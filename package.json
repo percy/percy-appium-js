@@ -1,0 +1,50 @@
+{
+  "name": "@percy/appium-webdriver",
+  "description": "Appium client library for visual testing with Percy",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Perceptual Inc.",
+  "repository": "https://github.com/percy/percy-appium-js",
+  "keywords": [
+    "appium",
+    "percy",
+    "visual testing"
+  ],
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "index.js",
+    "types/index.d.ts"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "cross-env NODE_ENV=test percy exec --testing -- jasmine --config=./test/jasmine.json",
+    "test:coverage": "nyc yarn test",
+    "test:types": "tsd"
+  },
+  "dependencies": {
+    "@percy/sdk-utils": "^1.0.0"
+  },
+  "peerDependencies": {
+    "selenium-webdriver": "~3 || ~4"
+  },
+  "devDependencies": {
+    "@percy/cli": "^1.10.4",
+    "@types/selenium-webdriver": "^4.0.9",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.11.0",
+    "eslint-config-standard": "^16.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "jasmine": "^4.4.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "nyc": "^15.1.0",
+    "selenium-webdriver": "~4.5.0",
+    "tsd": "^0.24.1"
+  }
+}
