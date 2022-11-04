@@ -1,10 +1,5 @@
-const utils = require('@percy/sdk-utils');
-
-// Collect client and environment information
-const sdkPkg = require('./package.json');
-const seleniumPkg = require('selenium-webdriver/package.json');
-const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
-const ENV_INFO = `${seleniumPkg.name}/${seleniumPkg.version}`;
+const { AppiumDriver } = require("./percy/driver/driverWrapper");
+const { AppAutomateProvider } = require("./percy/providers/appAutomateProvider");
 
 // Execute browserstack specific commands
 function browserstackExecutor(driver, action, args) {
@@ -50,7 +45,7 @@ function getDeviceInformation(driver) {
 }
 
 // Take a screenshot and post it to the comparison endpoint
-module.exports = function percyScreenshot(driver, name, options) {
+function percyScreenshot1(driver, name, options) {
   // allow working with or without standalone mode
   if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
   if (!driver) throw new Error('The WebdriverIO `browser` object is required.');
@@ -109,3 +104,16 @@ module.exports = function percyScreenshot(driver, name, options) {
     }
   });
 };
+
+module.exports = async function percyScreenshot(driver, name, options) {
+  // allow working with or without standalone mode
+  if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
+  if (!driver) throw new Error('The WebdriverIO `browser` object is required.');
+  if (!name) throw new Error('The `name` argument is required.');
+
+
+  driver = new AppiumDriver(driver);
+  const provider = new AppAutomateProvider(driver);
+
+  return await provider.screenshot(name, options);
+}

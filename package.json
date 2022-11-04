@@ -26,14 +26,14 @@
     "test:types": "tsd"
   },
   "dependencies": {
-    "@percy/sdk-utils": "^1.0.0"
+    "@percy/sdk-utils": "^1.0.0",
+    "tmp": "^0.2.1"
   },
   "peerDependencies": {
-    "selenium-webdriver": "~3 || ~4"
+    "wd": "^1.14"
   },
   "devDependencies": {
     "@percy/cli": "^1.10.4",
-    "@types/selenium-webdriver": "^4.0.9",
     "cross-env": "^7.0.2",
     "eslint": "^7.11.0",
     "eslint-config-standard": "^16.0.1",
@@ -44,7 +44,8 @@
     "jasmine": "^4.4.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nyc": "^15.1.0",
-    "selenium-webdriver": "~4.5.0",
-    "tsd": "^0.24.1"
+    "tsd": "^0.24.1",
+    "wd": "^1.14.0",
+    "webdriverio": "^7.25.4"
   }
 }
