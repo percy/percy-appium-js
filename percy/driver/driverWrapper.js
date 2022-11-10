@@ -1,4 +1,3 @@
-const { percy } = require('@percy/sdk-utils');
 const { Cache } = require('../util/cache');
 const { Undefined } = require('../util/validations');
 
@@ -71,11 +70,11 @@ class AppiumDriver {
   }
 
   get wdio() {
-    return this.type == 'wdio';
+    return this.type === 'wdio';
   }
 
   get wd() {
-    return this.type == 'wd';
+    return this.type === 'wd';
   }
 }
 

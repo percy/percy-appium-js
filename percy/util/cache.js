@@ -1,12 +1,12 @@
 
-const { Undefined } = require("./validations");
+const { Undefined } = require('./validations');
 
 class Cache {
-  static cache = {}
+  static cache = {};
 
   // Common stores, const, dont modify outside
-  static caps = "caps";
-  static bstackSessionDetails = "bstack:getSessionDetails";
+  static caps = 'caps';
+  static bstackSessionDetails = 'bstack:getSessionDetails';
 
   // maintainance
   static lastTime = Date.now();
@@ -29,7 +29,7 @@ class Cache {
     try {
       obj.val = await func();
       obj.success = true;
-    } catch(e) {
+    } catch (e) {
       if (!cacheExceptions) throw e;
       obj.val = e;
     }
@@ -40,7 +40,7 @@ class Cache {
   static maintain() {
     if (this.lastTime + this.timeout > Date.now()) return;
 
-    for (const [_, store] in Object.entries(this.cache)) {
+    for (const [, store] in Object.entries(this.cache)) {
       for (const [key, item] in Object.entries(store)) {
         if (item.time + this.timeout < Date.now()) {
           delete store[key];
@@ -52,5 +52,5 @@ class Cache {
 }
 
 module.exports = {
-  Cache,
-}
+  Cache
+};

@@ -9,11 +9,17 @@ const log = require('../util/log');
 // Collect client and environment information
 const sdkPkg = require('../../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
-const wdPkg = require('wd/package.json');
-// TODO fix this
-const wdioPkg = require('webdriverio/package.json');
 
-let ENV_INFO = `${wdPkg.name}/${wdPkg.version}`;
+let clientWdPkg = null;
+try {
+  clientWdPkg = require('wd/package.json');
+} catch {}
+
+try {
+  clientWdPkg = require('webdriverio/package.json');
+} catch {}
+
+let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
 class GenericProvider {
   constructor(driver) {

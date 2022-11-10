@@ -48,7 +48,7 @@ class Metadata {
 
   // Ideally dont cache this as it can change in the test
   async systemBars() {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   }
 
   async statusBarHeight() {
@@ -71,7 +71,7 @@ class Metadata {
       if (computedHeight >= 0) {
         return computedHeight;
       } else {
-        throw `Could not compute correct height ${computedHeight}`;
+        throw new Error(`Could not compute correct height ${computedHeight}`);
       }
     } catch (e) {
       log.debug(e);
