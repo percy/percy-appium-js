@@ -1,119 +1,47 @@
 const { AppiumDriver } = require("./percy/driver/driverWrapper");
-const { AppAutomateProvider } = require("./percy/providers/appAutomateProvider");
+const { ProviderResolver } = require("./percy/providers/providerResolver");
+const log = require("./percy/util/log");
+const utils = require("@percy/sdk-utils");
 
-// Execute browserstack specific commands
-function browserstackExecutor(driver, action, args) {
-  let options = args ? { action, arguments: args } : { action };
-  return driver.execute(`browserstack_executor: ${JSON.stringify(options)}`);
+async function isPercyEnabled(driver) {
+  if (!(await utils.isPercyEnabled())) return false;
+
+  return (await driver.getPercyOptions()).enabled;
 }
 
-// Collect various device information
-function getDeviceInformation(driver) {
-  let meta = {
-    name: driver.capabilities.deviceName,
-    osName: driver.capabilities.platformName,
-    osVersion: driver.capabilities.platformVersion,
-    orientation: driver.getOrientation().toLowerCase()
+module.exports = async function percyScreenshot(driver, name, {
+  fullscreen,
+  deviceName,
+  orientation,
+  statusBarHeight,
+  navigationBarHeight,
+} = {}) {
+  // allow working with or without standalone mode
+  // if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
+  if (!driver) throw new Error('The WebdriverIO `browser` object or wd `driver` object is required.');
+  if (!name) throw new Error('The `name` argument is required.');
+
+  log.debug(`[${name}] -> begin`);
+  driver = new AppiumDriver(driver);
+
+  if (!await isPercyEnabled(driver)) {
+    log.info(`[${name}] percy is disabled for session ${driver.sessionId} -> end`);
+    return;
   };
 
-  if (meta.osName.toLowerCase() === 'android') {
-    // collect information from android devices
-    let size = driver.capabilities.deviceScreenSize;
-    let [width, height] = size.split('x').map(i => parseInt(i, 10));
-    let { statusBar, navigationBar: navBar } = driver.getSystemBars();
-    Object.assign(meta, { width, height, statusBar, navBar, android: true });
-  } else if (meta.osName.toLowerCase() === 'ios') {
-    // collect information from ios devices
-    let viewport = driver.execute('mobile: viewportRect');
-    let [width, height] = [viewport.width, viewport.top + viewport.height];
-    let [statusBar, navBar] = [{ height: viewport.top }, { height: 0 }];
-    Object.assign(meta, { width, height, statusBar, navBar, ios: true });
-  } else {
-    // throw for unsupported devices
-    throw new Error(`Unsupported platform: ${meta.osName}`);
+  try {
+    const provider = ProviderResolver.resolve(driver);
+    const response = await provider.screenshot(name, {
+      fullscreen,
+      deviceName,
+      orientation,
+      statusBarHeight,
+      navigationBarHeight,
+    });
+    log.debug(`[${name}] -> end`);
+    return response;
+  } catch(e) {
+    log.error(`[${name}] failed to take screenshot`)
+    if ((await driver.getPercyOptions()).raiseErrors) throw e;
   }
-
-  // collect information from browserstack devices
-  if (driver.capabilities['bstack:options'] ||
-      Object.keys(driver.capabilities).some(cap => cap.startsWith('browserstack.'))) {
-    let session = browserstackExecutor(driver, 'getSessionDetails');
-    meta.debugUrl = session.browser_url;
-    meta.browserstack = true
-  }
-
-  return meta;
-}
-
-// Take a screenshot and post it to the comparison endpoint
-function percyScreenshot1(driver, name, options) {
-  // allow working with or without standalone mode
-  if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
-  if (!driver) throw new Error('The WebdriverIO `browser` object is required.');
-  if (!name) throw new Error('The `name` argument is required.');
-
-  return driver.call(async () => {
-    if (!(await utils.isPercyEnabled())) return;
-    let log = utils.logger('appium-webdriverio');
-
-    try {
-      // Collect device information
-      let meta = getDeviceInfo(driver);
-
-      // Execute browserstack specific begin screenshot action
-      if (meta.browserstack) {
-        browserstackExecutor(driver, 'percyScreenshot', {
-          percyBuildId: process.env.PERCY_BUILD_ID,
-          percyBuildUrl: process.env.PERCY_BUILD_URL,
-          state: 'begin'
-        });
-      }
-
-      // Post to the comparison endpoint with device information and screenshots
-      let { link } = await utils.postComparison({
-        name,
-        tag: {
-          name: meta.name,
-          osName: meta.osName,
-          osVersion: meta.osVersion,
-          width: meta.width,
-          height: meta.height,
-          orientation: meta.orientation
-        },
-        tiles: [{
-          content: driver.takeScreenshot(),
-          statusBarHeight: meta.statusBar?.height,
-          navBarHeight: meta.navBar?.height,
-          fullscreen: options?.fullscreen
-        }],
-        externalDebugUrl: meta.debugUrl,
-        environmentInfo: ENV_INFO,
-        clientInfo: CLIENT_INFO,
-      });
-
-      // Execute browserstack specific end screenshot action
-      if (meta.browserstack) {
-        browserstackExecutor(driver, 'percyScreenshot', {
-          percyScreenshotUrl: link,
-          state: 'end'
-        });
-      }
-    } catch (error) {
-      // Handle errors
-      log.error(`Could not take screenshot "${name}"`);
-      log.error(error);
-    }
-  });
-};
-
-module.exports = async function percyScreenshot(driver, name, options) {
-  // allow working with or without standalone mode
-  if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
-  if (!driver) throw new Error('The WebdriverIO `browser` object is required.');
-  if (!name) throw new Error('The `name` argument is required.');
-
-
-  driver = new AppiumDriver(driver);
-  const provider = new AppAutomateProvider(driver);
-
-  return await provider.screenshot(name, options);
 }

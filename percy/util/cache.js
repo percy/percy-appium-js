@@ -1,4 +1,6 @@
 
+const { Undefined } = require("./validations");
+
 class Cache {
   static cache = {}
 
@@ -6,8 +8,13 @@ class Cache {
   static caps = "caps";
   static bstackSessionDetails = "bstack:getSessionDetails";
 
+  // maintainance
+  static lastTime = Date.now();
+  static timeout = 5 * 60 * 1000;
+
   static async withCache(store, key, func, cacheExceptions = false) {
-    if (this.cache[store] === undefined) this.cache[store] = {};
+    this.maintain();
+    if (Undefined(this.cache[store])) this.cache[store] = {};
 
     store = this.cache[store];
     if (store[key]) {
@@ -18,7 +25,7 @@ class Cache {
       }
     }
 
-    const obj = { success: false, val: null };
+    const obj = { success: false, val: null, time: Date.now() };
     try {
       obj.val = await func();
       obj.success = true;
@@ -26,10 +33,22 @@ class Cache {
       if (!cacheExceptions) throw e;
       obj.val = e;
     }
-    obj.time = Date.now();
     store[key] = obj;
     return obj.val;
-  } 
+  }
+
+  static maintain() {
+    if (this.lastTime + this.timeout > Date.now()) return;
+
+    for (const [_, store] in Object.entries(this.cache)) {
+      for (const [key, item] in Object.entries(store)) {
+        if (item.time + this.timeout < Date.now()) {
+          delete store[key];
+        }
+      }
+    }
+    this.lastTime = Date.now();
+  }
 }
 
 module.exports = {

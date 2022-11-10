@@ -4,11 +4,16 @@ const fs = require('fs/promises');
 
 const { Tile } = require("../util/tile");
 const { MetadataResolver } = require("../metadata/metadataResolver");
+const log = require("../util/log");
 
 // Collect client and environment information
 const sdkPkg = require('../../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
-const ENV_INFO = 'none'; //`${seleniumPkg.name}/${seleniumPkg.version}`;
+const wdPkg = require('wd/package.json');
+// TODO fix this
+const wdioPkg = require('webdriverio/package.json');
+
+let ENV_INFO = `${wdPkg.name}/${wdPkg.version}`;
 
 class GenericProvider {
   constructor(driver) {
@@ -20,13 +25,26 @@ class GenericProvider {
     return true;
   }
 
-  async screenshot(name, { fullscreen, deviceName }) {
+  async screenshot(name, {
+    fullscreen,
+    deviceName,
+    orientation,
+    statusBarHeight,
+    navigationBarHeight,
+  }) {
     fullscreen = fullscreen || false;
 
-    this.metadata = await MetadataResolver.resolve(this.driver, { fullscreen, deviceName });
+    this.metadata = await MetadataResolver.resolve(this.driver, {
+      deviceName,
+      orientation,
+      statusBarHeight,
+      navigationBarHeight,
+    });
+
     const tag = await this.getTag();
     const tiles = await this.getTiles(fullscreen);
-    console.log(tiles)
+    log.debug(`${name} : Tag ${JSON.stringify(tag)}`)
+    log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`)
     return await utils.postComparison({
       name,
       tag: tag,
@@ -43,8 +61,8 @@ class GenericProvider {
     return [
       new Tile({
         filepath: path,
-        statusBarHeight: await this.metadata.statusBar(),
-        navBarHeight: await this.metadata.navigationBar(),
+        statusBarHeight: await this.metadata.statusBarHeight(),
+        navBarHeight: await this.metadata.navigationBarHeight(),
         headerHeight: 0,
         footerHeight: 0,
         fullscreen: fullscreen,

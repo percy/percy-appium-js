@@ -11,20 +11,30 @@ class AppAutomateProvider extends GenericProvider {
     return driver.remoteHostname.includes("browserstack");
   }
 
-  async screenshot(name, { fullscreen, deviceName } = {}) {
-    await this.percyScreenshotBegin();
+  async screenshot(name, {
+    fullscreen,
+    deviceName,
+    orientation,
+    statusBarHeight,
+    navigationBarHeight,
+  } = {}) {
+    await this.percyScreenshotBegin(name);
     const response = await super.screenshot(name, {
       fullscreen,
       deviceName: deviceName || await this.getDeviceName(),
+      orientation,
+      statusBarHeight,
+      navigationBarHeight,
     });
-    await this.percyScreenshotEnd(response.link);
+    await this.percyScreenshotEnd(name, response.body.link);
   }
 
-  async percyScreenshotBegin() {
+  async percyScreenshotBegin(name) {
     try {
       const { success } = await this.browserstackExecutor('percyScreenshot', {
+        name,
         percyBuildId: process.env.PERCY_BUILD_ID,
-        percyBuildUrl: process.env.PERCY_BUILD_URL,
+        percyBuildUrl: process.env.PERCY_BUILD_URL || "unknown",
         state: 'begin'
       });
       this._markedPercy = success;
@@ -33,12 +43,14 @@ class AppAutomateProvider extends GenericProvider {
     }
   }
 
-  async percyScreenshotEnd(percyScreenshotUrl) {
+  async percyScreenshotEnd(name, percyScreenshotUrl) {
     if (!this._markedPercy) return;
 
     try {
       await this.browserstackExecutor('percyScreenshot', {
+        name,
         percyScreenshotUrl,
+        status: "success",
         state: 'end',
       });
     } catch(e) {
