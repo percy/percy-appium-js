@@ -1,5 +1,5 @@
-const { GenericProvider } = require("./genericProvider");
-const { Cache } = require("../util/cache");
+const { GenericProvider } = require('./genericProvider');
+const { Cache } = require('../util/cache');
 
 class AppAutomateProvider extends GenericProvider {
   constructor(driver) {
@@ -8,7 +8,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   static supports(driver) {
-    return driver.remoteHostname.includes("browserstack");
+    return driver.remoteHostname.includes('browserstack');
   }
 
   async screenshot(name, {
@@ -16,7 +16,7 @@ class AppAutomateProvider extends GenericProvider {
     deviceName,
     orientation,
     statusBarHeight,
-    navigationBarHeight,
+    navigationBarHeight
   } = {}) {
     await this.percyScreenshotBegin(name);
     const response = await super.screenshot(name, {
@@ -24,7 +24,7 @@ class AppAutomateProvider extends GenericProvider {
       deviceName: deviceName || await this.getDeviceName(),
       orientation,
       statusBarHeight,
-      navigationBarHeight,
+      navigationBarHeight
     });
     await this.percyScreenshotEnd(name, response.body.link);
   }
@@ -34,12 +34,12 @@ class AppAutomateProvider extends GenericProvider {
       const { success } = await this.browserstackExecutor('percyScreenshot', {
         name,
         percyBuildId: process.env.PERCY_BUILD_ID,
-        percyBuildUrl: process.env.PERCY_BUILD_URL || "unknown",
+        percyBuildUrl: process.env.PERCY_BUILD_URL || 'unknown',
         state: 'begin'
       });
       this._markedPercy = success;
-    } catch(e) {
-      console.log("Could not mark App Automate percy session");
+    } catch (e) {
+      console.log('Could not mark App Automate percy session');
     }
   }
 
@@ -50,11 +50,11 @@ class AppAutomateProvider extends GenericProvider {
       await this.browserstackExecutor('percyScreenshot', {
         name,
         percyScreenshotUrl,
-        status: "success",
-        state: 'end',
+        status: 'success',
+        state: 'end'
       });
-    } catch(e) {
-      console.log("Could not mark App Automate percy session");
+    } catch (e) {
+      console.log('Could not mark App Automate percy session');
     }
   }
 
@@ -63,7 +63,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   async getSessionDetails() {
-    return await Cache.withCache(Cache.bstackSessionDetails, this.driver.sessionId, 
+    return await Cache.withCache(Cache.bstackSessionDetails, this.driver.sessionId,
       async () => await this.browserstackExecutor('getSessionDetails'));
   }
 
@@ -74,5 +74,5 @@ class AppAutomateProvider extends GenericProvider {
 }
 
 module.exports = {
-  AppAutomateProvider,
-}
+  AppAutomateProvider
+};

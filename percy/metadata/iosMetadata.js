@@ -1,4 +1,4 @@
-const { Metadata } = require("./metadata");
+const { Metadata } = require('./metadata');
 
 class IosMetadata extends Metadata {
   async statusBarHeight() {
@@ -6,7 +6,7 @@ class IosMetadata extends Metadata {
     if (this._statusBarHeight) return this._statusBarHeight;
 
     const height = await super.statusBarHeight();
-    // In Ios the height of statusBarHeight in caps needs to be multiplied by pixel ratio 
+    // In Ios the height of statusBarHeight in caps needs to be multiplied by pixel ratio
     return height * (await this.caps()).pixelRatio;
   }
 
@@ -28,5 +28,5 @@ class IosMetadata extends Metadata {
 }
 
 module.exports = {
-  IosMetadata,
-}
+  IosMetadata
+};

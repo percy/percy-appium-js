@@ -1,5 +1,5 @@
-const { GenericProvider } = require("./genericProvider");
-const { AppAutomateProvider } = require("./appAutomateProvider");
+const { GenericProvider } = require('./genericProvider');
+const { AppAutomateProvider } = require('./appAutomateProvider');
 
 class ProviderResolver {
   static resolve(driver) {
@@ -10,5 +10,5 @@ class ProviderResolver {
 }
 
 module.exports = {
-  ProviderResolver,
-}
+  ProviderResolver
+};

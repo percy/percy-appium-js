@@ -1,17 +1,17 @@
-const log = require("../util/log");
+const log = require('../util/log');
 class Metadata {
   constructor(driver, {
     deviceName,
     orientation,
     statusBarHeight,
-    navigationBarHeight,
+    navigationBarHeight
   } = {}) {
     this.driver = driver;
     this.sessionId = this.driver.sessionId;
     this.remoteHostname = this.driver.remoteHostname;
 
     this._deviceName = deviceName;
-    this._orientation = orientation || "caps";
+    this._orientation = orientation || 'caps';
     this._statusBarHeight = statusBarHeight;
     this._navigationBarHeight = navigationBarHeight;
   }
@@ -33,12 +33,12 @@ class Metadata {
   async orientation() {
     // We use cache if provided by user
     if (this._orientation) {
-      if (["portrait", "landscape"].includes(this._orientation)) {
+      if (['portrait', 'landscape'].includes(this._orientation)) {
         return this._orientation;
-      } else if (this._orientation === "caps") {
-        let deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase() 
+      } else if (this._orientation === 'caps') {
+        let deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
         if (deviceOrientation) return deviceOrientation;
-        return "portrait"; // default if failed to get from caps (wd/jsonwire)
+        return 'portrait'; // default if failed to get from caps (wd/jsonwire)
       }
     }
 
@@ -48,7 +48,7 @@ class Metadata {
 
   // Ideally dont cache this as it can change in the test
   async systemBars() {
-    throw "Not implemented"
+    throw 'Not implemented';
   }
 
   async statusBarHeight() {
@@ -71,7 +71,7 @@ class Metadata {
       if (computedHeight >= 0) {
         return computedHeight;
       } else {
-        throw `Could not compute correct height ${computedHeight}`
+        throw `Could not compute correct height ${computedHeight}`;
       }
     } catch (e) {
       log.debug(e);
@@ -95,5 +95,5 @@ class Metadata {
 }
 
 module.exports = {
-  Metadata,
-}
+  Metadata
+};

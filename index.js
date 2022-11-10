@@ -1,7 +1,7 @@
-const { AppiumDriver } = require("./percy/driver/driverWrapper");
-const { ProviderResolver } = require("./percy/providers/providerResolver");
-const log = require("./percy/util/log");
-const utils = require("@percy/sdk-utils");
+const { AppiumDriver } = require('./percy/driver/driverWrapper');
+const { ProviderResolver } = require('./percy/providers/providerResolver');
+const log = require('./percy/util/log');
+const utils = require('@percy/sdk-utils');
 
 async function isPercyEnabled(driver) {
   if (!(await utils.isPercyEnabled())) return false;
@@ -14,7 +14,7 @@ module.exports = async function percyScreenshot(driver, name, {
   deviceName,
   orientation,
   statusBarHeight,
-  navigationBarHeight,
+  navigationBarHeight
 } = {}) {
   // allow working with or without standalone mode
   // if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
@@ -36,12 +36,12 @@ module.exports = async function percyScreenshot(driver, name, {
       deviceName,
       orientation,
       statusBarHeight,
-      navigationBarHeight,
+      navigationBarHeight
     });
     log.debug(`[${name}] -> end`);
     return response;
-  } catch(e) {
-    log.error(`[${name}] failed to take screenshot`)
+  } catch (e) {
+    log.error(`[${name}] failed to take screenshot`);
     if ((await driver.getPercyOptions()).raiseErrors) throw e;
   }
-}
+};

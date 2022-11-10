@@ -3,5 +3,5 @@ function Undefined(obj) {
 }
 
 module.exports = {
-  Undefined,
-}
+  Undefined
+};
