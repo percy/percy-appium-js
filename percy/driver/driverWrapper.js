@@ -1,5 +1,6 @@
 const { Cache } = require('../util/cache');
 const { Undefined } = require('../util/validations');
+const { TimeIt } = require('../util/timing');
 
 // This is a single common driver class that gives same interface to multiple appium drivers
 // like wd or wdio etc.
@@ -18,28 +19,37 @@ class AppiumDriver {
   async getCapabilities() {
     return await Cache.withCache(Cache.caps, this.sessionId,
       async () => {
-        if (this.wd) return await this.driver.sessionCapabilities();
-        if (this.wdio) return await this.driver.getSession();
+        return await TimeIt.run('getCapabilities', async () => {
+          if (this.wd) return await this.driver.sessionCapabilities();
+          if (this.wdio) return await this.driver.getSession();
+        });
       });
   }
 
   async getSystemBars() {
     return await Cache.withCache(Cache.systemBars, this.sessionId, async () => {
-      if (this.wdio) {
-        const bars = await this.driver.getSystemBars();
-        return {
-          statusbarHeight: bars.statusBar.height,
-          navigationBarHeight: bars.navigationBar.height
-        };
-      }
-      if (this.wd) throw new Error('System bars are not supported on wd driver');
+      return await TimeIt.run('getSystemBars', async () => {
+        if (this.wdio) {
+          const bars = await this.driver.getSystemBars();
+          return {
+            statusbarHeight: bars.statusBar.height,
+            navigationBarHeight: bars.navigationBar.height
+          };
+        }
+        if (this.wd) throw new Error('System bars are not supported on wd driver');
+      });
     }, true);
   }
 
   async getPercyOptions() {
     let optionsObject = {};
     if (this.wd) {
+      // in Android devices percy:options exist in desired
       optionsObject = (await this.getCapabilities()).desired;
+      // desired is empty for iOS but percy:options is in standard capabilities
+      if (Undefined(optionsObject)) {
+        optionsObject = await this.getCapabilities();
+      }
     }
     if (this.wdio) {
       optionsObject = this.driver.capabilities;
@@ -61,15 +71,21 @@ class AppiumDriver {
 
   // non cached
   async getOrientation() {
-    return (await this.driver.getOrientation()).toLowerCase();
+    return await TimeIt.run('getOrientation', async () => {
+      return (await this.driver.getOrientation()).toLowerCase();
+    });
   }
 
   async takeScreenshot() {
-    return await this.driver.takeScreenshot();
+    return await TimeIt.run('takeScreenshot', async () => {
+      return await this.driver.takeScreenshot();
+    });
   }
 
   async execute(command) {
-    return await this.driver.execute(command);
+    return await TimeIt.run('execute', async () => {
+      return await this.driver.execute(command);
+    });
   }
 
   get sessionId() {

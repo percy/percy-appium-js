@@ -4,6 +4,7 @@ const fs = require('fs/promises');
 
 const { Tile } = require('../util/tile');
 const { MetadataResolver } = require('../metadata/metadataResolver');
+const { TimeIt } = require('../util/timing');
 const log = require('../util/log');
 
 // Collect client and environment information
@@ -89,23 +90,27 @@ class GenericProvider {
   }
 
   async writeTempImage(base64content) {
-    const path = await this.tempFile();
-    const buffer = Buffer.from(base64content, 'base64');
-    await fs.writeFile(path, buffer);
-    return path;
+    return await TimeIt.run('writeTempImage', async () => {
+      const path = await this.tempFile();
+      const buffer = Buffer.from(base64content, 'base64');
+      await fs.writeFile(path, buffer);
+      return path;
+    });
   }
 
   // this creates a temp file and closes descriptor
-  tempFile() {
-    return new Promise((resolve, reject) => {
-      tmp.file({
-        mode: 0o644,
-        prefix: 'percy-',
-        postfix: '.png',
-        discardDescriptor: true
-      }, (err, path) => {
-        if (err) reject(err);
-        resolve(path);
+  async tempFile() {
+    return await TimeIt.run('writeTempImage', async () => {
+      return await new Promise((resolve, reject) => {
+        tmp.file({
+          mode: 0o644,
+          prefix: 'percy-',
+          postfix: '.png',
+          discardDescriptor: true
+        }, (err, path) => {
+          if (err) reject(err);
+          resolve(path);
+        });
       });
     });
   }

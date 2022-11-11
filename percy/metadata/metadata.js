@@ -31,19 +31,17 @@ class Metadata {
   }
 
   async orientation() {
-    // We use cache if provided by user
-    if (this._orientation) {
-      if (['portrait', 'landscape'].includes(this._orientation)) {
-        return this._orientation;
-      } else if (this._orientation === 'caps') {
-        let deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
-        if (deviceOrientation) return deviceOrientation;
-        return 'portrait'; // default if failed to get from caps (wd/jsonwire)
-      }
+    if (this._orientation === 'auto') {
+      return await this.driver.getOrientation();
     }
 
-    // Anything else, basically `auto`
-    return await this.driver.getOrientation();
+    if (['portrait', 'landscape'].includes(this._orientation)) {
+      return this._orientation;
+    } else if (this._orientation === 'caps') {
+      let deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
+      if (deviceOrientation) return deviceOrientation;
+    }
+    return 'portrait'; // default if failed to get from caps (wd/jsonwire)
   }
 
   // Ideally dont cache this as it can change in the test

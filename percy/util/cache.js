@@ -41,8 +41,8 @@ class Cache {
   static maintain() {
     if (this.lastTime + this.timeout > Date.now()) return;
 
-    for (const [, store] in Object.entries(this.cache)) {
-      for (const [key, item] in Object.entries(store)) {
+    for (const [, store] of Object.entries(this.cache)) {
+      for (const [key, item] of Object.entries(store)) {
         if (item.time + this.timeout < Date.now()) {
           delete store[key];
         }

@@ -1,5 +1,7 @@
 const { AppiumDriver } = require('./percy/driver/driverWrapper');
 const { ProviderResolver } = require('./percy/providers/providerResolver');
+const { TimeIt } = require('./percy/util/timing');
+
 const log = require('./percy/util/log');
 const utils = require('@percy/sdk-utils');
 
@@ -28,20 +30,21 @@ module.exports = async function percyScreenshot(driver, name, {
     log.info(`[${name}] percy is disabled for session ${driver.sessionId} -> end`);
     return;
   };
-
-  try {
-    const provider = ProviderResolver.resolve(driver);
-    const response = await provider.screenshot(name, {
-      fullscreen,
-      deviceName,
-      orientation,
-      statusBarHeight,
-      navigationBarHeight
-    });
-    log.debug(`[${name}] -> end`);
-    return response;
-  } catch (e) {
-    log.error(`[${name}] failed to take screenshot`);
-    if ((await driver.getPercyOptions()).raiseErrors) throw e;
-  }
+  return TimeIt.run('percyScreenshot', async () => {
+    try {
+      const provider = ProviderResolver.resolve(driver);
+      const response = await provider.screenshot(name, {
+        fullscreen,
+        deviceName,
+        orientation,
+        statusBarHeight,
+        navigationBarHeight
+      });
+      log.debug(`[${name}] -> end`);
+      return response;
+    } catch (e) {
+      log.error(`[${name}] failed to take screenshot`);
+      if ((await driver.getPercyOptions()).raiseErrors) throw e;
+    }
+  });
 };
