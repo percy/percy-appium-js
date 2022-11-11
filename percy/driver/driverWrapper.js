@@ -23,6 +23,19 @@ class AppiumDriver {
       });
   }
 
+  async getSystemBars() {
+    return await Cache.withCache(Cache.systemBars, this.sessionId, async () => {
+      if (this.wdio) {
+        const bars = await this.driver.getSystemBars();
+        return {
+          statusbarHeight: bars.statusBar.height,
+          navigationBarHeight: bars.navigationBar.height
+        };
+      }
+      if (this.wd) throw new Error('System bars are not supported on wd driver');
+    }, true);
+  }
+
   async getPercyOptions() {
     let optionsObject = {};
     if (this.wd) {

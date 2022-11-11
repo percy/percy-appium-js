@@ -7,6 +7,7 @@ class Cache {
   // Common stores, const, dont modify outside
   static caps = 'caps';
   static bstackSessionDetails = 'bstack:getSessionDetails';
+  static systemBars = 'systemBars';
 
   // maintainance
   static lastTime = Date.now();
