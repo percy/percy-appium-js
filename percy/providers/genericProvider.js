@@ -100,7 +100,7 @@ class GenericProvider {
 
   // this creates a temp file and closes descriptor
   async tempFile() {
-    return await TimeIt.run('writeTempImage', async () => {
+    return await TimeIt.run('tempFile', async () => {
       return await new Promise((resolve, reject) => {
         tmp.file({
           mode: 0o644,

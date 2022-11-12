@@ -2,7 +2,7 @@ const { Metadata } = require('./metadata');
 
 class AndroidMetadata extends Metadata {
   async systemBars() {
-    await this.driver.getSystemBars();
+    return await this.driver.getSystemBars();
   }
 }
 

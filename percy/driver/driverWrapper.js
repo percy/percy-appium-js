@@ -29,14 +29,22 @@ class AppiumDriver {
   async getSystemBars() {
     return await Cache.withCache(Cache.systemBars, this.sessionId, async () => {
       return await TimeIt.run('getSystemBars', async () => {
-        if (this.wdio) {
-          const bars = await this.driver.getSystemBars();
+        try {
+          if (this.wdio) {
+            const bars = await this.driver.getSystemBars();
+            return {
+              statusbarHeight: bars.statusBar.height,
+              navigationBarHeight: bars.navigationBar.height
+            };
+          }
+          if (this.wd) throw new Error('System bars are not supported on wd driver');
+        } catch {
+          // return default 0, 0 in case of failure
           return {
-            statusbarHeight: bars.statusBar.height,
-            navigationBarHeight: bars.navigationBar.height
+            statusbarHeight: 0,
+            navigationBarHeight: 0
           };
         }
-        if (this.wd) throw new Error('System bars are not supported on wd driver');
       });
     }, true);
   }

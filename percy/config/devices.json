@@ -1,0 +1,86 @@
+{
+  "ipad pro 9.7 2016": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 1536,
+    "screenHeight": 2048
+  },
+  "ipad pro 12.9": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 1536,
+    "screenHeight": 2048
+  },
+  "ipad 6th": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 1536,
+    "screenHeight": 2048
+  },
+  "ipad mini 4": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 1536,
+    "screenHeight": 2048
+  },
+  "ipad 5th": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 1536,
+    "screenHeight": 2048
+  },
+  "iphone x": {
+    "pixelRatio": 3,
+    "statusBarHeight": 44,
+    "screenWidth": 1125,
+    "screenHeight": 2436
+  },
+  "iphone se": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 750,
+    "screenHeight": 1334
+  },
+  "iphone 8": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 750,
+    "screenHeight": 1334
+  },
+  "iphone 8 plus": {
+    "pixelRatio": 3,
+    "statusBarHeight": 20,
+    "screenWidth": 1080,
+    "screenHeight": 1920
+  },
+  "iphone 7": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 750,
+    "screenHeight": 1334
+  },
+  "iphone 6s": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 750,
+    "screenHeight": 1334
+  },
+  "iphone 6 plus": {
+    "pixelRatio": 3,
+    "statusBarHeight": 20,
+    "screenWidth": 1080,
+    "screenHeight": 1920
+  },
+  "iphone 6s plus": {
+    "pixelRatio": 3,
+    "statusBarHeight": 20,
+    "screenWidth": 1080,
+    "screenHeight": 1920
+  },
+  "iphone 6": {
+    "pixelRatio": 2,
+    "statusBarHeight": 20,
+    "screenWidth": 750,
+    "screenHeight": 1334
+  }
+}
