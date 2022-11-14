@@ -38,11 +38,24 @@ describe('percyScreenshot', () => {
       ]));
     });
 
-    it('logs errors if any', async () => {
-      driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
+    describe('errors', () => {
+      describe('with percy:options.raiseErrors true', () => {
+        it('logs errors if any', async () => {
+          driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
 
-      await expectAsync(percyScreenshot(driver, 'Screenshot 1'))
-        .toBeRejectedWithError('Screenshot failed');
+          await expectAsync(percyScreenshot(driver, 'Screenshot 1'))
+            .toBeRejectedWithError('Screenshot failed');
+        });
+      });
+
+      describe('with percy:options.raiseErrors false', () => {
+        it('logs errors if any', async () => {
+          driver = wdDriver({ raiseErrors: false });
+          driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
+
+          await percyScreenshot(driver, 'Screenshot 1');
+        });
+      });
     });
   });
 
@@ -85,6 +98,16 @@ describe('percyScreenshot', () => {
 
         // logs from cli will be empty as we will not post screenshot to it
         expect(await helpers.get('logs')).toEqual([]);
+      });
+
+      it('gets orientation from driver if orientation is auto', async () => {
+        driver = driverFunc({ enabled: true });
+
+        await percyScreenshot(driver, 'Screenshot 1', { orientation: 'auto' });
+
+        expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+          'Snapshot found: Screenshot 1'
+        ]));
       });
     });
   };

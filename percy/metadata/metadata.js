@@ -17,9 +17,9 @@ class Metadata {
   }
 
   // items that need caps are moved to getters as caps are not stored on wd driver object
-  // So we need to make a lazy call to avoid making session get call in non app automate context
-  caps() {
-    return this.driver.getCapabilities();
+  // So we need to make a lazy call to avoid making session get call in app automate context
+  async caps() {
+    return await this.driver.getCapabilities();
   }
 
   async osName() {
@@ -37,10 +37,11 @@ class Metadata {
 
     if (['portrait', 'landscape'].includes(this._orientation)) {
       return this._orientation;
-    } else if (this._orientation === 'caps') {
-      let deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
-      if (deviceOrientation) return deviceOrientation;
     }
+
+    const deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
+    if (deviceOrientation) return deviceOrientation;
+
     return 'portrait'; // default if failed to get from caps (wd/jsonwire)
   }
 

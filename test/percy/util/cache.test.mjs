@@ -1,6 +1,6 @@
 import { Cache } from '../../../percy/util/cache.js';
 
-describe('percyScreenshot', () => {
+describe('Cache', () => {
   const store = 'abc';
   const key = 'key';
 
@@ -100,7 +100,7 @@ describe('percyScreenshot', () => {
     describe('with expired cache', () => {
       const originalCacheTimeout = Cache.timeout;
       beforeAll(() => {
-        Cache.timeout = 1; // 1ms
+        Cache.timeout = 7; // 7ms
       });
 
       afterAll(() => {
@@ -118,10 +118,17 @@ describe('percyScreenshot', () => {
         // wait for expiry
         await new Promise((resolve) => setTimeout(resolve, 10));
 
+        // create a test entry that should not get deleted
+        Cache.cache.random_store = {};
+        Cache.cache.random_store.some_new_key = { val: 1, time: Date.now(), success: true };
+
         // test expired cache
         val = await Cache.withCache(store, key, func);
         expect(func.calls.count()).toEqual(2);
         expect(val).toEqual(expectedVal);
+
+        // Not deleted
+        expect(Cache.cache.random_store.some_new_key).toBeTruthy();
       });
 
       it('it invalidates all expired keys on any call', async () => {

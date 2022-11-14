@@ -1,6 +1,6 @@
 import { TimeIt } from '../../../percy/util/timing.js';
 
-describe('percyScreenshot', () => {
+describe('TimeIt', () => {
   const store = 'store';
 
   const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t));
@@ -53,6 +53,7 @@ describe('percyScreenshot', () => {
       await TimeIt.run('funcVariableTime', func200);
 
       const summary = TimeIt.summary({ includeVals: true });
+      TimeIt.summary(); // also without vals
       expect(Object.keys(summary).length).toEqual(2);
 
       // funcReturns

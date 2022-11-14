@@ -21,6 +21,7 @@ class AppAutomateProvider extends GenericProvider {
     navigationBarHeight
   } = {}) {
     let response = null;
+    let error;
     try {
       await this.percyScreenshotBegin(name);
       response = await super.screenshot(name, {
@@ -30,8 +31,10 @@ class AppAutomateProvider extends GenericProvider {
         statusBarHeight,
         navigationBarHeight
       });
+    } catch (e) {
+      error = e;
     } finally {
-      await this.percyScreenshotEnd(name, response?.body?.link);
+      await this.percyScreenshotEnd(name, response?.body?.link, `${error}`);
     }
     return response;
   }
@@ -41,8 +44,8 @@ class AppAutomateProvider extends GenericProvider {
       try {
         const { success } = await this.browserstackExecutor('percyScreenshot', {
           name,
-          percyBuildId: process.env.PERCY_BUILD_ID || 'Unknown',
-          percyBuildUrl: process.env.PERCY_BUILD_URL || 'Unknown',
+          percyBuildId: process.env.PERCY_BUILD_ID,
+          percyBuildUrl: process.env.PERCY_BUILD_URL,
           state: 'begin'
         });
         this._markedPercy = success;
@@ -52,13 +55,14 @@ class AppAutomateProvider extends GenericProvider {
     });
   }
 
-  async percyScreenshotEnd(name, percyScreenshotUrl) {
+  async percyScreenshotEnd(name, percyScreenshotUrl, statusMessage = null) {
     return await TimeIt.run('percyScreenshotEnd', async () => {
       try {
         await this.browserstackExecutor('percyScreenshot', {
           name,
           percyScreenshotUrl,
-          status: 'success',
+          status: percyScreenshotUrl ? 'success' : 'failure',
+          statusMessage: statusMessage,
           state: 'end'
         });
       } catch (e) {

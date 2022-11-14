@@ -27,7 +27,6 @@ class TimeIt {
 
   static avg(store) {
     const vals = this.data[store];
-    if (vals.length === 0) return 0;
 
     return vals.reduce((a, b) => a + b, 0) / vals.length;
   }

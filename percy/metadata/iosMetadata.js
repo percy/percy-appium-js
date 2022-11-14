@@ -27,7 +27,6 @@ class IosMetadata extends Metadata {
     // We just add statusBarHeight and viewport rect
     // We do not use existing functions because user can override those
     const caps = await this.caps();
-
     if (await this.staticData()) {
       const data = await this.staticData();
       return { width: data.screenWidth, height: data.screenHeight };
@@ -48,7 +47,7 @@ class IosMetadata extends Metadata {
   // helpers
 
   async staticData() {
-    return staticDeviceMeta[(await this.deviceName()).toLowerCase()];
+    return staticDeviceMeta[(await this.deviceName())?.toLowerCase()];
   }
 }
 

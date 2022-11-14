@@ -4,13 +4,15 @@ class Browser {
     appAutomate,
     platform,
     deviceName,
-    enabled
+    enabled,
+    raiseErrors
   } = {}) {
     appAutomate = appAutomate || false;
     const ios = platform === 'iOS' || false;
     const android = !ios;
     deviceName = deviceName || android ? 'GenericAndroid' : 'iPhone 8 Plus'; // some device from static config
     enabled = enabled === undefined ? true : enabled;
+    raiseErrors = raiseErrors === undefined ? true : raiseErrors;
 
     this.sessionId = 'sessionId';
 
@@ -18,7 +20,7 @@ class Browser {
       platformName: ios ? 'iOS' : 'Android',
       'percy:options': {
         enabled: enabled,
-        raiseErrors: true
+        raiseErrors: raiseErrors
       }
     };
 
@@ -30,7 +32,7 @@ class Browser {
     } else if (ios) {
       sessionCaps['percy:options'] = {
         enabled: enabled,
-        raiseErrors: true
+        raiseErrors: raiseErrors
       };
       sessionCaps.deviceName = deviceName;
     }
@@ -59,6 +61,7 @@ class Browser {
       }
       return JSON.stringify(res);
     });
+    this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');
   }
 };
 

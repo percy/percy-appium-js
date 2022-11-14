@@ -108,6 +108,7 @@ class GenericProvider {
           postfix: '.png',
           discardDescriptor: true
         }, (err, path) => {
+          /* istanbul ignore next */ // hard to test
           if (err) reject(err);
           resolve(path);
         });

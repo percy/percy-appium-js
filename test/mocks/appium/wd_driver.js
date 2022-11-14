@@ -2,13 +2,15 @@ module.exports = function({
   appAutomate,
   platform,
   deviceName,
-  enabled
+  enabled,
+  raiseErrors
 } = {}) {
   appAutomate = appAutomate || false;
   const ios = platform === 'iOS';
   const android = !ios;
   deviceName = deviceName || android ? 'GenericAndroid' : 'iPhone 8 Plus'; // some device from static config
   enabled = enabled === undefined ? true : enabled;
+  raiseErrors = raiseErrors === undefined ? true : raiseErrors;
 
   const sessionCaps = {
     platformName: ios ? 'iOS' : 'Android'
@@ -20,13 +22,13 @@ module.exports = function({
       deviceName,
       'percy:options': {
         enabled: enabled,
-        raiseErrors: true
+        raiseErrors: raiseErrors
       }
     };
   } else if (ios) {
     sessionCaps['percy:options'] = {
       enabled: enabled,
-      raiseErrors: true
+      raiseErrors: raiseErrors
     };
     sessionCaps.deviceName = deviceName;
   }
@@ -49,7 +51,8 @@ module.exports = function({
         res = { success: true };
       }
       return JSON.stringify(res);
-    })
+    }),
+    getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT')
   };
 
   return obj;

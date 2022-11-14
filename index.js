@@ -44,6 +44,7 @@ module.exports = async function percyScreenshot(driver, name, {
       return response;
     } catch (e) {
       log.error(`[${name}] failed to take screenshot`);
+      log.debug(`[${name}] ${e}, \n ${e.stack}`);
       if ((await driver.getPercyOptions()).raiseErrors) throw e;
     }
   });
