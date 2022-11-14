@@ -31,10 +31,13 @@ class Cache {
       obj.val = await func();
       obj.success = true;
     } catch (e) {
-      if (!cacheExceptions) throw e;
       obj.val = e;
     }
-    store[key] = obj;
+    if (obj.success || cacheExceptions) {
+      store[key] = obj;
+    }
+
+    if (!obj.success) throw obj.val;
     return obj.val;
   }
 
@@ -49,6 +52,10 @@ class Cache {
       }
     }
     this.lastTime = Date.now();
+  }
+
+  static reset() {
+    this.cache = {};
   }
 }
 

@@ -43,9 +43,13 @@ class TimeIt {
         avg: this.avg(key),
         count: this.data[key].length
       };
-      if (includeVals) agg.vals = this.data[key];
+      if (includeVals) agg[key].vals = this.data[key];
     }
     return agg;
+  }
+
+  static reset() {
+    this.data = {};
   }
 };
 

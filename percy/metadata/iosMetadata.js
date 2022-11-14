@@ -1,4 +1,3 @@
-const { Undefined } = require('../util/validations');
 const { Metadata } = require('./metadata');
 const staticDeviceMeta = require('../config/devices.json');
 
@@ -8,11 +7,9 @@ class IosMetadata extends Metadata {
     if (this._statusBarHeight) return this._statusBarHeight;
 
     const caps = await this.caps();
-    if (Undefined(caps.statBarHeight)) {
+    if (await this.staticData()) {
       const data = await this.staticData();
-      if (!Undefined(data)) {
-        return data.statusBarHeight * data.pixelRatio;
-      }
+      return data.statusBarHeight * data.pixelRatio;
     }
 
     // In Ios the height of statusBarHeight in caps needs to be multiplied by pixel ratio
@@ -31,14 +28,21 @@ class IosMetadata extends Metadata {
     // We do not use existing functions because user can override those
     const caps = await this.caps();
 
-    if (Undefined(caps.viewportRect)) {
-      // console.log(`ERROR viewportRect is missing for ${await this.deviceName()}`);
+    if (await this.staticData()) {
       const data = await this.staticData();
       return { width: data.screenWidth, height: data.screenHeight };
     }
-    const height = caps.statBarHeight * caps.pixelRatio + caps.viewportRect.height;
-    const width = caps.viewportRect.width;
+    const height = caps.statBarHeight * caps.pixelRatio + caps.viewportRect?.height;
+    const width = caps.viewportRect?.width;
     return { width, height };
+  }
+
+  // Need override because ios does not have desired in caps
+  async deviceName() {
+    if (this._deviceName) return this._deviceName;
+
+    let caps = await this.caps();
+    return caps.deviceName || caps.device;
   }
 
   // helpers
