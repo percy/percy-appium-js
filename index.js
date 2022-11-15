@@ -18,8 +18,26 @@ module.exports = async function percyScreenshot(driver, name, {
   statusBarHeight,
   navigationBarHeight
 } = {}) {
-  // allow working with or without standalone mode
-  // if (!driver || typeof driver === 'string') [driver, name, options] = [browser, driver, name];
+  // allow working with or without standalone mode for wdio
+  if (!driver || typeof driver === 'string') {
+    // Unable to test this as couldnt define `browser` from test mjs file that would be
+    // accessible here
+    /* istanbul ignore if */
+    if (name) {
+      fullscreen = name.fullscreen;
+      deviceName = name.deviceName;
+      orientation = name.orientation;
+      statusBarHeight = name.statusBarHeight;
+      navigationBarHeight = name.navigationBarHeight;
+    }
+    try {
+      // browser is defined in wdio context
+      // eslint-disable-next-line no-undef
+      [driver, name] = [browser, driver];
+    } catch (e) { // ReferenceError: browser is not defined.
+      driver = undefined;
+    }
+  };
   if (!driver) throw new Error('The WebdriverIO `browser` object or wd `driver` object is required.');
   if (!name) throw new Error('The `name` argument is required.');
 
@@ -45,7 +63,7 @@ module.exports = async function percyScreenshot(driver, name, {
     } catch (e) {
       log.error(`[${name}] failed to take screenshot`);
       log.debug(`[${name}] ${e}, \n ${e.stack}`);
-      if ((await driver.getPercyOptions()).raiseErrors) throw e;
+      if (!(await driver.getPercyOptions()).ignoreErrors) throw e;
     }
   });
 };

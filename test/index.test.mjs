@@ -59,6 +59,39 @@ describe('percyScreenshot', () => {
     });
   });
 
+  describe('wdio standalone context', () => {
+    describe('with browser not defined', () => {
+      it('throws an error when a driver is not provided', async () => {
+        await expectAsync(percyScreenshot('Screenshot 1'))
+          .toBeRejectedWithError('The WebdriverIO `browser` object or wd `driver` object is required.');
+      });
+    });
+
+    // Currently unable to declare browser that would be accessible inside percyScreenshot function
+    // TODO: Fix me
+    // describe('with browser defined', () => {
+    //   beforeEach(() => {
+    //     // browser = wdioDriver();
+    //   });
+
+    //   it('uses browser from context when browser is defined', async () => {
+    //     await percyScreenshot('Screenshot 1');
+
+    //     expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+    //       'Snapshot found: Screenshot 1'
+    //     ]));
+    //   });
+
+    //   it('uses name arg as options when driver is a string in wdio context', async () => {
+    //     await percyScreenshot('Screenshot 1', { fullscreen: true });
+
+    //     expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+    //       'Snapshot found: Screenshot 1'
+    //     ]));
+    //   });
+    // });
+  });
+
   for (const [driverType, driverFunc] of [['wd driver', wdDriver], ['wdio driver', wdioDriver]]) {
     describe(`with ${driverType}`, () => {
       for (const appAutomate of [true, false]) {
