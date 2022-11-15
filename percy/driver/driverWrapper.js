@@ -78,11 +78,11 @@ class AppiumDriver {
 
     // defaults
     if (Undefined(percyOptions.enabled)) percyOptions.enabled = true;
-    if (Undefined(percyOptions.raiseErrors)) percyOptions.raiseErrors = false;
+    if (Undefined(percyOptions.ignoreErrors)) percyOptions.ignoreErrors = true;
 
     // pull legacy for wd
     if (!Undefined(optionsObject['percy.enabled'])) percyOptions.enabled = optionsObject['percy.enabled'];
-    if (!Undefined(optionsObject['percy.raiseErrors'])) percyOptions.raiseErrors = optionsObject['percy.raiseErrors'];
+    if (!Undefined(optionsObject['percy.ignoreErrors'])) percyOptions.ignoreErrors = optionsObject['percy.ignoreErrors'];
 
     return percyOptions;
   }

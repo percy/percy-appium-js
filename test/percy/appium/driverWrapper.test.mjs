@@ -12,26 +12,26 @@ describe('AppiumDriver', () => {
       // correct data in underlying wd driver
       driver.getCapabilities = jasmine.createSpy().and.resolveTo({});
 
-      expect(await driver.getPercyOptions()).toEqual({ enabled: true, raiseErrors: false });
+      expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: true });
     });
 
     it('returns options from percy.* caps', async () => {
       const driver = new AppiumDriver(wdDriver());
 
-      // Mocking case where there are percy.enabled or percy.raiseErrors
+      // Mocking case where there are percy.enabled or percy.ignoreErrors
       // Note: here we are mocking function from AppiumDriver instead of giving
       // correct data in underlying wd driver
       driver.getCapabilities = jasmine.createSpy().and.resolveTo(
-        { 'percy.enabled': true, 'percy.raiseErrors': true }
+        { 'percy.enabled': true, 'percy.ignoreErrors': false }
       );
 
-      expect(await driver.getPercyOptions()).toEqual({ enabled: true, raiseErrors: true });
+      expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: false });
     });
 
     it('returns options from percy:options caps', async () => {
       const driver = new AppiumDriver(wdDriver());
 
-      expect(await driver.getPercyOptions()).toEqual({ enabled: true, raiseErrors: true });
+      expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: false });
     });
   });
 });

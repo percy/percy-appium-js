@@ -3,14 +3,14 @@ module.exports = function({
   platform,
   deviceName,
   enabled,
-  raiseErrors
+  ignoreErrors
 } = {}) {
   appAutomate = appAutomate || false;
   const ios = platform === 'iOS';
   const android = !ios;
   deviceName = deviceName || android ? 'GenericAndroid' : 'iPhone 8 Plus'; // some device from static config
   enabled = enabled === undefined ? true : enabled;
-  raiseErrors = raiseErrors === undefined ? true : raiseErrors;
+  ignoreErrors = ignoreErrors === undefined ? false : ignoreErrors;
 
   const sessionCaps = {
     platformName: ios ? 'iOS' : 'Android'
@@ -22,13 +22,13 @@ module.exports = function({
       deviceName,
       'percy:options': {
         enabled: enabled,
-        raiseErrors: raiseErrors
+        ignoreErrors: ignoreErrors
       }
     };
   } else if (ios) {
     sessionCaps['percy:options'] = {
       enabled: enabled,
-      raiseErrors: raiseErrors
+      ignoreErrors: ignoreErrors
     };
     sessionCaps.deviceName = deviceName;
   }

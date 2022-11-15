@@ -39,7 +39,7 @@ describe('percyScreenshot', () => {
     });
 
     describe('errors', () => {
-      describe('with percy:options.raiseErrors true', () => {
+      describe('with percy:options.ignoreErrors false', () => {
         it('logs errors if any', async () => {
           driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
 
@@ -48,9 +48,9 @@ describe('percyScreenshot', () => {
         });
       });
 
-      describe('with percy:options.raiseErrors false', () => {
+      describe('with percy:options.ignoreErrors true', () => {
         it('logs errors if any', async () => {
-          driver = wdDriver({ raiseErrors: false });
+          driver = wdDriver({ ignoreErrors: true });
           driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
 
           await percyScreenshot(driver, 'Screenshot 1');
