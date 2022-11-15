@@ -1,6 +1,4 @@
 extends: standard
-parserOptions:
-  ecmaVersion: 13
 rules:
   prefer-const: off
   no-unused-expressions: off

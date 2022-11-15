@@ -21,14 +21,14 @@ module.exports = function({
     sessionCaps.desired = {
       deviceName,
       'percy:options': {
-        enabled: enabled,
-        ignoreErrors: ignoreErrors
+        enabled,
+        ignoreErrors
       }
     };
   } else if (ios) {
     sessionCaps['percy:options'] = {
-      enabled: enabled,
-      ignoreErrors: ignoreErrors
+      enabled,
+      ignoreErrors
     };
     sessionCaps.deviceName = deviceName;
   }

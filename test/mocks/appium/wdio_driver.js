@@ -19,8 +19,8 @@ class Browser {
     const sessionCaps = {
       platformName: ios ? 'iOS' : 'Android',
       'percy:options': {
-        enabled: enabled,
-        ignoreErrors: ignoreErrors
+        enabled,
+        ignoreErrors
       }
     };
 
@@ -31,8 +31,8 @@ class Browser {
       };
     } else if (ios) {
       sessionCaps['percy:options'] = {
-        enabled: enabled,
-        ignoreErrors: ignoreErrors
+        enabled,
+        ignoreErrors
       };
       sessionCaps.deviceName = deviceName;
     }

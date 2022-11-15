@@ -62,7 +62,7 @@ class AppAutomateProvider extends GenericProvider {
           name,
           percyScreenshotUrl,
           status: percyScreenshotUrl ? 'success' : 'failure',
-          statusMessage: statusMessage,
+          statusMessage,
           state: 'end'
         });
       } catch (e) {

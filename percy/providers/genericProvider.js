@@ -54,8 +54,8 @@ class GenericProvider {
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
     return await utils.postComparison({
       name,
-      tag: tag,
-      tiles: tiles,
+      tag,
+      tiles,
       externalDebugUrl: this.getDebugUrl(),
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO
@@ -72,7 +72,7 @@ class GenericProvider {
         navBarHeight: await this.metadata.navigationBarHeight(),
         headerHeight: 0,
         footerHeight: 0,
-        fullscreen: fullscreen
+        fullscreen
       })
     ];
   }
