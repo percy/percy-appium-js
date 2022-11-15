@@ -1,13 +1,13 @@
 # @percy/appium-webdriver
-[![Version](https://img.shields.io/npm/v/@percy/appium-webdriver.svg)](https://npmjs.org/package/@percy/appium-webdriver)
+[![Version](https://img.shields.io/npm/v/@percy/appium-app.svg)](https://npmjs.org/package/@percy/appium-app)
 ![Test](https://github.com/percy/percy-appium-js/workflows/Test/badge.svg)
 
-[Percy](https://percy.io) visual testing [Appium (wd) and WebdriverIO](https://webdriver.io/docs/appium-service/)
+[Percy](https://percy.io) visual testing [Appium (wd)](https://www.npmjs.com/package/wd) and [WebdriverIO](https://webdriver.io/docs/appium-service/)
 
 ## Installation
 
 ```sh-session
-$ npm install --save-dev @percy/cli @percy/appium
+$ npm install --save-dev @percy/cli @percy/appium-app
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ $ npm install --save-dev @percy/cli @percy/appium
 This is an example test using the `percyScreenshot` function.
 
 ```js
-const percyScreenshot = require('@percy/appium');
+const percyScreenshot = require('@percy/appium-app');
 
 describe('Appium webdriverio test example', function() {
   it('takes a screenshot', async () => {
