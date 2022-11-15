@@ -25,6 +25,7 @@ describe('Appium webdriverio test example', function() {
 
 describe('Appium wd test example', function() {
   it('takes a screenshot', async () => {
+    driver = // use your existing way to create appium driver with wd
     await percyScreenshot(driver, 'Appium JS example');
   });
 });
