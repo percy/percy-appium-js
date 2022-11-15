@@ -1,7 +1,7 @@
 {
-  "name": "@percy/appium-webdriver",
+  "name": "@percy/appium",
   "description": "Appium client library for visual testing with Percy",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "author": "Perceptual Inc.",
   "repository": "https://github.com/percy/percy-appium-js",
@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@percy/sdk-utils": "^1.0.0",
-    
     "tmp": "^0.2.1"
   },
   "devDependencies": {

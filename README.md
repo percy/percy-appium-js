@@ -7,7 +7,7 @@
 ## Installation
 
 ```sh-session
-$ npm install --save-dev @percy/cli @percy/appium-webdriver
+$ npm install --save-dev @percy/cli @percy/appium
 ```
 
 ## Usage
@@ -15,16 +15,16 @@ $ npm install --save-dev @percy/cli @percy/appium-webdriver
 This is an example test using the `percyScreenshot` function.
 
 ```js
-const percyScreenshot = require('@percy/appium-webdriver);
+const percyScreenshot = require('@percy/appium');
 
 describe('Appium webdriverio test example', function() {
-  it('takes a screenshot, async () => {
+  it('takes a screenshot', async () => {
     await percyScreenshot('Appium JS example');
   });
 });
 
 describe('Appium wd test example', function() {
-  it('takes a screenshot, async () => {
+  it('takes a screenshot', async () => {
     await percyScreenshot(driver, 'Appium JS example');
   });
 });
