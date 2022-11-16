@@ -4,7 +4,10 @@
   "version": "0.0.1",
   "license": "MIT",
   "author": "Perceptual Inc.",
-  "repository": "https://github.com/percy/percy-appium-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/percy/percy-appium-js.git"
+  },
   "keywords": [
     "appium",
     "percy",
@@ -14,10 +17,14 @@
   "types": "types/index.d.ts",
   "files": [
     "index.js",
-    "types/index.d.ts"
+    "types/index.d.ts",
+    "percy"
   ],
   "engines": {
     "node": ">=14"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
@@ -44,5 +51,12 @@
     "tsd": "^0.24.1",
     "wd": "^1.14.0",
     "webdriverio": "^7.25.4"
+  },
+  "bugs": {
+    "url": "https://github.com/percy/percy-appium-js/issues"
+  },
+  "homepage": "https://github.com/percy/percy-appium-js#readme",
+  "directories": {
+    "test": "test"
   }
 }
