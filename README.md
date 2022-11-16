@@ -1,4 +1,4 @@
-# @percy/appium-webdriver
+# @percy/appium-app
 [![Version](https://img.shields.io/npm/v/@percy/appium-app.svg)](https://npmjs.org/package/@percy/appium-app)
 ![Test](https://github.com/percy/percy-appium-js/workflows/Test/badge.svg)
 
