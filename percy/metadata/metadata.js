@@ -27,7 +27,8 @@ class Metadata {
   }
 
   async osVersion() {
-    return (await this.caps()).osVersion?.split('.')[0];
+    const caps = await this.caps();
+    return (caps.osVersion || caps.platformVersion)?.split('.')[0];
   }
 
   async orientation() {
