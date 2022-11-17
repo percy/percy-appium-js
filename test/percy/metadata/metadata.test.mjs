@@ -38,6 +38,16 @@ describe('Metadata', () => {
       mockCaps({ osVersion: '12.5' });
       expect(await metadata.osVersion()).toEqual('12');
     });
+
+    it('returns major os version from platform caps', async () => {
+      mockCaps({ platformVersion: '12.5' });
+      expect(await metadata.osVersion()).toEqual('12');
+    });
+
+    it('returns major os version if both osVersion and platformVersion are present', async () => {
+      mockCaps({ osVersion: '12.5', platformVersion: '13.7' }); // keeping different for test
+      expect(await metadata.osVersion()).toEqual('12');
+    });
   });
 
   describe('orientation', () => {
