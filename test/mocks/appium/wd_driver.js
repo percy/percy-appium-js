@@ -45,6 +45,7 @@ module.exports = function({
       if (str.includes('getSessionDetails')) {
         res = {
           device: deviceName,
+          os_version: 'osVersion',
           browser_url: 'url'
         };
       } else {

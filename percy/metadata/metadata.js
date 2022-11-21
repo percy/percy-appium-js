@@ -2,6 +2,7 @@ const log = require('../util/log');
 class Metadata {
   constructor(driver, {
     deviceName,
+    osVersion,
     orientation,
     statusBarHeight,
     navigationBarHeight
@@ -11,6 +12,7 @@ class Metadata {
     this.remoteHostname = this.driver.remoteHostname;
 
     this._deviceName = deviceName;
+    this._osVersion = osVersion;
     this._orientation = orientation || 'caps';
     this._statusBarHeight = statusBarHeight;
     this._navigationBarHeight = navigationBarHeight;
@@ -27,6 +29,8 @@ class Metadata {
   }
 
   async osVersion() {
+    if (this._osVersion) return this._osVersion;
+
     const caps = await this.caps();
     return (caps.osVersion || caps.platformVersion)?.split('.')[0];
   }

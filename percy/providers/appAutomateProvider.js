@@ -27,6 +27,7 @@ class AppAutomateProvider extends GenericProvider {
       response = await super.screenshot(name, {
         fullscreen,
         deviceName: deviceName || await this.getDeviceName(),
+        osVersion: await this.getOsVersion(),
         orientation,
         statusBarHeight,
         navigationBarHeight
@@ -72,8 +73,14 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   async getDeviceName() {
-    return await TimeIt.run('getDeviceName', async () => {
+    return await TimeIt.run('getAADeviceName', async () => {
       return (await this.getSessionDetails()).device;
+    });
+  }
+
+  async getOsVersion() {
+    return await TimeIt.run('getAAOsVersion', async () => {
+      return (await this.getSessionDetails()).os_version;
     });
   }
 

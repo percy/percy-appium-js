@@ -35,6 +35,7 @@ class GenericProvider {
   async screenshot(name, {
     fullscreen,
     deviceName,
+    osVersion,
     orientation,
     statusBarHeight,
     navigationBarHeight
@@ -43,6 +44,7 @@ class GenericProvider {
 
     this.metadata = await MetadataResolver.resolve(this.driver, {
       deviceName,
+      osVersion,
       orientation,
       statusBarHeight,
       navigationBarHeight
