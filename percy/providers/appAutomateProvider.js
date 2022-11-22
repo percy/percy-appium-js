@@ -10,7 +10,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   static supports(driver) {
-    return driver.remoteHostname.includes('browserstack');
+    return driver.remoteHostname.includes(process.env.AA_DOMAIN || 'browserstack');
   }
 
   async screenshot(name, {
@@ -80,7 +80,7 @@ class AppAutomateProvider extends GenericProvider {
 
   async getOsVersion() {
     return await TimeIt.run('getAAOsVersion', async () => {
-      return (await this.getSessionDetails()).os_version;
+      return (await this.getSessionDetails()).os_version?.split('.')[0];
     });
   }
 
