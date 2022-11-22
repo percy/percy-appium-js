@@ -36,12 +36,9 @@ describe('AppAutomateProvider', () => {
       await appAutomate.screenshot('abc');
 
       expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
-
       expect(getDeviceNameSpy.calls.count()).toEqual(1);
       expect(getOsVersionSpy.calls.count()).toEqual(1);
-
       expect(superScreenshotSpy).toHaveBeenCalledWith('abc', jasmine.any(Object));
-
       expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', 'undefined');
     });
 
