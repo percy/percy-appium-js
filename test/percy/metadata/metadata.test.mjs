@@ -34,6 +34,12 @@ describe('Metadata', () => {
   });
 
   describe('osVersion', () => {
+    it('returns passed osVersion if passed', async () => {
+      meta({ osVersion: '14' });
+      mockCaps({ osVersion: '12.5' });
+      expect(await metadata.osVersion()).toEqual('14');
+    });
+
     it('returns major os version', async () => {
       mockCaps({ osVersion: '12.5' });
       expect(await metadata.osVersion()).toEqual('12');

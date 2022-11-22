@@ -10,7 +10,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   static supports(driver) {
-    return driver.remoteHostname.includes('browserstack');
+    return driver.remoteHostname.includes(process.env.AA_DOMAIN || 'browserstack');
   }
 
   async screenshot(name, {
@@ -27,6 +27,7 @@ class AppAutomateProvider extends GenericProvider {
       response = await super.screenshot(name, {
         fullscreen,
         deviceName: deviceName || await this.getDeviceName(),
+        osVersion: await this.getOsVersion(),
         orientation,
         statusBarHeight,
         navigationBarHeight
@@ -72,8 +73,14 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   async getDeviceName() {
-    return await TimeIt.run('getDeviceName', async () => {
+    return await TimeIt.run('getAADeviceName', async () => {
       return (await this.getSessionDetails()).device;
+    });
+  }
+
+  async getOsVersion() {
+    return await TimeIt.run('getAAOsVersion', async () => {
+      return (await this.getSessionDetails()).os_version?.split('.')[0];
     });
   }
 

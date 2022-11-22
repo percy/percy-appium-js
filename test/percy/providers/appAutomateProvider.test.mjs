@@ -5,26 +5,53 @@ import AppiumDriverMock from '../../mocks/appium/appium_driver.js';
 
 describe('AppAutomateProvider', () => {
   let driver;
+  let superScreenshotSpy;
 
   beforeEach(async () => {
     driver = AppiumDriverMock();
+    superScreenshotSpy = spyOn(GenericProvider.prototype, 'screenshot');
   });
 
   describe('screenshot', () => {
+    let getDeviceNameSpy;
+    let getOsVersionSpy;
+    let percyScreenshotBeginSpy;
+    let percyScreenshotEndSpy;
+
+    beforeEach(() => {
+      getDeviceNameSpy = spyOn(AppAutomateProvider.prototype,
+        'getDeviceName').and.returnValue('deviceName');
+      getOsVersionSpy = spyOn(AppAutomateProvider.prototype,
+        'getOsVersion').and.returnValue('osVersion');
+      percyScreenshotBeginSpy = spyOn(AppAutomateProvider.prototype,
+        'percyScreenshotBegin').and.returnValue(true);
+      percyScreenshotEndSpy = spyOn(AppAutomateProvider.prototype,
+        'percyScreenshotEnd').and.returnValue(true);
+    });
+
     it('test call with default args', async () => {
       const appAutomate = new AppAutomateProvider(driver);
 
-      spyOn(GenericProvider.prototype, 'screenshot').and.resolveTo({});
+      superScreenshotSpy.and.resolveTo({ body: { link: 'link to screenshot' } });
       await appAutomate.screenshot('abc');
+
+      expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
+      expect(getDeviceNameSpy.calls.count()).toEqual(1);
+      expect(getOsVersionSpy.calls.count()).toEqual(1);
+      expect(superScreenshotSpy).toHaveBeenCalledWith('abc', jasmine.any(Object));
+      expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', 'undefined');
     });
 
     it('passes exception message to percyScreenshotEnd in case of exception', async () => {
       const appAutomate = new AppAutomateProvider(driver);
       const errorMessage = 'Some error occured';
-      spyOn(GenericProvider.prototype, 'screenshot').and.rejectWith(new Error(errorMessage));
-      const percyScreenshotEndSpy = spyOn(AppAutomateProvider.prototype,
-        'percyScreenshotEnd').and.rejectWith(new Error(errorMessage));
+      superScreenshotSpy.and.rejectWith(new Error(errorMessage));
+      percyScreenshotEndSpy.and.rejectWith(new Error(errorMessage));
+
       await expectAsync(appAutomate.screenshot('abc')).toBeRejectedWithError(errorMessage);
+
+      expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
+
       expect(percyScreenshotEndSpy).toHaveBeenCalledWith(
         'abc', undefined, `Error: ${errorMessage}`);
     });
