@@ -58,7 +58,7 @@ class GenericProvider {
       name,
       tag,
       tiles,
-      externalDebugUrl: this.getDebugUrl(),
+      externalDebugUrl: await this.getDebugUrl(),
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO
     });
