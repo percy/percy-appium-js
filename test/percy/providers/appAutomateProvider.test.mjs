@@ -80,4 +80,26 @@ describe('AppAutomateProvider', () => {
       expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('failure'));
     });
   });
+
+  describe('getDebugUrl', () => {
+    const browserUrl = 'https://abc';
+    let getSessionDetailsSpy;
+
+    beforeEach(() => {
+      getSessionDetailsSpy = spyOn(AppAutomateProvider.prototype,
+        'getSessionDetails').and.returnValue({});
+    });
+
+    it('returns undefined if no browser_url in session details', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+
+      expect(await appAutomate.getDebugUrl()).toEqual(undefined);
+    });
+
+    it('returns undefined if no browser_url in session details', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      getSessionDetailsSpy.and.returnValue({ browser_url: browserUrl });
+      expect(await appAutomate.getDebugUrl()).toEqual(browserUrl);
+    });
+  });
 });

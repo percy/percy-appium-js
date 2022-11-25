@@ -54,6 +54,7 @@ class GenericProvider {
     const tiles = await this.getTiles(fullscreen);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
+    log.debug(`${name} : Debug url ${await this.getDebugUrl()}`);
     return await utils.postComparison({
       name,
       tag,

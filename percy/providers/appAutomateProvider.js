@@ -100,7 +100,7 @@ class AppAutomateProvider extends GenericProvider {
 
   async getDebugUrl() {
     return await TimeIt.run('getDebugUrl', async () => {
-      return await this.getSessionDetails().browser_url;
+      return (await this.getSessionDetails()).browser_url;
     });
   }
 }
