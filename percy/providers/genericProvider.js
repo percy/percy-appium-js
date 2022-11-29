@@ -103,10 +103,16 @@ class GenericProvider {
 
   // this creates a temp file and closes descriptor
   async tempFile() {
+    const percyTmpDir = process.env.PERCY_TMP_DIR;
+    if (percyTmpDir) {
+      // this does not throw for existing directory if recursive is true
+      await fs.mkdir(percyTmpDir, { recursive: true });
+    }
     return await TimeIt.run('tempFile', async () => {
       return await new Promise((resolve, reject) => {
         tmp.file({
           mode: 0o644,
+          tmpdir: process.env.PERCY_TMP_DIR,
           prefix: 'percy-',
           postfix: '.png',
           discardDescriptor: true
