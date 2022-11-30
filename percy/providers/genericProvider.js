@@ -112,7 +112,7 @@ class GenericProvider {
       return await new Promise((resolve, reject) => {
         tmp.file({
           mode: 0o644,
-          tmpdir: process.env.PERCY_TMP_DIR,
+          tmpdir: percyTmpDir,
           prefix: 'percy-',
           postfix: '.png',
           discardDescriptor: true
