@@ -49,7 +49,7 @@ class Browser {
       statusBar: { height: 60 },
       navigationBar: { height: 30 }
     });
-    this.execute = jasmine.createSpy().and.callFake((str) => {
+    this.execute = jasmine.createSpy().and.callFake(() => {
       let res = {
         success: true,
         deviceName: 'Google Pixel 4',

@@ -73,7 +73,23 @@ describe('AppAutomateProvider', () => {
     });
   });
 
-  describe('getDebugUrl', () => {
+  describe('browserstackExecutor', () => {
+    it('only sends action when no arguments are provided', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      await appAutomate.browserstackExecutor('action');
+
+      expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('action'));
+    });
+
+    it('uses arguments when provided', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      await appAutomate.browserstackExecutor('action', { arg: 'arg1' });
+
+      expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('arguments'));
+    });
+  });
+
+  describe('setDebugUrl', () => {
     const browserUrl = 'https://app-automate.browserstack.com/dashboard/v2/builds/abc/sessions/def';
 
     it('returns undefined if no browser_url in session details', async () => {

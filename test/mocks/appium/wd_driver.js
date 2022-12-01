@@ -40,7 +40,7 @@ module.exports = function({
     },
     sessionCapabilities: jasmine.createSpy().and.returnValue(sessionCaps),
     takeScreenshot: jasmine.createSpy().and.resolveTo('some screenshot data'),
-    execute: jasmine.createSpy().and.callFake((str) => {
+    execute: jasmine.createSpy().and.callFake(() => {
       let res = {
         success: true,
         deviceName: 'Google Pixel 4',
