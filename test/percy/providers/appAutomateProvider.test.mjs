@@ -13,16 +13,10 @@ describe('AppAutomateProvider', () => {
   });
 
   describe('screenshot', () => {
-    let getDeviceNameSpy;
-    let getOsVersionSpy;
     let percyScreenshotBeginSpy;
     let percyScreenshotEndSpy;
 
     beforeEach(() => {
-      getDeviceNameSpy = spyOn(AppAutomateProvider.prototype,
-        'getDeviceName').and.returnValue('deviceName');
-      getOsVersionSpy = spyOn(AppAutomateProvider.prototype,
-        'getOsVersion').and.returnValue('osVersion');
       percyScreenshotBeginSpy = spyOn(AppAutomateProvider.prototype,
         'percyScreenshotBegin').and.returnValue(true);
       percyScreenshotEndSpy = spyOn(AppAutomateProvider.prototype,
@@ -36,8 +30,6 @@ describe('AppAutomateProvider', () => {
       await appAutomate.screenshot('abc');
 
       expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
-      expect(getDeviceNameSpy.calls.count()).toEqual(1);
-      expect(getOsVersionSpy.calls.count()).toEqual(1);
       expect(superScreenshotSpy).toHaveBeenCalledWith('abc', jasmine.any(Object));
       expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', 'undefined');
     });
@@ -82,24 +74,12 @@ describe('AppAutomateProvider', () => {
   });
 
   describe('getDebugUrl', () => {
-    const browserUrl = 'https://abc';
-    let getSessionDetailsSpy;
-
-    beforeEach(() => {
-      getSessionDetailsSpy = spyOn(AppAutomateProvider.prototype,
-        'getSessionDetails').and.returnValue({});
-    });
+    const browserUrl = 'https://app-automate.browserstack.com/dashboard/v2/builds/abc/sessions/def';
 
     it('returns undefined if no browser_url in session details', async () => {
       const appAutomate = new AppAutomateProvider(driver);
-
-      expect(await appAutomate.getDebugUrl()).toEqual(undefined);
-    });
-
-    it('returns undefined if no browser_url in session details', async () => {
-      const appAutomate = new AppAutomateProvider(driver);
-      getSessionDetailsSpy.and.returnValue({ browser_url: browserUrl });
-      expect(await appAutomate.getDebugUrl()).toEqual(browserUrl);
+      await appAutomate.setDebugUrl({ buildHash: 'abc', sessionHash: 'def' });
+      expect(await appAutomate.debugUrl).toEqual(browserUrl);
     });
   });
 });
