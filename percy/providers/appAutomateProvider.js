@@ -79,11 +79,9 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   async setDebugUrl(result) {
-    return await TimeIt.run('setDebugUrl', async () => {
-      const buildHash = result.buildHash;
-      const sessionHash = result.sessionHash;
-      this.debugUrl = `https://app-automate.browserstack.com/dashboard/v2/builds/${buildHash}/sessions/${sessionHash}`;
-    });
+    const buildHash = result.buildHash;
+    const sessionHash = result.sessionHash;
+    this.debugUrl = `https://app-automate.browserstack.com/dashboard/v2/builds/${buildHash}/sessions/${sessionHash}`;
   }
 }
 

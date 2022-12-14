@@ -43,7 +43,7 @@ module.exports = function({
     execute: jasmine.createSpy().and.callFake(() => {
       let res = {
         success: true,
-        deviceName: 'Google Pixel 4',
+        deviceName,
         osVersion: '12.0',
         buildHash: 'abc',
         sessionHash: 'def'

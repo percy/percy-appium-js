@@ -60,7 +60,7 @@ class GenericProvider {
       name,
       tag,
       tiles,
-      externalDebugUrl: await this.debugUrl,
+      externalDebugUrl: await this.getDebugUrl(),
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO
     });
@@ -124,6 +124,10 @@ class GenericProvider {
         });
       });
     });
+  }
+
+  async getDebugUrl() {
+    return this.debugUrl;
   }
 }
 
