@@ -49,17 +49,14 @@ class Browser {
       statusBar: { height: 60 },
       navigationBar: { height: 30 }
     });
-    this.execute = jasmine.createSpy().and.callFake((str) => {
-      let res;
-      if (str.includes('getSessionDetails')) {
-        res = {
-          device: deviceName,
-          os_version: 'osVersion',
-          browser_url: 'url'
-        };
-      } else {
-        res = { success: true };
-      }
+    this.execute = jasmine.createSpy().and.callFake(() => {
+      let res = {
+        success: true,
+        deviceName,
+        osVersion: '12.0',
+        buildHash: 'abc',
+        sessionHash: 'def'
+      };
       return JSON.stringify(res);
     });
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');

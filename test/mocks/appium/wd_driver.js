@@ -40,17 +40,14 @@ module.exports = function({
     },
     sessionCapabilities: jasmine.createSpy().and.returnValue(sessionCaps),
     takeScreenshot: jasmine.createSpy().and.resolveTo('some screenshot data'),
-    execute: jasmine.createSpy().and.callFake((str) => {
-      let res;
-      if (str.includes('getSessionDetails')) {
-        res = {
-          device: deviceName,
-          os_version: 'osVersion',
-          browser_url: 'url'
-        };
-      } else {
-        res = { success: true };
-      }
+    execute: jasmine.createSpy().and.callFake(() => {
+      let res = {
+        success: true,
+        deviceName,
+        osVersion: '12.0',
+        buildHash: 'abc',
+        sessionHash: 'def'
+      };
       return JSON.stringify(res);
     }),
     getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT')

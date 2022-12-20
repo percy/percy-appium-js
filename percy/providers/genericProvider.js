@@ -26,6 +26,7 @@ class GenericProvider {
   constructor(driver) {
     this.driver = driver;
     this.metadata = null;
+    this.debugUrl = null;
   }
 
   static supports(_driver) {
@@ -54,7 +55,7 @@ class GenericProvider {
     const tiles = await this.getTiles(fullscreen);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
-    log.debug(`${name} : Debug url ${await this.getDebugUrl()}`);
+    log.debug(`${name} : Debug url ${this.debugUrl}`);
     return await utils.postComparison({
       name,
       tag,
@@ -126,7 +127,7 @@ class GenericProvider {
   }
 
   async getDebugUrl() {
-    return null;
+    return this.debugUrl;
   }
 }
 
