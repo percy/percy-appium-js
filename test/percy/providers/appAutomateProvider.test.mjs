@@ -15,12 +15,15 @@ describe('AppAutomateProvider', () => {
   describe('screenshot', () => {
     let percyScreenshotBeginSpy;
     let percyScreenshotEndSpy;
+    let percyScreenshotSpy;
 
     beforeEach(() => {
       percyScreenshotBeginSpy = spyOn(AppAutomateProvider.prototype,
         'percyScreenshotBegin').and.returnValue(true);
       percyScreenshotEndSpy = spyOn(AppAutomateProvider.prototype,
         'percyScreenshotEnd').and.returnValue(true);
+      percyScreenshotSpy = spyOn(AppAutomateProvider.prototype,
+        'percyScreenshot').and.returnValue(true);
     });
 
     it('test call with default args', async () => {
@@ -30,6 +33,7 @@ describe('AppAutomateProvider', () => {
       await appAutomate.screenshot('abc');
 
       expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
+      expect(percyScreenshotSpy).toHaveBeenCalled();
       expect(superScreenshotSpy).toHaveBeenCalledWith('abc', jasmine.any(Object));
       expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', 'undefined');
     });

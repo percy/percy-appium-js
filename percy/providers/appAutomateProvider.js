@@ -1,6 +1,7 @@
 const { GenericProvider } = require('./genericProvider');
 const { TimeIt } = require('../util/timing');
 const log = require('../util/log');
+const { Tile } = require('../util/tile');
 
 class AppAutomateProvider extends GenericProvider {
   constructor(driver) {
@@ -38,6 +39,31 @@ class AppAutomateProvider extends GenericProvider {
       await this.percyScreenshotEnd(name, response?.body?.link, `${error}`);
     }
     return response;
+  }
+
+  async percyScreenshot() {
+    return await TimeIt.run('percyScreenshot', async () => {
+      let res = await this.browserstackExecutor('percyScreenshot', {
+        percyBuildId: process.env.PERCY_BUILD_ID,
+        state: 'screenshot'
+      });
+      return res.result;
+    });
+  }
+
+  async getTiles(fullscreen) {
+    const sha = await this.percyScreenshot();
+    return [
+      new Tile({
+        filepath: null,
+        sha,
+        statusBarHeight: await this.metadata.statusBarHeight(),
+        navBarHeight: await this.metadata.navigationBarHeight(),
+        headerHeight: 0,
+        footerHeight: 0,
+        fullscreen
+      })
+    ];
   }
 
   async percyScreenshotBegin(name) {

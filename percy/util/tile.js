@@ -1,6 +1,7 @@
 class Tile {
   constructor({
     filepath,
+    sha,
     statusBarHeight,
     navBarHeight,
     headerHeight,
@@ -8,6 +9,7 @@ class Tile {
     fullscreen
   }) {
     this.filepath = filepath;
+    this.sha = sha;
     this.statusBarHeight = statusBarHeight;
     this.navBarHeight = navBarHeight;
     this.headerHeight = headerHeight;

@@ -72,6 +72,7 @@ class GenericProvider {
     return [
       new Tile({
         filepath: path,
+        sha: null,
         statusBarHeight: await this.metadata.statusBarHeight(),
         navBarHeight: await this.metadata.navigationBarHeight(),
         headerHeight: 0,
