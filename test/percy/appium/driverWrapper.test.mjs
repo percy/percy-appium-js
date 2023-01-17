@@ -28,10 +28,24 @@ describe('AppiumDriver', () => {
       expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: false });
     });
 
-    it('returns options from percy:options caps', async () => {
+    it('returns default options from percy:options caps', async () => {
       const driver = new AppiumDriver(wdDriver());
 
       expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: false });
+    });
+
+    it('returns options from percyOptions caps', async () => {
+      const driver = new AppiumDriver(wdDriver());
+      // Mocking case where there are percyOptions
+      // Note: here we are mocking function from AppiumDriver instead of giving
+      // correct data in underlying wd driver
+      driver.getCapabilities = jasmine.createSpy().and.resolveTo(
+        {'percyOptions': {
+          enabled: false,
+          ignoreErrors: true
+        }}
+      );
+      expect(await driver.getPercyOptions()).toEqual({ enabled: false, ignoreErrors: true });
     });
   });
 });

@@ -74,7 +74,7 @@ class AppiumDriver {
 
     // pull w3c
     /* istanbul ignore next */
-    const percyOptions = optionsObject['percy:options'] || {};
+    const percyOptions = optionsObject['percy:options'] || optionsObject.percyOptions || {};
 
     // defaults
     if (Undefined(percyOptions.enabled)) percyOptions.enabled = true;
