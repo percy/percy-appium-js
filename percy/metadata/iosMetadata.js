@@ -49,6 +49,10 @@ class IosMetadata extends Metadata {
   async staticData() {
     return staticDeviceMeta[(await this.deviceName())?.toLowerCase()];
   }
+
+  async scaleFactor() {
+    return (await this.caps()).pixelRatio;
+  }
 }
 
 module.exports = {

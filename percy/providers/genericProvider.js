@@ -39,7 +39,8 @@ class GenericProvider {
     osVersion,
     orientation,
     statusBarHeight,
-    navigationBarHeight
+    navigationBarHeight,
+    fullPage
   }) {
     fullscreen = fullscreen || false;
 
@@ -52,7 +53,7 @@ class GenericProvider {
     });
 
     const tag = await this.getTag();
-    const tiles = await this.getTiles(fullscreen);
+    const tiles = await this.getTiles(fullscreen, fullPage);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
     log.debug(`${name} : Debug url ${this.debugUrl}`);
@@ -66,7 +67,12 @@ class GenericProvider {
     });
   }
 
-  async getTiles(fullscreen) {
+  async getTiles(fullscreen, _fullPage) {
+    if (_fullPage === true) {
+      log.warn('Full page screeshot is only supported on App Automate.' +
+        ' Falling back to single page screenshot.');
+    }
+
     const base64content = await this.driver.takeScreenshot();
     const path = await this.writeTempImage(base64content);
     return [

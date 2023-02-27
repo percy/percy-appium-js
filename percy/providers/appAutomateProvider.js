@@ -1,5 +1,6 @@
 const { GenericProvider } = require('./genericProvider');
 const { TimeIt } = require('../util/timing');
+const { Tile } = require('../util/tile');
 const log = require('../util/log');
 
 class AppAutomateProvider extends GenericProvider {
@@ -17,7 +18,8 @@ class AppAutomateProvider extends GenericProvider {
     deviceName,
     orientation,
     statusBarHeight,
-    navigationBarHeight
+    navigationBarHeight,
+    fullPage
   } = {}) {
     let response = null;
     let error;
@@ -30,7 +32,8 @@ class AppAutomateProvider extends GenericProvider {
         osVersion: result.osVersion?.split('.')[0],
         orientation,
         statusBarHeight,
-        navigationBarHeight
+        navigationBarHeight,
+        fullPage
       });
     } catch (e) {
       error = e;
@@ -71,6 +74,50 @@ class AppAutomateProvider extends GenericProvider {
         log.debug(`[${name}] Could not mark App Automate session as percy`);
       }
     });
+  }
+
+  // Override this for AA specific optimizations
+  async getTiles(fullscreen, fullPage) {
+    // Temporarily restrict AA optimizations only for full page
+    if (fullPage !== true) {
+      return await super.getTiles(fullscreen, fullPage);
+    }
+    
+    // Take screenshots via browserstack executor
+    const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
+      return await this.browserstackExecutor('percyScreenshot', {
+        state: 'screenshot',
+        percyBuildId: process.env.PERCY_BUILD_ID,
+        screenshotType: 'fullpage',
+        scaleFactor: await this.metadata.scaleFactor(),
+        options: {
+          numOfTiles: 4, // default, user configurable in the future
+          deviceHeight: (await this.metadata.screenSize()).height,
+        },
+      });  
+    });
+    
+    if (!response.success) {
+      throw new Error('Failed to get screenshots from App Automate.' +
+      ' Check dashboard for error.');
+    }
+    
+    const tiles = [];
+    const statBarHeight = await this.metadata.statusBarHeight();
+    const navBarHeight = await this.metadata.navigationBarHeight();
+    
+    response.result.forEach(tileData => {
+      tiles.push(new Tile({
+        statBarHeight,
+        navBarHeight,
+        fullscreen, 
+        headerHeight: tileData['header_height'],
+        footerHeight: tileData['footer_height'],
+        sha: tileData['sha'].split('-')[0], // drop build id
+      }));
+    });
+
+    return tiles;
   }
 
   async browserstackExecutor(action, args) {

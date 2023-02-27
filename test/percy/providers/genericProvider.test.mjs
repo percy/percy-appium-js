@@ -31,4 +31,18 @@ describe('GenericProvider', () => {
       });
     });
   });
+
+  describe('getTiles', () => {
+    describe('with fullPage on generic provider', () => {
+      beforeEach(() => {
+        // mock metadata
+        provider.metadata = { statusBarHeight: () => 1, navigationBarHeight: () => 1};
+      });
+
+      it('defaults to single page screenshot', async () => {
+        const tiles = await provider.getTiles(true, true);
+        expect(tiles.length).toEqual(1);
+      });
+    });
+  });
 });
