@@ -4,7 +4,7 @@ module.exports = function({
   deviceName,
   enabled,
   ignoreErrors,
-  failScreenshot,
+  failScreenshot
 } = {}) {
   appAutomate = appAutomate || false;
   const ios = platform === 'iOS';
@@ -53,15 +53,15 @@ module.exports = function({
           };
           return JSON.stringify(res);
         } else if (str.includes('end')) {
-          return JSON.stringify({success: true})
+          return JSON.stringify({ success: true });
         } else if (str.includes('screenshot')) {
           return JSON.stringify({
-            success: failScreenshot ? false : true,
+            success: !failScreenshot,
             result: [
-              {sha: '123-12', headerHeight: 12, footerHeight: 123},
-              {sha: '124-12', headerHeight: 12, footerHeight: 123},
-            ] 
-          })
+              { sha: '123-12', headerHeight: 12, footerHeight: 123 },
+              { sha: '124-12', headerHeight: 12, footerHeight: 123 }
+            ]
+          });
         }
       }
     }),

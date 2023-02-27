@@ -5,6 +5,6 @@ module.exports = function() {
     sessionId: 'sessionId',
     remoteHostname: 'localhost',
     execute: jasmine.createSpy().and.resolveTo(JSON.stringify({ success: true })),
-    takeScreenshot: jasmine.createSpy().and.resolveTo('abcd='),
+    takeScreenshot: jasmine.createSpy().and.resolveTo('abcd=')
   };
 };

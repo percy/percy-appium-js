@@ -82,7 +82,7 @@ class AppAutomateProvider extends GenericProvider {
     if (fullPage !== true) {
       return await super.getTiles(fullscreen, fullPage);
     }
-    
+
     // Take screenshots via browserstack executor
     const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
       return await this.browserstackExecutor('percyScreenshot', {
@@ -92,28 +92,28 @@ class AppAutomateProvider extends GenericProvider {
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
           numOfTiles: 4, // default, user configurable in the future
-          deviceHeight: (await this.metadata.screenSize()).height,
-        },
-      });  
+          deviceHeight: (await this.metadata.screenSize()).height
+        }
+      });
     });
-    
+
     if (!response.success) {
       throw new Error('Failed to get screenshots from App Automate.' +
       ' Check dashboard for error.');
     }
-    
+
     const tiles = [];
     const statBarHeight = await this.metadata.statusBarHeight();
     const navBarHeight = await this.metadata.navigationBarHeight();
-    
+
     response.result.forEach(tileData => {
       tiles.push(new Tile({
         statBarHeight,
         navBarHeight,
-        fullscreen, 
-        headerHeight: tileData['header_height'],
-        footerHeight: tileData['footer_height'],
-        sha: tileData['sha'].split('-')[0], // drop build id
+        fullscreen,
+        headerHeight: tileData.header_height,
+        footerHeight: tileData.footer_height,
+        sha: tileData.sha.split('-')[0] // drop build id
       }));
     });
 
