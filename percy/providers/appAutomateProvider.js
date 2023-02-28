@@ -19,7 +19,8 @@ class AppAutomateProvider extends GenericProvider {
     orientation,
     statusBarHeight,
     navigationBarHeight,
-    fullPage
+    fullPage,
+    screenLengths
   } = {}) {
     let response = null;
     let error;
@@ -33,7 +34,8 @@ class AppAutomateProvider extends GenericProvider {
         orientation,
         statusBarHeight,
         navigationBarHeight,
-        fullPage
+        fullPage,
+        screenLengths
       });
     } catch (e) {
       error = e;
@@ -77,10 +79,10 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   // Override this for AA specific optimizations
-  async getTiles(fullscreen, fullPage) {
+  async getTiles(fullscreen, fullPage, screenLengths) {
     // Temporarily restrict AA optimizations only for full page
     if (fullPage !== true) {
-      return await super.getTiles(fullscreen, fullPage);
+      return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
     // Take screenshots via browserstack executor
@@ -91,7 +93,7 @@ class AppAutomateProvider extends GenericProvider {
         screenshotType: 'fullpage',
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
-          numOfTiles: 4, // default, user configurable in the future
+          numOfTiles: screenLengths || 4,
           deviceHeight: (await this.metadata.screenSize()).height
         }
       });

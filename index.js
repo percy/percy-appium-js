@@ -17,7 +17,8 @@ module.exports = async function percyScreenshot(driver, name, {
   orientation,
   statusBarHeight,
   navigationBarHeight,
-  fullPage
+  fullPage,
+  screenLengths
 } = {}) {
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
@@ -31,6 +32,7 @@ module.exports = async function percyScreenshot(driver, name, {
       statusBarHeight = name.statusBarHeight;
       navigationBarHeight = name.navigationBarHeight;
       fullPage = name.fullPage;
+      screenLengths = name.screenLengths;
     }
     try {
       // browser is defined in wdio context
@@ -59,7 +61,8 @@ module.exports = async function percyScreenshot(driver, name, {
         orientation,
         statusBarHeight,
         navigationBarHeight,
-        fullPage
+        fullPage,
+        screenLengths
       });
       log.debug(`[${name}] -> end`);
       return response;
