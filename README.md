@@ -73,3 +73,5 @@ percyScreenshot(driver, name[, {
   - `orientation`: "portrait"/"landscape" tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
   - `statusBarHeight`: In px if you want to override SDK
   - `navigationBarHeight`: In px if you want to override SDK
+  - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions [ needs @percy/cli 1.20+ ]
+  - `screenLengths`: int [Experimental] max screen lengths for fullPage [ needs @percy/cli 1.20+ ]
