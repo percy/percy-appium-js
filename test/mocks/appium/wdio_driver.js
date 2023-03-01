@@ -66,10 +66,10 @@ class Browser {
         } else if (str.includes('screenshot')) {
           return JSON.stringify({
             success: !failScreenshot,
-            result: [
+            result: JSON.stringify([
               { sha: '123-12', headerHeight: 12, footerHeight: 123 },
               { sha: '124-12', headerHeight: 12, footerHeight: 123 }
-            ]
+            ])
           });
         }
       }

@@ -132,10 +132,15 @@ describe('percyScreenshot', () => {
                     driver = driverFunc({ platform, appAutomate, failScreenshot: true });
                   });
 
-                  it('dies not post screenshot to local percy server', async () => {
-                    await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
-                    await percyScreenshot(driver, 'Screenshot 2', {fullPage: true});
-  
+                  it('does not post screenshot to local percy server', async () => {
+                    let error = null;
+                    try{
+                      await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+                    } catch (e) {
+                      error = e;
+                    }
+
+                    expect(error).not.toEqual(null);
                     expect(await helpers.get('logs')).not.toEqual(jasmine.arrayContaining([
                       'Snapshot found: Screenshot 1',
                       'Snapshot found: Screenshot 2'

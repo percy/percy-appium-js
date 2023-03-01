@@ -39,6 +39,7 @@ class AppAutomateProvider extends GenericProvider {
       });
     } catch (e) {
       error = e;
+      throw e;
     } finally {
       await this.percyScreenshotEnd(name, response?.body?.link, `${error}`);
     }
@@ -108,7 +109,7 @@ class AppAutomateProvider extends GenericProvider {
     const statBarHeight = await this.metadata.statusBarHeight();
     const navBarHeight = await this.metadata.navigationBarHeight();
 
-    response.result.forEach(tileData => {
+    JSON.parse(response.result).forEach(tileData => {
       tiles.push(new Tile({
         statBarHeight,
         navBarHeight,
