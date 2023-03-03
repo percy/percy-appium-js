@@ -5,7 +5,8 @@ class Tile {
     navBarHeight,
     headerHeight,
     footerHeight,
-    fullscreen
+    fullscreen,
+    sha
   }) {
     this.filepath = filepath;
     this.statusBarHeight = statusBarHeight;
@@ -13,6 +14,7 @@ class Tile {
     this.headerHeight = headerHeight;
     this.footerHeight = footerHeight;
     this.fullscreen = fullscreen;
+    this.sha = sha;
   }
 }
 

@@ -168,4 +168,10 @@ describe('Metadata', () => {
       });
     });
   });
+
+  describe('scaleFactor', () => {
+    it('return 1 as default', async () => {
+      expect(await metadata.scaleFactor()).toEqual(1);
+    });
+  });
 });

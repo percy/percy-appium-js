@@ -38,6 +38,10 @@ describe('percyScreenshot', () => {
       ]));
     });
 
+    it('prints warning if fullPage: true is used on generic provider and doesnt throw', async () => {
+      await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+    });
+
     describe('errors', () => {
       describe('with percy:options.ignoreErrors false', () => {
         it('logs errors if any', async () => {
@@ -109,6 +113,41 @@ describe('percyScreenshot', () => {
                   'Snapshot found: Screenshot 2'
                 ]));
               });
+
+              if (appAutomate) {
+                it('posts full page screenshot to the local percy server', async () => {
+                  driver = driverFunc({ platform, appAutomate });
+
+                  await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+                  await percyScreenshot(driver, 'Screenshot 2', {fullPage: true});
+
+                  expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+                    'Snapshot found: Screenshot 1',
+                    'Snapshot found: Screenshot 2'
+                  ]));
+                });
+
+                describe('with failed screenshot call', () => {
+                  beforeEach(() => {
+                    driver = driverFunc({ platform, appAutomate, failScreenshot: true });
+                  });
+
+                  it('does not post screenshot to local percy server', async () => {
+                    let error = null;
+                    try{
+                      await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+                    } catch (e) {
+                      error = e;
+                    }
+
+                    expect(error).not.toEqual(null);
+                    expect(await helpers.get('logs')).not.toEqual(jasmine.arrayContaining([
+                      'Snapshot found: Screenshot 1',
+                      'Snapshot found: Screenshot 2'
+                    ]));
+                  });
+                });
+              }
             });
           }
         });

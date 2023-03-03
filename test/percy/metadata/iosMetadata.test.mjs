@@ -113,4 +113,15 @@ describe('Metadata', () => {
       });
     });
   });
+
+  describe('scaleFactor', () => {
+    const expectedScaleFactor = 1.5;
+
+    it('returns from pixelRatio field', async () => {
+      mockCaps({
+        pixelRatio: expectedScaleFactor,
+      });
+      expect(await metadata.scaleFactor()).toEqual(expectedScaleFactor);
+    });
+  });
 });

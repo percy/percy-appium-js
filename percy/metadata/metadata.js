@@ -96,6 +96,10 @@ class Metadata {
     let caps = await this.caps();
     return caps.desired.deviceName || caps.desired.device;
   }
+
+  async scaleFactor() {
+    return 1;
+  }
 }
 
 module.exports = {
