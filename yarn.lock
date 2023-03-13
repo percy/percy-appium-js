@@ -425,9 +425,9 @@
   integrity sha512-x76tOiB/m6GnND9KQ4Fjm+hl7l1NlITuveNWYuSS8Z2euqiggBAXdRuNSqV/oLR4UfgfiY6vYb7ENVpo9G33Iw==
 
 "@percy/sdk-utils@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.npmjs.org/@percy/sdk-utils/-/sdk-utils-1.20.0.tgz"
-  integrity sha512-zfHazp6nk5cINYXajnxMz4i00gG8X2DC2SSHLVwhWrGIIXMo4YFnVv5XbzDW8NqUYDk0I8VzEpNmp0rzVk4HXA==
+  version "1.20.3"
+  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.20.3.tgz#a230ef0d13756ed2194f0ee1f0d6dd04c72198a9"
+  integrity sha512-ryry+YgAKtMSq4NoRnfxDhrKoGiGq5FkUyqQvtCNGPEqXvXT7z/qurnRt6hVDTfw+5zCd+JaiV5e14NmJnu3tA==
 
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
