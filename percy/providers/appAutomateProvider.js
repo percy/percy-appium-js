@@ -29,8 +29,8 @@ class AppAutomateProvider extends GenericProvider {
       this.setDebugUrl(result);
       response = await super.screenshot(name, {
         fullscreen,
-        deviceName: deviceName || result.deviceName,
-        osVersion: result.osVersion?.split('.')[0],
+        deviceName: deviceName || result?.deviceName,
+        osVersion: result?.osVersion?.split('.')[0],
         orientation,
         statusBarHeight,
         navigationBarHeight,
@@ -59,6 +59,7 @@ class AppAutomateProvider extends GenericProvider {
         return result;
       } catch (e) {
         log.debug(`[${name}] Could not mark App Automate session as percy`);
+        return null;
       }
     });
   }
@@ -128,7 +129,9 @@ class AppAutomateProvider extends GenericProvider {
     return JSON.parse(await this.driver.execute(`browserstack_executor: ${JSON.stringify(options)}`));
   }
 
-  async setDebugUrl(result) {
+  setDebugUrl(result) {
+    if (!result) return null;
+
     const buildHash = result.buildHash;
     const sessionHash = result.sessionHash;
     this.debugUrl = `https://app-automate.browserstack.com/dashboard/v2/builds/${buildHash}/sessions/${sessionHash}`;
