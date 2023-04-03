@@ -92,10 +92,16 @@ describe('AppAutomateProvider', () => {
   describe('setDebugUrl', () => {
     const expectedBrowserUrl = 'https://app-automate.browserstack.com/dashboard/v2/builds/abc/sessions/def';
 
-    it('returns undefined if no browser_url in session details', async () => {
+    it('returns url', async () => {
       const appAutomate = new AppAutomateProvider(driver);
       await appAutomate.setDebugUrl({ buildHash: 'abc', sessionHash: 'def' });
-      expect(await appAutomate.debugUrl).toEqual(expectedBrowserUrl);
+      expect(appAutomate.debugUrl).toEqual(expectedBrowserUrl);
+    });
+
+    it('returns null if passed result was null', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      await appAutomate.setDebugUrl(null);
+      expect(appAutomate.debugUrl).toEqual(null);
     });
   });
 });

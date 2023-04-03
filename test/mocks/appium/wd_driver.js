@@ -4,7 +4,8 @@ module.exports = function({
   deviceName,
   enabled,
   ignoreErrors,
-  failScreenshot
+  failScreenshot,
+  failedBeginCall
 } = {}) {
   appAutomate = appAutomate || false;
   const ios = platform === 'iOS';
@@ -44,6 +45,9 @@ module.exports = function({
     execute: jasmine.createSpy().and.callFake((str) => {
       if (str.includes('percyScreenshot')) {
         if (str.includes('begin')) {
+          if (failedBeginCall) {
+            throw new Error('failed percyScreenshotBegin');
+          }
           let res = {
             success: true,
             deviceName,

@@ -6,7 +6,8 @@ class Browser {
     deviceName,
     enabled,
     ignoreErrors,
-    failScreenshot
+    failScreenshot,
+    failedBeginCall
   } = {}) {
     appAutomate = appAutomate || false;
     const ios = platform === 'iOS' || false;
@@ -53,6 +54,9 @@ class Browser {
     this.execute = jasmine.createSpy().and.callFake((str) => {
       if (str.includes('percyScreenshot')) {
         if (str.includes('begin')) {
+          if (failedBeginCall) {
+            throw new Error('failed percyScreenshotBegin');
+          }
           let res = {
             success: true,
             deviceName,

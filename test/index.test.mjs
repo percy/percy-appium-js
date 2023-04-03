@@ -142,8 +142,21 @@ describe('percyScreenshot', () => {
 
                     expect(error).not.toEqual(null);
                     expect(await helpers.get('logs')).not.toEqual(jasmine.arrayContaining([
-                      'Snapshot found: Screenshot 1',
-                      'Snapshot found: Screenshot 2'
+                      'Snapshot found: Screenshot 1'
+                    ]));
+                  });
+                });
+
+                describe('with failed percyScreenshotBegin call', () => {
+                  beforeEach(() => {
+                    driver = driverFunc({ platform, appAutomate, failedBeginCall: true });
+                  });
+
+                  it('does not throw', async () => {
+                    await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+
+                    expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+                      'Snapshot found: Screenshot 1'
                     ]));
                   });
                 });
