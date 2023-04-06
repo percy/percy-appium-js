@@ -9,7 +9,11 @@
 ```sh-session
 $ npm install --save-dev @percy/cli @percy/appium-app
 ```
-Note: Minimum required version for `@percy/cli` is `1.15.0` for this package to work correctly.
+> Notes: 
+>
+> Minimum required version for `@percy/cli` is `1.15.0` for this package to work correctly.
+>
+> This is tested on node 14+ and should be compatible with all newer node versions
 
 ## Usage
 
