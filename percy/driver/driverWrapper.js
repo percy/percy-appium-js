@@ -127,12 +127,16 @@ class AppiumDriver {
   }
 
   async elementByXPath(xpath) {
+    // element returned by both wd and wdio drivers have same name fucntions
+    // for finding element size and location and attributes
     if (this.wd) return await this.driver.elementByXPath(xpath);
     /* istanbul ignore next */ // not sure why its marking it when its covered
     if (this.wdio) return await this.driver.$(xpath);
   }
 
   async elementByAccessibilityId(id) {
+    // element returned by both wd and wdio drivers have same name fucntions
+    // for finding element size and location and attributes
     if (this.wd) return await this.driver.elementByAccessibilityId(id);
     /* istanbul ignore next */ // not sure why its marking it when its covered
     if (this.wdio) return await this.driver.$(`~${id}`);

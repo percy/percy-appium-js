@@ -66,15 +66,15 @@ describe('AppiumDriver', () => {
     it('should return an element by XPath for wdio driver', async () => {
       const driver = new AppiumDriver(wdioDriver());
       const xpath = '//div[@class="example"]';
-      driver.elementByXPath = jasmine.createSpy().and.returnValue(Promise.resolve('element'));
-      expect(await driver.elementByXPath(xpath)).toBe('element');
+      const element = await driver.elementByXPath(xpath);
+      expect(element).toBe('element');
     });
 
     it('should return an element by id for wdio driver', async () => {
       const driver = new AppiumDriver(wdioDriver());
       const id = 'id';
-      driver.elementByAccessibilityId = jasmine.createSpy().and.returnValue(Promise.resolve('element'));
-      expect(await driver.elementByAccessibilityId(id)).toBe('element');
+      const element = await driver.elementByAccessibilityId(id);
+      expect(element).toBe('element');
     });
   });
 });

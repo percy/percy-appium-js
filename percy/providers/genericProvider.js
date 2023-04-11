@@ -62,6 +62,7 @@ class GenericProvider {
     const tag = await this.getTag();
     const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
     const ignoreRegions = await this.findIgnoredRegions(ignoreRegionXpaths || [], ignoreRegionAccessibilityIds || [], ignoreRegionAppiumElements || [], customIgnoreRegions || []);
+    log.debug(`${name} : Tag ${JSON.stringify(ignoreRegions)}`);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
     log.debug(`${name} : Debug url ${this.debugUrl}`);
