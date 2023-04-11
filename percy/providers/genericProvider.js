@@ -14,11 +14,11 @@ const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 let clientWdPkg = null;
 try {
   clientWdPkg = require('wd/package.json');
-} catch {}
+} catch { }
 
 try {
   clientWdPkg = require('webdriverio/package.json');
-} catch {}
+} catch { }
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
@@ -41,7 +41,13 @@ class GenericProvider {
     statusBarHeight,
     navigationBarHeight,
     fullPage,
-    screenLengths
+    screenLengths,
+    ignoreRegionXpaths,
+    ignoreRegionAccessibilityIds,
+    ignoreRegionAppiumElements,
+    customIgnoreRegions,
+    scrollableXpath,
+    scrollableId
   }) {
     fullscreen = fullscreen || false;
 
@@ -54,7 +60,8 @@ class GenericProvider {
     });
 
     const tag = await this.getTag();
-    const tiles = await this.getTiles(fullscreen, fullPage, screenLengths);
+    const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
+    const ignoreRegions = await this.findIgnoredRegions(ignoreRegionXpaths || [], ignoreRegionAccessibilityIds || [], ignoreRegionAppiumElements || [], customIgnoreRegions || []);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
     log.debug(`${name} : Debug url ${this.debugUrl}`);
@@ -63,6 +70,7 @@ class GenericProvider {
       tag,
       tiles,
       externalDebugUrl: await this.getDebugUrl(),
+      ignoredElementsData: ignoreRegions,
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO
     });
@@ -135,6 +143,104 @@ class GenericProvider {
 
   async getDebugUrl() {
     return this.debugUrl;
+  }
+
+  async findIgnoredRegions(ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions) {
+    const ignoredElementsArray = [];
+    await this.ignoreRegionsByXpaths(ignoredElementsArray, ignoreRegionXpaths);
+    await this.ignoreRegionsByIds(ignoredElementsArray, ignoreRegionAccessibilityIds);
+    await this.ignoreRegionsByElement(ignoredElementsArray, ignoreRegionAppiumElements);
+    await this.addCustomIgnoreRegions(ignoredElementsArray, customIgnoreRegions);
+
+    const ignoredElementsLocations = {
+      ignoreElementsData: ignoredElementsArray
+    };
+
+    return ignoredElementsLocations;
+  }
+
+  async ignoreElementObject(selector, element) {
+    const scaleFactor = await this.metadata.scaleFactor();
+    const location = await element.getLocation();
+    const size = await element.getSize();
+    const coOrdinates = {
+      top: location.y * scaleFactor,
+      bottom: (location.y + size.height) * scaleFactor,
+      left: location.x * scaleFactor,
+      right: (location.x + size.width) * scaleFactor
+    };
+
+    const jsonObject = {
+      selector,
+      coOrdinates
+    };
+
+    return jsonObject;
+  }
+
+  async ignoreRegionsByXpaths(ignoredElementsArray, xpaths) {
+    for (const xpath of xpaths) {
+      try {
+        const element = await this.driver.elementByXPath(xpath);
+        const selector = `xpath: ${xpath}`;
+        const ignoredRegion = await this.ignoreElementObject(selector, element);
+        ignoredElementsArray.push(ignoredRegion);
+      } catch (e) {
+        log.info(`Appium Element with xpath: ${xpath} not found. Ignoring this xpath.`);
+        log.debug(e.toString());
+      }
+    }
+  }
+
+  async ignoreRegionsByIds(ignoredElementsArray, ids) {
+    for (const id of ids) {
+      try {
+        const element = await this.driver.elementByAccessibilityId(id);
+        const selector = `id: ${id}`;
+        const ignoredRegion = await this.ignoreElementObject(selector, element);
+        ignoredElementsArray.push(ignoredRegion);
+      } catch (e) {
+        log.info(`Appium Element with id: ${id} not found. Ignoring this id.`);
+        log.debug(e.toString());
+      }
+    }
+  }
+
+  async ignoreRegionsByElement(ignoredElementsArray, elements) {
+    for (let index = 0; index < elements.length; index++) {
+      try {
+        const type = await elements[index].getAttribute('class');
+        const selector = `element: ${index} ${type}`;
+
+        const ignoredRegion = await this.ignoreElementObject(selector, elements[index]);
+        ignoredElementsArray.push(ignoredRegion);
+      } catch (e) {
+        log.info(`Correct Mobile Element not passed at index ${index}.`);
+        log.debug(e.toString());
+      }
+    }
+  }
+
+  async addCustomIgnoreRegions(ignoredElementsArray, customLocations) {
+    const { width, height } = await this.metadata.screenSize();
+    for (let index = 0; index < customLocations.length; index++) {
+      const customLocation = customLocations[index];
+      if (customLocation.isValid(height, width)) {
+        const selector = `custom ignore region ${index}`;
+        const ignoredRegion = {
+          selector,
+          coOrdinates: {
+            top: customLocation.top,
+            bottom: customLocation.bottom,
+            left: customLocation.left,
+            right: customLocation.right
+          }
+        };
+        ignoredElementsArray.push(ignoredRegion);
+      } else {
+        log.info(`Values passed in custom ignored region at index: ${index} is not valid`);
+      }
+    }
   }
 }
 

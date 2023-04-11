@@ -18,7 +18,13 @@ module.exports = async function percyScreenshot(driver, name, {
   statusBarHeight,
   navigationBarHeight,
   fullPage,
-  screenLengths
+  screenLengths,
+  ignoreRegionXpaths,
+  ignoreRegionAccessibilityIds,
+  ignoreRegionAppiumElements,
+  customIgnoreRegions,
+  scrollableXpath,
+  scrollableId
 } = {}) {
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
@@ -33,6 +39,12 @@ module.exports = async function percyScreenshot(driver, name, {
       navigationBarHeight = name.navigationBarHeight;
       fullPage = name.fullPage;
       screenLengths = name.screenLengths;
+      ignoreRegionXpaths = name.ignoreRegionXpaths;
+      ignoreRegionAccessibilityIds = name.ignoreRegionAccessibilityIds;
+      ignoreRegionAppiumElements = name.ignoreRegionAppiumElements;
+      customIgnoreRegions = name.customIgnoreRegions;
+      scrollableXpath = name.scrollableXpath;
+      scrollableId = name.scrollableId;
     }
     try {
       // browser is defined in wdio context
@@ -62,7 +74,13 @@ module.exports = async function percyScreenshot(driver, name, {
         statusBarHeight,
         navigationBarHeight,
         fullPage,
-        screenLengths
+        screenLengths,
+        ignoreRegionXpaths,
+        ignoreRegionAccessibilityIds,
+        ignoreRegionAppiumElements,
+        customIgnoreRegions,
+        scrollableXpath,
+        scrollableId
       });
       log.debug(`[${name}] -> end`);
       return response;

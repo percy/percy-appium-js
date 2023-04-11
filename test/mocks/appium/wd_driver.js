@@ -69,7 +69,9 @@ module.exports = function({
         }
       }
     }),
-    getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT')
+    getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT'),
+    elementByXPath: jasmine.createSpy().and.returnValue(Promise.resolve('element')),
+    elementByAccessibilityId: jasmine.createSpy().and.returnValue(Promise.resolve('element'))
   };
 
   return obj;

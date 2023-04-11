@@ -79,6 +79,8 @@ class Browser {
       }
     });
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');
+    this.elementByXPath = jasmine.createSpy().and.returnValue(Promise.resolve('element'));
+    this.elementByAccessibilityId = jasmine.createSpy().and.returnValue(Promise.resolve('element'));
   }
 };
 

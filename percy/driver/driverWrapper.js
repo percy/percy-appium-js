@@ -16,7 +16,7 @@ class AppiumDriver {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
       driver.constructor.name === 'Object') && // Object check is only added for tests
-        !Undefined(driver.sessionCapabilities)) {
+      !Undefined(driver.sessionCapabilities)) {
       this.type = 'wd';
     }
   }
@@ -124,6 +124,16 @@ class AppiumDriver {
 
   get wd() {
     return this.type === 'wd';
+  }
+
+  async elementByXPath(xpath) {
+    if (this.wd) return await this.driver.elementByXPath(xpath);
+    if (this.wdio) return await this.driver.$(xpath);
+  }
+
+  async elementByAccessibilityId(id) {
+    if (this.wd) return await this.driver.elementByAccessibilityId(id);
+    if (this.wdio) return await this.driver.$(`~${id}`);
   }
 }
 

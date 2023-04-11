@@ -20,7 +20,13 @@ class AppAutomateProvider extends GenericProvider {
     statusBarHeight,
     navigationBarHeight,
     fullPage,
-    screenLengths
+    screenLengths,
+    ignoreRegionXpaths,
+    ignoreRegionAccessibilityIds,
+    ignoreRegionAppiumElements,
+    customIgnoreRegions,
+    scrollableXpath,
+    scrollableId
   } = {}) {
     let response = null;
     let error;
@@ -35,7 +41,13 @@ class AppAutomateProvider extends GenericProvider {
         statusBarHeight,
         navigationBarHeight,
         fullPage,
-        screenLengths
+        screenLengths,
+        ignoreRegionXpaths,
+        ignoreRegionAccessibilityIds,
+        ignoreRegionAppiumElements,
+        customIgnoreRegions,
+        scrollableXpath,
+        scrollableId
       });
     } catch (e) {
       error = e;
@@ -81,7 +93,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   // Override this for AA specific optimizations
-  async getTiles(fullscreen, fullPage, screenLengths) {
+  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
     // Temporarily restrict AA optimizations only for full page
     if (fullPage !== true) {
       return await super.getTiles(fullscreen, fullPage, screenLengths);
@@ -96,7 +108,9 @@ class AppAutomateProvider extends GenericProvider {
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
           numOfTiles: screenLengths || 4,
-          deviceHeight: (await this.metadata.screenSize()).height
+          deviceHeight: (await this.metadata.screenSize()).height,
+          scollableXpath: scrollableXpath || null,
+          scrollableId: scrollableId || null
         }
       });
     });
