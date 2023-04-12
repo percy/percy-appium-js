@@ -90,7 +90,7 @@ percyScreenshot(driver, name[, {
 
     - Constructor:
       ```
-      init(self, top, bottom, left, right)
+      constructor(top, bottom, left, right)
       ```
 
     - Parameters:
