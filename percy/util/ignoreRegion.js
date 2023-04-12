@@ -14,8 +14,12 @@ class IgnoreRegion {
     this.right = right;
   }
 
-  isValid(height, width) {
-    if (this.top >= height || this.bottom > height || this.left >= width || this.right > width) {
+  isValid(screenHeight, screenWidth) {
+    if (
+      this.top >= screenHeight ||
+      this.bottom > screenHeight ||
+      this.left >= screenWidth ||
+      this.right > screenWidth) {
       return false;
     }
 

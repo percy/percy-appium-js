@@ -61,7 +61,10 @@ class GenericProvider {
 
     const tag = await this.getTag();
     const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
-    const ignoreRegions = await this.findIgnoredRegions(ignoreRegionXpaths || [], ignoreRegionAccessibilityIds || [], ignoreRegionAppiumElements || [], customIgnoreRegions || []);
+    const ignoreRegions = await this.findIgnoredRegions(
+      ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions
+    );
+
     log.debug(`${name} : Tag ${JSON.stringify(ignoreRegions)}`);
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
@@ -148,10 +151,10 @@ class GenericProvider {
 
   async findIgnoredRegions(ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions) {
     const ignoredElementsArray = [];
-    await this.ignoreRegionsByXpaths(ignoredElementsArray, ignoreRegionXpaths);
-    await this.ignoreRegionsByIds(ignoredElementsArray, ignoreRegionAccessibilityIds);
-    await this.ignoreRegionsByElement(ignoredElementsArray, ignoreRegionAppiumElements);
-    await this.addCustomIgnoreRegions(ignoredElementsArray, customIgnoreRegions);
+    await this.ignoreRegionsByXpaths(ignoredElementsArray, ignoreRegionXpaths || []);
+    await this.ignoreRegionsByIds(ignoredElementsArray, ignoreRegionAccessibilityIds || []);
+    await this.ignoreRegionsByElement(ignoredElementsArray, ignoreRegionAppiumElements || []);
+    await this.addCustomIgnoreRegions(ignoredElementsArray, customIgnoreRegions || []);
 
     const ignoredElementsLocations = {
       ignoreElementsData: ignoredElementsArray
