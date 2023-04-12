@@ -79,6 +79,10 @@ class Browser {
       }
     });
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');
+    this.$ = jasmine.createSpy().and.returnValue(Promise.resolve({
+      getLocation: jasmine.createSpy().and.returnValue({ x: 10, y: 20 }),
+      getSize: jasmine.createSpy().and.returnValue({ width: 100, height: 200 })
+    }));
   }
 };
 

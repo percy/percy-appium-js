@@ -39,7 +39,7 @@ describe('percyScreenshot', () => {
     });
 
     it('prints warning if fullPage: true is used on generic provider and doesnt throw', async () => {
-      await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+      await percyScreenshot(driver, 'Screenshot 1', { fullPage: true });
     });
 
     describe('errors', () => {
@@ -118,8 +118,8 @@ describe('percyScreenshot', () => {
                 it('posts full page screenshot to the local percy server', async () => {
                   driver = driverFunc({ platform, appAutomate });
 
-                  await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
-                  await percyScreenshot(driver, 'Screenshot 2', {fullPage: true});
+                  await percyScreenshot(driver, 'Screenshot 1', { fullPage: true });
+                  await percyScreenshot(driver, 'Screenshot 2', { fullPage: true });
 
                   expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
                     'Snapshot found: Screenshot 1',
@@ -134,8 +134,8 @@ describe('percyScreenshot', () => {
 
                   it('does not post screenshot to local percy server', async () => {
                     let error = null;
-                    try{
-                      await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+                    try {
+                      await percyScreenshot(driver, 'Screenshot 1', { fullPage: true });
                     } catch (e) {
                       error = e;
                     }
@@ -153,7 +153,7 @@ describe('percyScreenshot', () => {
                   });
 
                   it('does not throw', async () => {
-                    await percyScreenshot(driver, 'Screenshot 1', {fullPage: true});
+                    await percyScreenshot(driver, 'Screenshot 1', { fullPage: true });
 
                     expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
                       'Snapshot found: Screenshot 1'
@@ -193,6 +193,23 @@ describe('percyScreenshot', () => {
         expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
           'Snapshot found: Screenshot 1'
         ]));
+      });
+
+      it('tests ignore elments works', async () => {
+        driver = driverFunc({ enabled: true });
+        let ignoreRegionXpaths = ['someXpath'];
+        await percyScreenshot(driver, 'Screenshot 1', { ignoreRegionXpaths });
+
+        expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+          'Snapshot found: Screenshot 1'
+        ]));
+        if (driverType === 'wd driver') {
+          expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
+          expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
+        } else {
+          expect(driver.$).toHaveBeenCalledWith('someXpath');
+          expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
+        }
       });
     });
   };

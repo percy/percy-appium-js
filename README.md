@@ -79,3 +79,28 @@ percyScreenshot(driver, name[, {
   - `navigationBarHeight`: In px if you want to override SDK
   - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]
   - `screenLengths`: int [Experimental] max screen lengths for fullPage [ needs @percy/cli 1.20.2+ ]
+  - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage [ needs @percy/cli 1.20.2+ ]; string
+  - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage [ needs @percy/cli 1.20.2+ ]; string
+  - `ignoreRegionXpaths` (**optional**) - elements xpaths that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of string
+  - `ignoreRegionAccessibilityIds` (**optional**) - elements accessibility_ids that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of string
+  - `ignoreRegionAppiumElements` (**optional**) - appium elements that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of appium element object
+  - `customIgnoreRegions` (**optional**) - custom locations that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of ignore_region object
+  - IgnoreRegion:-
+    - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
+
+    - Constructor:
+      ```
+      constructor(top, bottom, left, right)
+      ```
+
+    - Parameters:
+
+      `top` (int): Top coordinate of the ignore region.
+
+      `bottom` (int): Bottom coordinate of the ignore region.
+
+      `left` (int): Left coordinate of the ignore region.
+
+      `right` (int): Right coordinate of the ignore region.
+    - Raises:Error: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
+    - valid: Ignore region should be within the boundaries of the screen.

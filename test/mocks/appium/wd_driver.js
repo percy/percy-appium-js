@@ -69,7 +69,15 @@ module.exports = function({
         }
       }
     }),
-    getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT')
+    getOrientation: jasmine.createSpy().and.returnValue('PORTRAIT'),
+    elementByXPath: jasmine.createSpy().and.returnValue(Promise.resolve({
+      getLocation: jasmine.createSpy().and.returnValue({ x: 10, y: 20 }),
+      getSize: jasmine.createSpy().and.returnValue({ width: 100, height: 200 })
+    })),
+    elementByAccessibilityId: jasmine.createSpy().and.returnValue(Promise.resolve({
+      getLocation: jasmine.createSpy().and.returnValue({ x: 10, y: 20 }),
+      getSize: jasmine.createSpy().and.returnValue({ width: 100, height: 200 })
+    }))
   };
 
   return obj;
