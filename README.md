@@ -102,5 +102,5 @@ percyScreenshot(driver, name[, {
       `left` (int): Left coordinate of the ignore region.
 
       `right` (int): Right coordinate of the ignore region.
-    - Raises:ValueError: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
+    - Raises:Error: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
     - valid: Ignore region should be within the boundaries of the screen.
