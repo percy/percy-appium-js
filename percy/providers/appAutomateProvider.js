@@ -3,6 +3,7 @@ const { TimeIt } = require('../util/timing');
 const { Tile } = require('../util/tile');
 const log = require('../util/log');
 const utils = require('@percy/sdk-utils');
+
 class AppAutomateProvider extends GenericProvider {
   constructor(driver) {
     super(driver);
