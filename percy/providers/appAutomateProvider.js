@@ -64,8 +64,8 @@ class AppAutomateProvider extends GenericProvider {
       try {
         let result = await this.browserstackExecutor('percyScreenshot', {
           name,
-          percyBuildId: utils.percy.build.id,
-          percyBuildUrl: utils.percy.build.url,
+          percyBuildId: utils.percy?.build?.id,
+          percyBuildUrl: utils.percy?.build?.url,
           state: 'begin'
         });
         this._markedPercy = result.success;
@@ -104,7 +104,7 @@ class AppAutomateProvider extends GenericProvider {
     const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
       return await this.browserstackExecutor('percyScreenshot', {
         state: 'screenshot',
-        percyBuildId: utils.percy.build.id,
+        percyBuildId: utils.percy?.build?.id,
         screenshotType: 'fullpage',
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
