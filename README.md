@@ -11,7 +11,7 @@ $ npm install --save-dev @percy/cli @percy/appium-app
 ```
 > Notes: 
 >
-> Minimum required version for `@percy/cli` is `1.15.0` for this package to work correctly.
+> Minimum required version for `@percy/cli` is `1.25.0` for this package to work correctly.
 >
 > This is tested on node 14+ and should be compatible with all newer node versions
 
@@ -77,14 +77,14 @@ percyScreenshot(driver, name[, {
   - `orientation`: "portrait"/"landscape" tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
   - `statusBarHeight`: In px if you want to override SDK
   - `navigationBarHeight`: In px if you want to override SDK
-  - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]
-  - `screenLengths`: int [Experimental] max screen lengths for fullPage [ needs @percy/cli 1.20.2+ ]
-  - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage [ needs @percy/cli 1.20.2+ ]; string
-  - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage [ needs @percy/cli 1.20.2+ ]; string
-  - `ignoreRegionXpaths` (**optional**) - elements xpaths that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of string
-  - `ignoreRegionAccessibilityIds` (**optional**) - elements accessibility_ids that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of string
-  - `ignoreRegionAppiumElements` (**optional**) - appium elements that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of appium element object
-  - `customIgnoreRegions` (**optional**) - custom locations that user want to ignore in visual diff [ needs @percy/cli 1.23.0+ ]; list of ignore_region object
+  - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions
+  - `screenLengths`: int [Experimental] max screen lengths for fullPage
+  - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage; string
+  - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage; string
+  - `ignoreRegionXpaths` (**optional**) - elements xpaths that user want to ignore in visual diff; list of string
+  - `ignoreRegionAccessibilityIds` (**optional**) - elements accessibility_ids that user want to ignore in visual diff; list of string
+  - `ignoreRegionAppiumElements` (**optional**) - appium elements that user want to ignore in visual diff; list of appium element object
+  - `customIgnoreRegions` (**optional**) - custom locations that user want to ignore in visual diff; list of ignore_region object
   - IgnoreRegion:-
     - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
 
