@@ -2,6 +2,7 @@ const { GenericProvider } = require('./genericProvider');
 const { TimeIt } = require('../util/timing');
 const { Tile } = require('../util/tile');
 const log = require('../util/log');
+const utils = require('@percy/sdk-utils');
 
 class AppAutomateProvider extends GenericProvider {
   constructor(driver) {
@@ -63,8 +64,8 @@ class AppAutomateProvider extends GenericProvider {
       try {
         let result = await this.browserstackExecutor('percyScreenshot', {
           name,
-          percyBuildId: process.env.PERCY_BUILD_ID,
-          percyBuildUrl: process.env.PERCY_BUILD_URL,
+          percyBuildId: utils.percy?.build?.id,
+          percyBuildUrl: utils.percy?.build?.url,
           state: 'begin'
         });
         this._markedPercy = result.success;
@@ -103,7 +104,7 @@ class AppAutomateProvider extends GenericProvider {
     const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
       return await this.browserstackExecutor('percyScreenshot', {
         state: 'screenshot',
-        percyBuildId: process.env.PERCY_BUILD_ID,
+        percyBuildId: utils.percy?.build?.id,
         screenshotType: 'fullpage',
         scaleFactor: await this.metadata.scaleFactor(),
         options: {

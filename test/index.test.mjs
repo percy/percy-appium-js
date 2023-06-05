@@ -3,6 +3,7 @@ import percyScreenshot from '../index.js';
 import wdDriver from './mocks/appium/wd_driver.js';
 import wdioDriver from './mocks/appium/wdio_driver.js';
 import { Cache } from '../percy/util/cache.js';
+import utils from '@percy/sdk-utils';
 
 describe('percyScreenshot', () => {
   let driver;
@@ -10,6 +11,10 @@ describe('percyScreenshot', () => {
   beforeEach(async () => {
     await helpers.setupTest();
     Cache.reset();
+    utils.percy.build = {
+      id: '123',
+      url: 'https://percy.io/test/test/123'
+    }
   });
 
   describe('common', () => {
