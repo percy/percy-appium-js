@@ -15,6 +15,7 @@ describe('percyScreenshot', () => {
       id: '123',
       url: 'https://percy.io/test/test/123'
     };
+    utils.percy.type = 'app-percy';
   });
 
   describe('common', () => {
