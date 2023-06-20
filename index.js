@@ -56,6 +56,7 @@ async function percyOnAutomate(driver, name, options = {}) {
     // Handle errors
     log.error(`Could not take Screenshot "${name}"`);
     log.error(error.stack);
+    if (!(await driver.getPercyOptions()).ignoreErrors) throw error;
   }
 }
 
@@ -146,5 +147,6 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
 };
 
 module.exports.request = async function request(data) {
+  /* istanbul ignore next */
   await utils.captureAutomateScreenshot(data);
 }; // To mock in test case

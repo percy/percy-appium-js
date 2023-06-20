@@ -82,5 +82,10 @@ describe('AppiumDriver', () => {
       expect(element.getLocation()).toEqual({ x: 10, y: 20 });
       expect(element.getSize()).toEqual({ width: 100, height: 200 });
     });
+
+    it('should return correct commandExecutorUrl', async () => {
+      const driver = new AppiumDriver(wdioDriver());
+      expect(driver.commandExecutorUrl).toEqual('https://localhost/wd/hub');
+    });
   });
 });
