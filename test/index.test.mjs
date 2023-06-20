@@ -243,6 +243,19 @@ describe('percyScreenshot', () => {
           options: { ignore_region_elements: ['123'] }
         }));
       });
+
+      it('should handle error POA', async () => {
+        driver = driverFunc({ enabled: true, ignoreErrors: false });
+        utils.percy.type = 'automate';
+        spyOn(percyScreenshot, 'request').and.callFake(() => { throw Error('Not found 404'); });
+        let error = null;
+        try {
+          await percyScreenshot(driver, 'Screenshot 2');
+        } catch (e) {
+          error = e;
+        }
+        expect(error).not.toEqual(null);
+      });
     });
   };
 });
