@@ -14,7 +14,7 @@ describe('percyScreenshot', () => {
     utils.percy.build = {
       id: '123',
       url: 'https://percy.io/test/test/123'
-    }
+    };
   });
 
   describe('common', () => {
@@ -215,6 +215,32 @@ describe('percyScreenshot', () => {
           expect(driver.$).toHaveBeenCalledWith('someXpath');
           expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
         }
+      });
+
+      it('should call POA percyScreenshot', async () => {
+        driver = driverFunc({ enabled: true });
+        utils.percy.type = 'automate';
+        spyOn(percyScreenshot, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 1');
+        expect(percyScreenshot.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          sessionId: 'sessionID', commandExecutorUrl: 'https://localhost/wd/hub', snapshotName: 'Screenshot 1'
+        }));
+      });
+
+      it('should call POA percyScreenshot with ignoreRegion', async () => {
+        const element = { value: '123', elementId: '123' };
+        driver = driverFunc({ enabled: true });
+        utils.percy.type = 'automate';
+        spyOn(percyScreenshot, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 2', { ignore_region_appium_elements: [element] });
+        expect(percyScreenshot.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          sessionId: 'sessionID',
+          commandExecutorUrl: 'https://localhost/wd/hub',
+          snapshotName: 'Screenshot 2',
+          options: { ignore_region_elements: ['123'] }
+        }));
       });
     });
   };
