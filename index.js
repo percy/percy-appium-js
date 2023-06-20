@@ -5,27 +5,76 @@ const { TimeIt } = require('./percy/util/timing');
 const log = require('./percy/util/log');
 const utils = require('@percy/sdk-utils');
 
+// Collect client and environment information
+const sdkPkg = require('./package.json');
+const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
+
+let clientWdPkg = null;
+try {
+  clientWdPkg = require('wd/package.json');
+} catch { }
+
+try {
+  clientWdPkg = require('webdriverio/package.json');
+} catch { }
+
+let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
+
 async function isPercyEnabled(driver) {
   if (!(await utils.isPercyEnabled())) return false;
 
   return (await driver.getPercyOptions()).enabled;
 }
 
-module.exports = async function percyScreenshot(driver, name, {
-  fullscreen,
-  deviceName,
-  orientation,
-  statusBarHeight,
-  navigationBarHeight,
-  fullPage,
-  screenLengths,
-  ignoreRegionXpaths,
-  ignoreRegionAccessibilityIds,
-  ignoreRegionAppiumElements,
-  customIgnoreRegions,
-  scrollableXpath,
-  scrollableId
-} = {}) {
+const getElementIdFromElements = async function getElementIdFromElements(type, elements) {
+  if (type === 'wd') return elements.map(e => e.value);
+  if (type === 'wdio') return elements.map(e => e.elementId);
+};
+
+async function percyOnAutomate(driver, name, options = {}) {
+  try {
+    const sessionId = driver.sessionId;
+    const capabilities = await driver.getCapabilities();
+    const commandExecutorUrl = driver.commandExecutorUrl;
+
+    if (options && 'ignore_region_appium_elements' in options) {
+      options.ignore_region_elements = await getElementIdFromElements(driver.type, options.ignore_region_appium_elements);
+      delete options.ignore_region_appium_elements;
+    }
+
+    // Post the driver details to the automate screenshot endpoint with snapshot options and other info
+    await utils.captureAutomateScreenshot({
+      environmentInfo: ENV_INFO,
+      clientInfo: CLIENT_INFO,
+      sessionId,
+      commandExecutorUrl,
+      capabilities,
+      snapshotName: name,
+      options
+    });
+  } catch (error) {
+    // Handle errors
+    log.error(`Could not take Screenshot "${name}"`);
+    log.error(error.stack);
+  }
+}
+
+module.exports = async function percyScreenshot(driver, name, options = {}) {
+  let {
+    fullscreen,
+    deviceName,
+    orientation,
+    statusBarHeight,
+    navigationBarHeight,
+    fullPage,
+    screenLengths,
+    ignoreRegionXpaths,
+    ignoreRegionAccessibilityIds,
+    ignoreRegionAppiumElements,
+    customIgnoreRegions,
+    scrollableXpath,
+    scrollableId
+  } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
     // Unable to test this as couldnt define `browser` from test mjs file that would be
@@ -45,6 +94,7 @@ module.exports = async function percyScreenshot(driver, name, {
       customIgnoreRegions = name.customIgnoreRegions;
       scrollableXpath = name.scrollableXpath;
       scrollableId = name.scrollableId;
+      options = name;
     }
     try {
       // browser is defined in wdio context
@@ -66,6 +116,9 @@ module.exports = async function percyScreenshot(driver, name, {
   };
   return TimeIt.run('percyScreenshot', async () => {
     try {
+      if (utils.percy?.type === 'automate') {
+        return percyOnAutomate(driver, name, options);
+      }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
         fullscreen,

@@ -106,6 +106,11 @@ class AppiumDriver {
     });
   }
 
+  get commandExecutorUrl() {
+    if (this.wd) return `${this.driver.configUrl.protocol}//${this.remoteHostname}${this.driver.configUrl.path}`;
+    if (this.wdio) return `${this.driver.options.protocol}://${this.remoteHostname}${this.driver.options.path}`;
+  }
+
   get sessionId() {
     if (this.wd) return this.driver.sessionID;
     /* istanbul ignore next */ // not sure why its marking it when its covered
