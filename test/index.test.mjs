@@ -219,7 +219,7 @@ describe('percyScreenshot', () => {
       });
 
       it('should call POA percyScreenshot', async () => {
-        driver = driverFunc({ enabled: true });
+        const driver = driverFunc({ enabled: true });
         utils.percy.type = 'automate';
         spyOn(percyScreenshot, 'request').and.callFake(() => {});
 
@@ -231,7 +231,7 @@ describe('percyScreenshot', () => {
 
       it('should call POA percyScreenshot with ignoreRegion', async () => {
         const element = { value: '123', elementId: '123' };
-        driver = driverFunc({ enabled: true });
+        const driver = driverFunc({ enabled: true });
         utils.percy.type = 'automate';
         spyOn(percyScreenshot, 'request').and.callFake(() => {});
 
@@ -245,7 +245,7 @@ describe('percyScreenshot', () => {
       });
 
       it('should handle error POA', async () => {
-        driver = driverFunc({ enabled: true, ignoreErrors: false });
+        const driver = driverFunc({ enabled: true, ignoreErrors: false });
         utils.percy.type = 'automate';
         spyOn(percyScreenshot, 'request').and.callFake(() => { throw Error('Not found 404'); });
         let error = null;
@@ -255,6 +255,18 @@ describe('percyScreenshot', () => {
           error = e;
         }
         expect(error).not.toEqual(null);
+      });
+
+      it('should handle error POA ignoreError false', async () => {
+        const driver = driverFunc({ enabled: true, ignoreErrors: true });
+        driver.sessionId = '1234';
+        let error = null;
+        try {
+          await percyScreenshot(driver, 'Screenshot 3');
+        } catch (e) {
+          error = e;
+        }
+        expect(error).toEqual(null);
       });
     });
   };

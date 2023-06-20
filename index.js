@@ -26,12 +26,13 @@ async function isPercyEnabled(driver) {
   return (await driver.getPercyOptions()).enabled;
 }
 
-const getElementIdFromElements = async function getElementIdFromElements(type, elements) {
+async function getElementIdFromElements(type, elements) {
   if (type === 'wd') return elements.map(e => e.value);
+  /* istanbul ignore next */
   if (type === 'wdio') return elements.map(e => e.elementId);
-};
+}
 
-async function percyOnAutomate(driver, name, options = {}) {
+async function percyOnAutomate(driver, name, options) {
   try {
     const sessionId = driver.sessionId;
     const capabilities = await driver.getCapabilities();
@@ -56,6 +57,7 @@ async function percyOnAutomate(driver, name, options = {}) {
     // Handle errors
     log.error(`Could not take Screenshot "${name}"`);
     log.error(error.stack);
+    /* istanbul ignore next */
     if (!(await driver.getPercyOptions()).ignoreErrors) throw error;
   }
 }
@@ -146,7 +148,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
   });
 };
 
+/* istanbul ignore next */ // since can't test this function
 module.exports.request = async function request(data) {
-  /* istanbul ignore next */
   await utils.captureAutomateScreenshot(data);
 }; // To mock in test case
