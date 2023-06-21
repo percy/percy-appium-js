@@ -4,6 +4,7 @@ import wdDriver from './mocks/appium/wd_driver.js';
 import wdioDriver from './mocks/appium/wdio_driver.js';
 import { Cache } from '../percy/util/cache.js';
 import utils from '@percy/sdk-utils';
+import percyOnAutomate from '../percy/percyOnAutomate.js';
 
 describe('percyScreenshot', () => {
   let driver;
@@ -221,10 +222,10 @@ describe('percyScreenshot', () => {
       it('should call POA percyScreenshot', async () => {
         const driver = driverFunc({ enabled: true });
         utils.percy.type = 'automate';
-        spyOn(percyScreenshot, 'request').and.callFake(() => {});
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
         await percyScreenshot(driver, 'Screenshot 1');
-        expect(percyScreenshot.request).toHaveBeenCalledWith(jasmine.objectContaining({
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID', commandExecutorUrl: 'https://localhost/wd/hub', snapshotName: 'Screenshot 1'
         }));
       });
@@ -233,10 +234,10 @@ describe('percyScreenshot', () => {
         const element = { value: '123', elementId: '123' };
         const driver = driverFunc({ enabled: true });
         utils.percy.type = 'automate';
-        spyOn(percyScreenshot, 'request').and.callFake(() => {});
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
         await percyScreenshot(driver, 'Screenshot 2', { ignore_region_appium_elements: [element] });
-        expect(percyScreenshot.request).toHaveBeenCalledWith(jasmine.objectContaining({
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
           commandExecutorUrl: 'https://localhost/wd/hub',
           snapshotName: 'Screenshot 2',
@@ -247,7 +248,7 @@ describe('percyScreenshot', () => {
       it('should handle error POA', async () => {
         const driver = driverFunc({ enabled: true, ignoreErrors: false });
         utils.percy.type = 'automate';
-        spyOn(percyScreenshot, 'request').and.callFake(() => { throw Error('Not found 404'); });
+        spyOn(percyOnAutomate, 'request').and.callFake(() => { throw Error('Not found 404'); });
         let error = null;
         try {
           await percyScreenshot(driver, 'Screenshot 2');
