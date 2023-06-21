@@ -96,11 +96,39 @@ percyScreenshot(driver, name[, {
     - Parameters:
 
       `top` (int): Top coordinate of the ignore region.
-
       `bottom` (int): Bottom coordinate of the ignore region.
-
       `left` (int): Left coordinate of the ignore region.
-
       `right` (int): Right coordinate of the ignore region.
     - Raises:Error: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
     - valid: Ignore region should be within the boundaries of the screen.
+
+## Running with Hybrid Apps
+
+For a hybrid app, we need to switch to native context before taking screenshot.
+
+- Add a helper method similar to following for say flutter based hybrid app:
+```js
+async function percyScreenshotFlutter(driver, name, options) {
+  // switch to native context
+  await driver.switchContext('NATIVE_APP');
+  await percyScreenshot(driver, name, options);
+  // switch back to flutter context
+  await driver.switchContext('FLUTTER');
+}
+```
+
+- Call percyScreenshotFlutter helper function when you want to take screenshot.
+```js
+await percyScreenshotFlutter(driver, name[, {
+  fullscreen,
+  deviceName,
+  orientation,
+  statusBarHeight,
+  navigationBarHeight
+}])
+```
+
+> Note: 
+>
+> For other hybrid apps the `await driver.switchContext('FLUTTER');` would change to context that it uses like say WEBVIEW etc.
+>
