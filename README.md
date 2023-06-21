@@ -106,7 +106,7 @@ percyScreenshot(driver, name[, {
 
 For a hybrid app, we need to switch to native context before taking screenshot.
 
-- Add a helper method similar to following:
+- Add a helper method similar to following for say flutter based hybrid app:
 ```js
 async function percyScreenshotFlutter(driver, name, options) {
   // switch to native context
@@ -127,3 +127,8 @@ await percyScreenshotFlutter(driver, name[, {
   navigationBarHeight
 }])
 ```
+
+> Note: 
+>
+> For other hybrid apps the `await driver.switchContext('FLUTTER');` would change to context that it uses like say WEBVIEW etc.
+>
