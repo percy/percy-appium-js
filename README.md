@@ -121,7 +121,7 @@ async function percyScreenshotFlutter(driver, name, options) {
 }
 ```
 
-- Call percyScreenshotFlutter wrapper function when you want to take screenshot.
+- Call percyScreenshotFlutter helper function when you want to take screenshot.
 
 ```js
 await percyScreenshotFlutter(driver, name[, {
