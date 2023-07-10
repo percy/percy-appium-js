@@ -94,10 +94,10 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   // Override this for AA specific optimizations
-  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
+  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId, forceFullPage) {
     // Temporarily restrict AA optimizations only for full page
     if (fullPage !== true) {
-      return await super.getTiles(fullscreen, fullPage, screenLengths);
+      return await super.getTiles(fullscreen, fullPage, screenLengths, forceFullPage);
     }
 
     // Take screenshots via browserstack executor
@@ -111,14 +111,15 @@ class AppAutomateProvider extends GenericProvider {
           numOfTiles: screenLengths || 4,
           deviceHeight: (await this.metadata.screenSize()).height,
           scollableXpath: scrollableXpath || null,
-          scrollableId: scrollableId || null
+          scrollableId: scrollableId || null,
+          FORCE_FULL_PAGE: forceFullPage || false
         }
       });
     });
 
     if (!response.success) {
       throw new Error('Failed to get screenshots from App Automate.' +
-      ' Check dashboard for error.');
+        ' Check dashboard for error.');
     }
 
     const tiles = [];

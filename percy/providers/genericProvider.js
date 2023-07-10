@@ -47,7 +47,8 @@ class GenericProvider {
     ignoreRegionAppiumElements,
     customIgnoreRegions,
     scrollableXpath,
-    scrollableId
+    scrollableId,
+    forceFullPage
   }) {
     fullscreen = fullscreen || false;
 
@@ -60,7 +61,7 @@ class GenericProvider {
     });
 
     const tag = await this.getTag();
-    const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
+    const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId, forceFullPage);
     const ignoreRegions = await this.findIgnoredRegions(
       ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions
     );
