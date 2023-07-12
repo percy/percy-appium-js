@@ -94,10 +94,10 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   // Override this for AA specific optimizations
-  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId, forceFullPage) {
+  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
     // Temporarily restrict AA optimizations only for full page
     if (fullPage !== true) {
-      return await super.getTiles(fullscreen, fullPage, screenLengths, forceFullPage);
+      return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
     // Take screenshots via browserstack executor
@@ -112,7 +112,7 @@ class AppAutomateProvider extends GenericProvider {
           deviceHeight: (await this.metadata.screenSize()).height,
           scollableXpath: scrollableXpath || null,
           scrollableId: scrollableId || null,
-          FORCE_FULL_PAGE: forceFullPage || false
+          FORCE_FULL_PAGE: process.env.FORCE_FULL_PAGE === 'true'
         }
       });
     });
