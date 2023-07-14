@@ -25,7 +25,11 @@ async function getElementIdFromElements(type, elements) {
 module.exports = async function percyOnAutomate(driver, name, options) {
   try {
     const sessionId = driver.sessionId;
-    const capabilities = await driver.getCapabilities();
+    // Since driver is AppiumDriver object created from driverWrapper.js
+    // This AppiumDriver has a property of driver which contains the original driver
+    // Hence to access the capabilities of original driver adding this fix
+    // Also, note that driverWrapper.getCapabilities() returns only few capabilities and not all
+    const capabilities = driver.driver.capabilities;
     const commandExecutorUrl = driver.commandExecutorUrl;
 
     if (options && 'ignore_region_appium_elements' in options) {
