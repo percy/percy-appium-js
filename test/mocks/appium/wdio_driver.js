@@ -1,4 +1,3 @@
-
 class Browser {
   constructor({
     appAutomate,
@@ -16,7 +15,7 @@ class Browser {
     enabled = enabled === undefined ? true : enabled;
     ignoreErrors = ignoreErrors === undefined ? false : ignoreErrors;
 
-    this.sessionId = 'sessionId';
+    this.sessionId = 'sessionID';
 
     const sessionCaps = {
       platformName: ios ? 'iOS' : 'Android',
@@ -40,6 +39,8 @@ class Browser {
     }
 
     this.options = {
+      protocol: 'https',
+      path: '/wd/hub',
       hostname: appAutomate ? 'hub.browserstack.com' : 'localhost'
     };
 

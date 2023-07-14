@@ -38,6 +38,8 @@ module.exports = function({
   let obj = {
     sessionID: 'sessionID',
     configUrl: {
+      protocol: 'https:',
+      path: '/wd/hub',
       hostname: appAutomate ? 'hub.browserstack.com' : 'localhost'
     },
     sessionCapabilities: jasmine.createSpy().and.returnValue(sessionCaps),

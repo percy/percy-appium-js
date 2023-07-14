@@ -1,6 +1,7 @@
 const { AppiumDriver } = require('./percy/driver/driverWrapper');
 const { ProviderResolver } = require('./percy/providers/providerResolver');
 const { TimeIt } = require('./percy/util/timing');
+const percyOnAutomate = require('./percy/percyOnAutomate');
 
 const log = require('./percy/util/log');
 const utils = require('@percy/sdk-utils');
@@ -11,21 +12,22 @@ async function isPercyEnabled(driver) {
   return (await driver.getPercyOptions()).enabled;
 }
 
-module.exports = async function percyScreenshot(driver, name, {
-  fullscreen,
-  deviceName,
-  orientation,
-  statusBarHeight,
-  navigationBarHeight,
-  fullPage,
-  screenLengths,
-  ignoreRegionXpaths,
-  ignoreRegionAccessibilityIds,
-  ignoreRegionAppiumElements,
-  customIgnoreRegions,
-  scrollableXpath,
-  scrollableId
-} = {}) {
+module.exports = async function percyScreenshot(driver, name, options = {}) {
+  let {
+    fullscreen,
+    deviceName,
+    orientation,
+    statusBarHeight,
+    navigationBarHeight,
+    fullPage,
+    screenLengths,
+    ignoreRegionXpaths,
+    ignoreRegionAccessibilityIds,
+    ignoreRegionAppiumElements,
+    customIgnoreRegions,
+    scrollableXpath,
+    scrollableId
+  } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
     // Unable to test this as couldnt define `browser` from test mjs file that would be
@@ -45,6 +47,7 @@ module.exports = async function percyScreenshot(driver, name, {
       customIgnoreRegions = name.customIgnoreRegions;
       scrollableXpath = name.scrollableXpath;
       scrollableId = name.scrollableId;
+      options = name;
     }
     try {
       // browser is defined in wdio context
@@ -66,6 +69,9 @@ module.exports = async function percyScreenshot(driver, name, {
   };
   return TimeIt.run('percyScreenshot', async () => {
     try {
+      if (utils.percy?.type === 'automate') {
+        return percyOnAutomate(driver, name, options);
+      }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
         fullscreen,
