@@ -92,6 +92,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
   });
 };
 
+// jasmine cannot mock individual functions, hence adding isPercyEnabled to the exports object
+// also need to define this at the end of the file or else default exports will over-ride this
 module.exports.isPercyEnabled = async function isPercyEnabled(driver) {
   if (!(await utils.isPercyEnabled())) return false;
 
