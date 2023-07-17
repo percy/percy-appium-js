@@ -98,4 +98,4 @@ module.exports.isPercyEnabled = async function isPercyEnabled(driver) {
   if (!(await utils.isPercyEnabled())) return false;
 
   return (await driver.getPercyOptions()).enabled;
-}
+};
