@@ -6,12 +6,6 @@ const percyOnAutomate = require('./percy/percyOnAutomate');
 const log = require('./percy/util/log');
 const utils = require('@percy/sdk-utils');
 
-async function isPercyEnabled(driver) {
-  if (!(await utils.isPercyEnabled())) return false;
-
-  return (await driver.getPercyOptions()).enabled;
-}
-
 module.exports = async function percyScreenshot(driver, name, options = {}) {
   let {
     fullscreen,
@@ -63,14 +57,14 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
   log.debug(`[${name}] -> begin`);
   driver = new AppiumDriver(driver);
 
-  if (!await isPercyEnabled(driver)) {
+  if (!await module.exports.isPercyEnabled(driver)) {
     log.info(`[${name}] percy is disabled for session ${driver.sessionId} -> end`);
     return;
   };
   return TimeIt.run('percyScreenshot', async () => {
     try {
       if (utils.percy?.type === 'automate') {
-        return percyOnAutomate(driver, name, options);
+        return await percyOnAutomate(driver, name, options);
       }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
@@ -96,4 +90,12 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       if (!(await driver.getPercyOptions()).ignoreErrors) throw e;
     }
   });
+};
+
+// jasmine cannot mock individual functions, hence adding isPercyEnabled to the exports object
+// also need to define this at the end of the file or else default exports will over-ride this
+module.exports.isPercyEnabled = async function isPercyEnabled(driver) {
+  if (!(await utils.isPercyEnabled())) return false;
+
+  return (await driver.getPercyOptions()).enabled;
 };
