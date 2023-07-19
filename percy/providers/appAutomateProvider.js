@@ -111,14 +111,15 @@ class AppAutomateProvider extends GenericProvider {
           numOfTiles: screenLengths || 4,
           deviceHeight: (await this.metadata.screenSize()).height,
           scollableXpath: scrollableXpath || null,
-          scrollableId: scrollableId || null
+          scrollableId: scrollableId || null,
+          FORCE_FULL_PAGE: process.env.FORCE_FULL_PAGE === 'true'
         }
       });
     });
 
     if (!response.success) {
       throw new Error('Failed to get screenshots from App Automate.' +
-      ' Check dashboard for error.');
+        ' Check dashboard for error.');
     }
 
     const tiles = [];
