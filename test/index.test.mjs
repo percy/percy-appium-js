@@ -4,6 +4,7 @@ import wdDriver from './mocks/appium/wd_driver.js';
 import wdioDriver from './mocks/appium/wdio_driver.js';
 import { Cache } from '../percy/util/cache.js';
 import utils from '@percy/sdk-utils';
+import percyOnAutomate from '../percy/percyOnAutomate.js';
 
 describe('percyScreenshot', () => {
   let driver;
@@ -14,7 +15,8 @@ describe('percyScreenshot', () => {
     utils.percy.build = {
       id: '123',
       url: 'https://percy.io/test/test/123'
-    }
+    };
+    utils.percy.type = 'app-percy';
   });
 
   describe('common', () => {
@@ -215,6 +217,62 @@ describe('percyScreenshot', () => {
           expect(driver.$).toHaveBeenCalledWith('someXpath');
           expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
         }
+      });
+
+      it('should call POA percyScreenshot', async () => {
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 1');
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          sessionId: 'sessionID', commandExecutorUrl: 'https://localhost/wd/hub', snapshotName: 'Screenshot 1'
+        }));
+      });
+
+      it('should call POA percyScreenshot with ignoreRegion', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 2', { ignore_region_appium_elements: [element] });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          sessionId: 'sessionID',
+          commandExecutorUrl: 'https://localhost/wd/hub',
+          snapshotName: 'Screenshot 2',
+          options: { ignore_region_elements: ['123'] }
+        }));
+      });
+
+      it('should handle error POA', async () => {
+        const driver = driverFunc({ enabled: true, ignoreErrors: false });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.returnValue(Promise.reject(new Error('Not found 404')));
+        let error = null;
+        try {
+          await percyScreenshot(driver, 'Screenshot 2');
+        } catch (e) {
+          error = e;
+        }
+        expect(error).not.toEqual(null);
+      });
+
+      it('should handle error POA ignoreError false', async () => {
+        const driver = driverFunc({ enabled: true, ignoreErrors: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.returnValue(Promise.reject(new Error('Not found 404')));
+        let error = null;
+        try {
+          await percyScreenshot(driver, 'Screenshot 3');
+        } catch (e) {
+          error = e;
+        }
+        expect(error).toEqual(null);
       });
     });
   };

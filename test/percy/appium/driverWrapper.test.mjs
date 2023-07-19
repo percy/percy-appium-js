@@ -30,8 +30,10 @@ describe('AppiumDriver', () => {
     });
 
     it('returns default options from percy:options caps', async () => {
-      const driver = new AppiumDriver(wdDriver());
-
+      // To fix flaky behavior due to caching of caps
+      const mockDriver = wdDriver();
+      mockDriver.sessionID = '123';
+      const driver = new AppiumDriver(mockDriver);
       expect(await driver.getPercyOptions()).toEqual({ enabled: true, ignoreErrors: false });
     });
 
@@ -81,6 +83,11 @@ describe('AppiumDriver', () => {
       const element = await driver.elementByAccessibilityId(id);
       expect(element.getLocation()).toEqual({ x: 10, y: 20 });
       expect(element.getSize()).toEqual({ width: 100, height: 200 });
+    });
+
+    it('should return correct commandExecutorUrl', async () => {
+      const driver = new AppiumDriver(wdioDriver());
+      expect(driver.commandExecutorUrl).toEqual('https://localhost/wd/hub');
     });
   });
 });

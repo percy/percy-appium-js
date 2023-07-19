@@ -1,31 +1,27 @@
 const { AppiumDriver } = require('./percy/driver/driverWrapper');
 const { ProviderResolver } = require('./percy/providers/providerResolver');
 const { TimeIt } = require('./percy/util/timing');
+const percyOnAutomate = require('./percy/percyOnAutomate');
 
 const log = require('./percy/util/log');
 const utils = require('@percy/sdk-utils');
 
-async function isPercyEnabled(driver) {
-  if (!(await utils.isPercyEnabled())) return false;
-
-  return (await driver.getPercyOptions()).enabled;
-}
-
-module.exports = async function percyScreenshot(driver, name, {
-  fullscreen,
-  deviceName,
-  orientation,
-  statusBarHeight,
-  navigationBarHeight,
-  fullPage,
-  screenLengths,
-  ignoreRegionXpaths,
-  ignoreRegionAccessibilityIds,
-  ignoreRegionAppiumElements,
-  customIgnoreRegions,
-  scrollableXpath,
-  scrollableId
-} = {}) {
+module.exports = async function percyScreenshot(driver, name, options = {}) {
+  let {
+    fullscreen,
+    deviceName,
+    orientation,
+    statusBarHeight,
+    navigationBarHeight,
+    fullPage,
+    screenLengths,
+    ignoreRegionXpaths,
+    ignoreRegionAccessibilityIds,
+    ignoreRegionAppiumElements,
+    customIgnoreRegions,
+    scrollableXpath,
+    scrollableId
+  } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
     // Unable to test this as couldnt define `browser` from test mjs file that would be
@@ -45,6 +41,7 @@ module.exports = async function percyScreenshot(driver, name, {
       customIgnoreRegions = name.customIgnoreRegions;
       scrollableXpath = name.scrollableXpath;
       scrollableId = name.scrollableId;
+      options = name;
     }
     try {
       // browser is defined in wdio context
@@ -60,12 +57,15 @@ module.exports = async function percyScreenshot(driver, name, {
   log.debug(`[${name}] -> begin`);
   driver = new AppiumDriver(driver);
 
-  if (!await isPercyEnabled(driver)) {
+  if (!await module.exports.isPercyEnabled(driver)) {
     log.info(`[${name}] percy is disabled for session ${driver.sessionId} -> end`);
     return;
   };
   return TimeIt.run('percyScreenshot', async () => {
     try {
+      if (utils.percy?.type === 'automate') {
+        return await percyOnAutomate(driver, name, options);
+      }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
         fullscreen,
@@ -90,4 +90,12 @@ module.exports = async function percyScreenshot(driver, name, {
       if (!(await driver.getPercyOptions()).ignoreErrors) throw e;
     }
   });
+};
+
+// jasmine cannot mock individual functions, hence adding isPercyEnabled to the exports object
+// also need to define this at the end of the file or else default exports will over-ride this
+module.exports.isPercyEnabled = async function isPercyEnabled(driver) {
+  if (!(await utils.isPercyEnabled())) return false;
+
+  return (await driver.getPercyOptions()).enabled;
 };
