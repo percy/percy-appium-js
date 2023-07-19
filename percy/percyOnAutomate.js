@@ -29,7 +29,7 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     // This AppiumDriver has a property of driver which contains the original driver
     // Hence to access the capabilities of original driver adding this fix
     // Also, note that driverWrapper.getCapabilities() returns only few capabilities and not all
-    const capabilities = driver.driver.capabilities;
+    const capabilities = driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
     const commandExecutorUrl = driver.commandExecutorUrl;
 
     if (options && 'ignore_region_appium_elements' in options) {
