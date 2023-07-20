@@ -96,7 +96,8 @@ class AppAutomateProvider extends GenericProvider {
   // Override this for AA specific optimizations
   async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
     // Temporarily restrict AA optimizations only for full page
-    if (process.env.PERCY_DISABLE_REMOTE_UPLOADS === 'true') {
+    console.log(`env:- ${process.env.PERCY_DISABLE_REMOTE_UPLOADS}`);
+    if (this.isDisableRemoteUpload()) {
       return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
@@ -105,7 +106,7 @@ class AppAutomateProvider extends GenericProvider {
     if (fullPage !== true) {
       screenshotType = 'singlepage';
     }
-    if (process.env.PERCY_ENABLE_DEV === 'true') {
+    if (this.isPercyDev()) {
       projectId = 'percy-dev';
     }
     // Take screenshots via browserstack executor
@@ -160,6 +161,14 @@ class AppAutomateProvider extends GenericProvider {
     const buildHash = result.buildHash;
     const sessionHash = result.sessionHash;
     this.debugUrl = `https://app-automate.browserstack.com/dashboard/v2/builds/${buildHash}/sessions/${sessionHash}`;
+  }
+
+  isDisableRemoteUpload() {
+    return process.env.PERCY_DISABLE_REMOTE_UPLOADS === 'true';
+  }
+
+  isPercyDev() {
+    return process.env.PERCY_ENABLE_DEV === 'true';
   }
 }
 

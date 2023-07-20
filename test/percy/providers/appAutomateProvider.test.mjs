@@ -104,4 +104,40 @@ describe('AppAutomateProvider', () => {
       expect(appAutomate.debugUrl).toEqual(null);
     });
   });
+
+  describe('getTiles', () => {
+
+    it('when env isDisableRemoteUpload is true', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
+                            .and.returnValue('true');
+      let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+      superGetTilesSpy.and.resolveTo([])
+                            
+      await appAutomate.getTiles(true, false, null, null, null);
+      expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
+    });
+
+    it('when env isPercyDev is true', async () => {
+      const appAutomate = new AppAutomateProvider(driver);
+      spyOn(AppAutomateProvider.prototype, 'isPercyDev')
+                            .and.returnValue('true');
+      let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+      let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+      superGetTilesSpy.and.resolveTo([])
+      let response = {
+        success: true,
+        result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+      };
+      browserstack_executorSpy.and.resolveTo(response);
+      var screenSize = {
+        height: 2000,
+      }
+      appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
+                            
+      await appAutomate.getTiles(true, false, null, null, null);
+      expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', jasmine.any(Object));
+    });
+
+  });
 });
