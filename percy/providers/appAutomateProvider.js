@@ -96,16 +96,25 @@ class AppAutomateProvider extends GenericProvider {
   // Override this for AA specific optimizations
   async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
     // Temporarily restrict AA optimizations only for full page
-    if (fullPage !== true) {
+    if (process.env.PERCY_DISABLE_REMOTE_UPLOADS === 'true') {
       return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
+    let screenshotType = 'fullpage';
+    let projectId = 'percy-prod';
+    if (fullPage !== true) {
+      screenshotType = 'singlepage';
+    }
+    if (process.env.PERCY_ENABLE_DEV === 'true') {
+      projectId = 'percy-dev';
+    }
     // Take screenshots via browserstack executor
     const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
       return await this.browserstackExecutor('percyScreenshot', {
         state: 'screenshot',
         percyBuildId: utils.percy?.build?.id,
-        screenshotType: 'fullpage',
+        screenshotType,
+        projectId,
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
           numOfTiles: screenLengths || 4,
