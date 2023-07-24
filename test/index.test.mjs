@@ -219,6 +219,23 @@ describe('percyScreenshot', () => {
         }
       });
 
+      it('tests consider elments works', async () => {
+        driver = driverFunc({ enabled: true });
+        let considerRegionXpaths = ['someXpath'];
+        await percyScreenshot(driver, 'Screenshot 1', { considerRegionXpaths });
+
+        expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+          'Snapshot found: Screenshot 1'
+        ]));
+        if (driverType === 'wd driver') {
+          expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
+          expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
+        } else {
+          expect(driver.$).toHaveBeenCalledWith('someXpath');
+          expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
+        }
+      });
+
       it('should call POA percyScreenshot', async () => {
         const driver = driverFunc({ enabled: true });
         spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
