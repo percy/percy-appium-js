@@ -106,38 +106,99 @@ describe('AppAutomateProvider', () => {
   });
 
   describe('getTiles', () => {
-
-    it('when env isDisableRemoteUpload is true', async () => {
-      const appAutomate = new AppAutomateProvider(driver);
-      spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
-                            .and.returnValue('true');
-      let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-      superGetTilesSpy.and.resolveTo([])
-                            
-      await appAutomate.getTiles(true, false, null, null, null);
-      expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
-    });
-
-    it('when env isPercyDev is true', async () => {
-      const appAutomate = new AppAutomateProvider(driver);
-      spyOn(AppAutomateProvider.prototype, 'isPercyDev')
-                            .and.returnValue('true');
-      let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-      let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
-      superGetTilesSpy.and.resolveTo([])
-      let response = {
-        success: true,
-        result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
-      };
-      browserstack_executorSpy.and.resolveTo(response);
-      var screenSize = {
-        height: 2000,
+    let args = {
+      state: 'screenshot',
+      percyBuildId: '123',
+      screenshotType: 'singlepage',
+      projectId: 'percy-prod',
+      scaleFactor: 1,
+      options: {
+        numOfTiles: 4,
+        deviceHeight: undefined,
+        scollableXpath: null,
+        scrollableId: null,
+        FORCE_FULL_PAGE: false
       }
-      appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-                            
-      await appAutomate.getTiles(true, false, null, null, null);
-      expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', jasmine.any(Object));
+    }
+    describe ('when taking singlepage', () => {
+      describe ('when env isDisableRemoteUpload is true', () => {
+        it('takes a local appium screenshot', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
+                                .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          superGetTilesSpy.and.resolveTo([])
+                                
+          await appAutomate.getTiles(true, false, null, null, null);
+          expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
+        });
+      });
+
+      describe('when env isDisableRemoteUpload is false', () => {
+        it('takes screenshot with remote executor', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isPercyDev')
+                                .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([])
+          let response = {
+            success: true,
+            result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+          };
+          browserstack_executorSpy.and.resolveTo(response);
+          var screenSize = {
+            height: 2000,
+          };
+          args['projectId'] = 'percy-dev';
+          args['options']['deviceHeight'] = screenSize['height'];
+          appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
+                                
+          await appAutomate.getTiles(true, false, null, null, null);
+          expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+        });
+      });
     });
 
+    describe ('when taking fullpage', () => {
+      describe ('when env isDisableRemoteUpload is true', () => {
+        it('takes a local appium screenshot', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
+                                .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          superGetTilesSpy.and.resolveTo([])
+                                
+          await appAutomate.getTiles(true, false, null, null, null);
+          expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
+        });
+      });
+
+      describe('when env isDisableRemoteUpload is false', () => {
+        it('takes screenshot with remote executor', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isPercyDev')
+                                .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([])
+          let response = {
+            success: true,
+            result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+          };
+          browserstack_executorSpy.and.resolveTo(response);
+          var screenSize = {
+            height: 2000,
+          };
+          args['projectId'] = 'percy-dev';
+          args['options']['deviceHeight'] = screenSize['height'];
+          args['screenshotType'] = 'fullpage';
+          appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
+                                
+          await appAutomate.getTiles(true, true, null, null, null);
+          expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+        });
+      });
+    });
   });
 });

@@ -95,8 +95,7 @@ class AppAutomateProvider extends GenericProvider {
 
   // Override this for AA specific optimizations
   async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
-    // Temporarily restrict AA optimizations only for full page
-    console.log(`env:- ${process.env.PERCY_DISABLE_REMOTE_UPLOADS}`);
+    // Override AA optimizations
     if (this.isDisableRemoteUpload()) {
       return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
