@@ -97,6 +97,9 @@ class AppAutomateProvider extends GenericProvider {
   async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
     // Override AA optimizations
     if (this.isDisableRemoteUpload()) {
+      if (fullPage === true) {
+        log.warn('Full page screenshots are only supported when "PERCY_DISABLE_REMOTE_UPLOADS" is not set');
+      }
       return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
