@@ -95,17 +95,29 @@ class AppAutomateProvider extends GenericProvider {
 
   // Override this for AA specific optimizations
   async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
-    // Temporarily restrict AA optimizations only for full page
-    if (fullPage !== true) {
+    // Override AA optimizations
+    if (this.isDisableRemoteUpload()) {
+      if (fullPage === true) {
+        log.warn('Full page screenshots are only supported when "PERCY_DISABLE_REMOTE_UPLOADS" is not set');
+      }
       return await super.getTiles(fullscreen, fullPage, screenLengths);
     }
 
+    let screenshotType = 'fullpage';
+    let projectId = 'percy-prod';
+    if (fullPage !== true) {
+      screenshotType = 'singlepage';
+    }
+    if (this.isPercyDev()) {
+      projectId = 'percy-dev';
+    }
     // Take screenshots via browserstack executor
     const response = await TimeIt.run('percyScreenshot:screenshot', async () => {
       return await this.browserstackExecutor('percyScreenshot', {
         state: 'screenshot',
         percyBuildId: utils.percy?.build?.id,
-        screenshotType: 'fullpage',
+        screenshotType,
+        projectId,
         scaleFactor: await this.metadata.scaleFactor(),
         options: {
           numOfTiles: screenLengths || 4,
@@ -151,6 +163,14 @@ class AppAutomateProvider extends GenericProvider {
     const buildHash = result.buildHash;
     const sessionHash = result.sessionHash;
     this.debugUrl = `https://app-automate.browserstack.com/dashboard/v2/builds/${buildHash}/sessions/${sessionHash}`;
+  }
+
+  isDisableRemoteUpload() {
+    return process.env.PERCY_DISABLE_REMOTE_UPLOADS === 'true';
+  }
+
+  isPercyDev() {
+    return process.env.PERCY_ENABLE_DEV === 'true';
   }
 }
 
