@@ -42,11 +42,10 @@ module.exports = async function percyOnAutomate(driver, name, options) {
         delete options.considerRegionAppiumElements;
       }
       if ('ignore_region_appium_elements' in options) {
-        options.ignore_region_appium_elements = await getElementIdFromElements(options.ignore_region_appium_elements);
-        delete options.ignore_region_appium_elements;
+        options.ignore_region_elements = await getElementIdFromElements(options.ignore_region_appium_elements);
       }
       if ('consider_region_appium_elements' in options) {
-        options.consider_region_appium_elements = await getElementIdFromElements(options.consider_region_appium_elements);
+        options.consider_region_elements = await getElementIdFromElements(options.consider_region_appium_elements);
         delete options.consider_region_appium_elements;
       }
     }
