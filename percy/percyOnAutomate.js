@@ -32,6 +32,7 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     const capabilities = driver.driver.capabilities;
     const commandExecutorUrl = driver.commandExecutorUrl;
 
+    /* istanbul ignore next */
     if (options) {
       if ('ignoreRegionAppiumElements' in options) {
         options.ignore_region_appium_elements = options.ignoreRegionAppiumElements;
