@@ -1,7 +1,7 @@
 // Covering only not covered in index tests
 import { GenericProvider } from '../../../percy/providers/genericProvider.js';
 import AppiumDriverMock from '../../mocks/appium/appium_driver.js';
-import { IgnoreRegion } from '../../../percy/util/ignoreRegion.js';
+import { Region } from '../../../percy/util/region.js';
 
 describe('GenericProvider', () => {
   let driver;
@@ -192,8 +192,8 @@ describe('GenericProvider', () => {
     it('should add custom regions to the provided array', async () => {
       const elementsArray = [];
       const customLocations = [
-        new IgnoreRegion(100, 200, 100, 200),
-        new IgnoreRegion(300, 400, 300, 400)
+        new Region(100, 200, 100, 200),
+        new Region(300, 400, 300, 400)
       ];
 
       await provider.getRegionsByLocation(elementsArray, customLocations);
@@ -213,8 +213,8 @@ describe('GenericProvider', () => {
     it('should ignore invalid custom regions', async () => {
       const elementsArray = [];
       const customLocations = [
-        new IgnoreRegion(100, 1090, 100, 200),
-        new IgnoreRegion(300, 400, 300, 1921)
+        new Region(100, 1090, 100, 200),
+        new Region(300, 400, 300, 1921)
       ];
 
       await provider.getRegionsByLocation(elementsArray, customLocations);
