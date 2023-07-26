@@ -26,6 +26,10 @@ class AppAutomateProvider extends GenericProvider {
     ignoreRegionAccessibilityIds,
     ignoreRegionAppiumElements,
     customIgnoreRegions,
+    considerRegionXpaths,
+    considerRegionAccessibilityIds,
+    considerRegionAppiumElements,
+    customConsiderRegions,
     scrollableXpath,
     scrollableId
   } = {}) {
@@ -47,6 +51,10 @@ class AppAutomateProvider extends GenericProvider {
         ignoreRegionAccessibilityIds,
         ignoreRegionAppiumElements,
         customIgnoreRegions,
+        considerRegionXpaths,
+        considerRegionAccessibilityIds,
+        considerRegionAppiumElements,
+        customConsiderRegions,
         scrollableXpath,
         scrollableId
       });

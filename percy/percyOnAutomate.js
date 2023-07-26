@@ -32,9 +32,24 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     const capabilities = driver.driver.capabilities;
     const commandExecutorUrl = driver.commandExecutorUrl;
 
-    if (options && 'ignore_region_appium_elements' in options) {
-      options.ignore_region_elements = await getElementIdFromElements(driver.type, options.ignore_region_appium_elements);
-      delete options.ignore_region_appium_elements;
+    /* istanbul ignore next */
+    if (options) {
+      if ('ignoreRegionAppiumElements' in options) {
+        options.ignore_region_appium_elements = options.ignoreRegionAppiumElements;
+        delete options.ignoreRegionAppiumElements;
+      }
+      if ('considerRegionAppiumElements' in options) {
+        options.consider_region_appium_elements = options.considerRegionAppiumElements;
+        delete options.considerRegionAppiumElements;
+      }
+      if ('ignore_region_appium_elements' in options) {
+        options.ignore_region_elements = await getElementIdFromElements(driver.type, options.ignore_region_appium_elements);
+        delete options.ignore_region_appium_elements;
+      }
+      if ('consider_region_appium_elements' in options) {
+        options.consider_region_elements = await getElementIdFromElements(driver.type, options.consider_region_appium_elements);
+        delete options.consider_region_appium_elements;
+      }
     }
 
     // Post the driver details to the automate screenshot endpoint with snapshot options and other info

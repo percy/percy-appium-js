@@ -19,6 +19,10 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     ignoreRegionAccessibilityIds,
     ignoreRegionAppiumElements,
     customIgnoreRegions,
+    considerRegionXpaths,
+    considerRegionAccessibilityIds,
+    considerRegionAppiumElements,
+    customConsiderRegions,
     scrollableXpath,
     scrollableId
   } = options;
@@ -39,6 +43,10 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       ignoreRegionAccessibilityIds = name.ignoreRegionAccessibilityIds;
       ignoreRegionAppiumElements = name.ignoreRegionAppiumElements;
       customIgnoreRegions = name.customIgnoreRegions;
+      considerRegionXpaths = name.considerRegionXpaths;
+      considerRegionAccessibilityIds = name.considerRegionAccessibilityIds;
+      considerRegionAppiumElements = name.considerRegionAppiumElements;
+      customConsiderRegions = name.customConsiderRegions;
       scrollableXpath = name.scrollableXpath;
       scrollableId = name.scrollableId;
       options = name;
@@ -79,6 +87,10 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         ignoreRegionAccessibilityIds,
         ignoreRegionAppiumElements,
         customIgnoreRegions,
+        considerRegionXpaths,
+        considerRegionAccessibilityIds,
+        considerRegionAppiumElements,
+        customConsiderRegions,
         scrollableXpath,
         scrollableId
       });
