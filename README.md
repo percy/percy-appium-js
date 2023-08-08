@@ -117,6 +117,22 @@ async function percyScreenshotFlutter(driver, name, options) {
 }
 ```
 
+- Call percyScreenshotFlutter helper function when you want to take screenshot.
+```js
+await percyScreenshotFlutter(driver, name[, {
+  fullscreen,
+  deviceName,
+  orientation,
+  statusBarHeight,
+  navigationBarHeight
+}])
+```
+
+> Note: 
+>
+> For other hybrid apps the `await driver.switchContext('FLUTTER');` would change to context that it uses like say WEBVIEW etc.
+>
+
 ## Running Percy on Automate
 `percyScreenshot(driver, name, options)` [ needs @percy/cli 1.27.0-beta.0+ ];
 - `driver` (**required**) - A appium driver instance
@@ -157,19 +173,3 @@ $ percy exec -- [python test command]
 ```
 
 Refer to docs here: [Percy on Automate](https://docs.percy.io/docs/integrate-functional-testing-with-visual-testing)
-
-- Call percyScreenshotFlutter helper function when you want to take screenshot.
-```js
-await percyScreenshotFlutter(driver, name[, {
-  fullscreen,
-  deviceName,
-  orientation,
-  statusBarHeight,
-  navigationBarHeight
-}])
-```
-
-> Note: 
->
-> For other hybrid apps the `await driver.switchContext('FLUTTER');` would change to context that it uses like say WEBVIEW etc.
->
