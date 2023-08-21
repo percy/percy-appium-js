@@ -46,6 +46,10 @@ class GenericProvider {
     ignoreRegionAccessibilityIds,
     ignoreRegionAppiumElements,
     customIgnoreRegions,
+    considerRegionXpaths,
+    considerRegionAccessibilityIds,
+    considerRegionAppiumElements,
+    customConsiderRegions,
     scrollableXpath,
     scrollableId
   }) {
@@ -61,8 +65,11 @@ class GenericProvider {
 
     const tag = await this.getTag();
     const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
-    const ignoreRegions = await this.findIgnoredRegions(
+    const ignoreRegions = await this.findRegions(
       ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions
+    );
+    const considerRegions = await this.findRegions(
+      considerRegionXpaths, considerRegionAccessibilityIds, considerRegionAppiumElements, customConsiderRegions
     );
 
     log.debug(`${name} : Tag ${JSON.stringify(ignoreRegions)}`);
@@ -74,7 +81,12 @@ class GenericProvider {
       tag,
       tiles,
       externalDebugUrl: await this.getDebugUrl(),
-      ignoredElementsData: ignoreRegions,
+      ignoredElementsData: {
+        ignoreElementsData: ignoreRegions
+      },
+      consideredElementsData: {
+        considerElementsData: considerRegions
+      },
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO
     });
@@ -149,21 +161,17 @@ class GenericProvider {
     return this.debugUrl;
   }
 
-  async findIgnoredRegions(ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions) {
-    const ignoredElementsArray = [];
-    await this.ignoreRegionsByXpaths(ignoredElementsArray, ignoreRegionXpaths || []);
-    await this.ignoreRegionsByIds(ignoredElementsArray, ignoreRegionAccessibilityIds || []);
-    await this.ignoreRegionsByElement(ignoredElementsArray, ignoreRegionAppiumElements || []);
-    await this.addCustomIgnoreRegions(ignoredElementsArray, customIgnoreRegions || []);
+  async findRegions(xpaths, accessibilityIds, appiumElements, customLocations) {
+    const regionsArray = [];
+    await this.getRegionsByXpath(regionsArray, xpaths || []);
+    await this.getRegionsByIds(regionsArray, accessibilityIds || []);
+    await this.getRegionsByElements(regionsArray, appiumElements || []);
+    await this.getRegionsByLocation(regionsArray, customLocations || []);
 
-    const ignoredElementsLocations = {
-      ignoreElementsData: ignoredElementsArray
-    };
-
-    return ignoredElementsLocations;
+    return regionsArray;
   }
 
-  async ignoreElementObject(selector, element) {
+  async getRegionObject(selector, element) {
     const scaleFactor = await this.metadata.scaleFactor();
     const location = await element.getLocation();
     const size = await element.getSize();
@@ -182,13 +190,13 @@ class GenericProvider {
     return jsonObject;
   }
 
-  async ignoreRegionsByXpaths(ignoredElementsArray, xpaths) {
+  async getRegionsByXpath(elementsArray, xpaths) {
     for (const xpath of xpaths) {
       try {
         const element = await this.driver.elementByXPath(xpath);
         const selector = `xpath: ${xpath}`;
-        const ignoredRegion = await this.ignoreElementObject(selector, element);
-        ignoredElementsArray.push(ignoredRegion);
+        const ignoredRegion = await this.getRegionObject(selector, element);
+        elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Appium Element with xpath: ${xpath} not found. Ignoring this xpath.`);
         log.debug(e.toString());
@@ -196,13 +204,13 @@ class GenericProvider {
     }
   }
 
-  async ignoreRegionsByIds(ignoredElementsArray, ids) {
+  async getRegionsByIds(elementsArray, ids) {
     for (const id of ids) {
       try {
         const element = await this.driver.elementByAccessibilityId(id);
         const selector = `id: ${id}`;
-        const ignoredRegion = await this.ignoreElementObject(selector, element);
-        ignoredElementsArray.push(ignoredRegion);
+        const ignoredRegion = await this.getRegionObject(selector, element);
+        elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Appium Element with id: ${id} not found. Ignoring this id.`);
         log.debug(e.toString());
@@ -210,14 +218,14 @@ class GenericProvider {
     }
   }
 
-  async ignoreRegionsByElement(ignoredElementsArray, elements) {
+  async getRegionsByElements(elementsArray, elements) {
     for (let index = 0; index < elements.length; index++) {
       try {
         const type = await elements[index].getAttribute('class');
         const selector = `element: ${index} ${type}`;
 
-        const ignoredRegion = await this.ignoreElementObject(selector, elements[index]);
-        ignoredElementsArray.push(ignoredRegion);
+        const ignoredRegion = await this.getRegionObject(selector, elements[index]);
+        elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Correct Mobile Element not passed at index ${index}.`);
         log.debug(e.toString());
@@ -225,7 +233,7 @@ class GenericProvider {
     }
   }
 
-  async addCustomIgnoreRegions(ignoredElementsArray, customLocations) {
+  async getRegionsByLocation(elementsArray, customLocations) {
     const { width, height } = await this.metadata.screenSize();
     for (let index = 0; index < customLocations.length; index++) {
       const customLocation = customLocations[index];
@@ -240,7 +248,7 @@ class GenericProvider {
             right: customLocation.right
           }
         };
-        ignoredElementsArray.push(ignoredRegion);
+        elementsArray.push(ignoredRegion);
       } else {
         log.info(`Values passed in custom ignored region at index: ${index} is not valid`);
       }

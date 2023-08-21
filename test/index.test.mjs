@@ -219,6 +219,23 @@ describe('percyScreenshot', () => {
         }
       });
 
+      it('tests consider elments works', async () => {
+        driver = driverFunc({ enabled: true });
+        let considerRegionXpaths = ['someXpath'];
+        await percyScreenshot(driver, 'Screenshot 1', { considerRegionXpaths });
+
+        expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+          'Snapshot found: Screenshot 1'
+        ]));
+        if (driverType === 'wd driver') {
+          expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
+          expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
+        } else {
+          expect(driver.$).toHaveBeenCalledWith('someXpath');
+          expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
+        }
+      });
+
       it('should call POA percyScreenshot', async () => {
         const driver = driverFunc({ enabled: true });
         spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
@@ -231,19 +248,38 @@ describe('percyScreenshot', () => {
         }));
       });
 
-      it('should call POA percyScreenshot with ignoreRegion', async () => {
+      it('should call POA percyScreenshot with ignoreRegion and considerRegion', async () => {
         const element = { value: '123', elementId: '123' };
+        const element2 = { value: '456', elementId: '456' };
         const driver = driverFunc({ enabled: true });
         spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
         utils.percy.type = 'automate';
         spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
-        await percyScreenshot(driver, 'Screenshot 2', { ignore_region_appium_elements: [element] });
+        await percyScreenshot(driver, 'Screenshot 2', {
+          ignore_region_appium_elements: [element], consider_region_appium_elements: [element]
+        });
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
           commandExecutorUrl: 'https://localhost/wd/hub',
           snapshotName: 'Screenshot 2',
-          options: { ignore_region_elements: ['123'] }
+          options: {
+            ignore_region_elements: ['123'],
+            consider_region_elements: ['123']
+          }
+        }));
+
+        await percyScreenshot(driver, 'Screenshot 3', {
+          ignoreRegionAppiumElements: [element2], considerRegionAppiumElements: [element2]
+        });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          sessionId: 'sessionID',
+          commandExecutorUrl: 'https://localhost/wd/hub',
+          snapshotName: 'Screenshot 3',
+          options: {
+            ignore_region_elements: ['456'],
+            consider_region_elements: ['456']
+          }
         }));
       });
 
