@@ -7,6 +7,9 @@ class Cache {
   // Common stores, const, dont modify outside
   static caps = 'caps';
   static systemBars = 'systemBars';
+  static capabilities = 'capabilities';
+  static sessionCapabilities = 'session_capabilites';
+  static commandExecutorUrl = 'command_executor_url';
 
   // maintainance
   static lastTime = Date.now();

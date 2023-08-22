@@ -4,6 +4,7 @@ const utils = require('@percy/sdk-utils');
 // Collect client and environment information
 const sdkPkg = require('../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
+const { Cache } = require('./util/cache');
 
 let clientWdPkg = null;
 try {
@@ -29,8 +30,12 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     // This AppiumDriver has a property of driver which contains the original driver
     // Hence to access the capabilities of original driver adding this fix
     // Also, note that driverWrapper.getCapabilities() returns only few capabilities and not all
-    const capabilities = driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
-    const commandExecutorUrl = driver.commandExecutorUrl;
+    const capabilities = await Cache.withCache(Cache.capabilities, sessionId, async () => {
+      return driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
+    });
+    const commandExecutorUrl = await Cache.withCache(Cache.commandExecutorUrl, sessionId, async () => {
+      return driver.commandExecutorUrl
+    });
 
     /* istanbul ignore next */
     if (options) {
