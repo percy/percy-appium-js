@@ -34,7 +34,7 @@ module.exports = async function percyOnAutomate(driver, name, options) {
       return driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
     });
     const commandExecutorUrl = await Cache.withCache(Cache.commandExecutorUrl, sessionId, async () => {
-      return driver.commandExecutorUrl
+      return driver.commandExecutorUrl;
     });
 
     /* istanbul ignore next */
