@@ -148,9 +148,9 @@ class AppAutomateProvider extends GenericProvider {
 
     JSON.parse(response.result).forEach(tileData => {
       tiles.push(new Tile({
-        statBarHeight,
-        navBarHeight,
-        fullscreen,
+        statusBarHeight: statBarHeight,
+        navBarHeight: navBarHeight,
+        fullscreen: fullscreen,
         headerHeight: tileData.header_height,
         footerHeight: tileData.footer_height,
         sha: tileData.sha.split('-')[0] // drop build id

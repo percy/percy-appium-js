@@ -153,7 +153,9 @@ describe('AppAutomateProvider', () => {
           args['options']['deviceHeight'] = screenSize['height'];
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
                                 
-          await appAutomate.getTiles(true, false, null, null, null);
+          let tiles = await appAutomate.getTiles(true, false, null, null, null);
+          expect(tiles[0].statusBarHeight).toEqual(100);
+          expect(tiles[0].navBarHeight).toEqual(200);
           expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
