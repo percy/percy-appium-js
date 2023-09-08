@@ -78,6 +78,9 @@ percyScreenshot(driver, name[, {
   - `statusBarHeight`: In px if you want to override SDK
   - `navigationBarHeight`: In px if you want to override SDK
   - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions
+  - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
+    - `topScrollviewOffset`: (**optional**) - [Experimental] offset from top of scrollview [ needs @percy/cli 1.20.2+ ]; int
+    - `bottomScrollviewOffset` (**optional**) - [Experimental] offset from bottom of scrollview [ needs @percy/cli 1.20.2+ ]; int
   - `screenLengths`: int [Experimental] max screen lengths for fullPage
   - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage; string
   - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage; string
