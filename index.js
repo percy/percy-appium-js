@@ -24,6 +24,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     considerRegionAppiumElements,
     customConsiderRegions,
     scrollableXpath,
+    topScrollviewOffset,
+    bottomScrollviewOffset,
     scrollableId
   } = options;
   // allow working with or without standalone mode for wdio
@@ -48,6 +50,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       considerRegionAppiumElements = name.considerRegionAppiumElements;
       customConsiderRegions = name.customConsiderRegions;
       scrollableXpath = name.scrollableXpath;
+      topScrollviewOffset = name.topScrollviewOffset;
+      bottomScrollviewOffset = name.bottomScrollviewOffset;
       scrollableId = name.scrollableId;
       options = name;
     }
@@ -92,6 +96,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         considerRegionAppiumElements,
         customConsiderRegions,
         scrollableXpath,
+        topScrollviewOffset,
+        bottomScrollviewOffset,
         scrollableId
       });
       log.debug(`[${name}] -> end`);
