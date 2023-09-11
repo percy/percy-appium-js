@@ -51,7 +51,7 @@
     "nyc": "^15.1.0",
     "tsd": "^0.24.1",
     "wd": "^1.14.0",
-    "webdriverio": "^7.25.4"
+    "webdriverio": "^8.16.6"
   },
   "bugs": {
     "url": "https://github.com/percy/percy-appium-js/issues"
