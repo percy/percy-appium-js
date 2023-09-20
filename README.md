@@ -72,22 +72,22 @@ percyScreenshot(driver, name[, {
 - `driver` (**required**) - A appium driver instance [ can be skipped in case of webdriverio runner]
 - `name` (**required**) - The screenshot name; must be unique to each screenshot
 - `options object` (**optional**) 
-  - `fullscreen`: if the app is currently in fullscreen; boolean
-  - `deviceName`: custom device name to override SDK fetched name
-  - `orientation`: ["portrait"/"landscape"] - tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
+  - `fullscreen`: If the app is currently in fullscreen; boolean
+  - `deviceName`: Custom device name to override SDK fetched name
+  - `orientation`: ["portrait"/"landscape"] - Tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
   - `statusBarHeight`: In px if you want to override SDK; int
   - `navigationBarHeight`: In px if you want to override SDK; int
-  - `fullPage`: [Experimental] only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
-    - `screenLengths`: [Experimental] max screen lengths for fullPage; int
+  - `fullPage`: [Experimental] Only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
+    - `screenLengths`: [Experimental] Max screen lengths for fullPage; int
     - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
-      - `topScrollviewOffset`: [Experimental] offset from top of scrollview; int
-      - `bottomScrollviewOffset`: [Experimental] offset from bottom of scrollview; int
-  - `scrollableXpath` [Experimental] scrollable element xpath for fullpage; string
-  - `scrollableId`: [Experimental] scrollable element accessibility id for fullpage; string
-  - `ignoreRegionXpaths`: elements xpaths that user want to ignore in visual diff; list of string
-  - `ignoreRegionAccessibilityIds`: elements accessibility_ids that user want to ignore in visual diff; list of string
-  - `ignoreRegionAppiumElements`: appium elements that user want to ignore in visual diff; list of appium element object
-  - `customIgnoreRegions`: custom locations that user want to ignore in visual diff; list of ignore_region object
+      - `topScrollviewOffset`: [Experimental] Offset from top of scrollview; int
+      - `bottomScrollviewOffset`: [Experimental] Offset from bottom of scrollview; int
+  - `scrollableXpath` [Experimental] Scrollable element xpath for fullpage; string
+  - `scrollableId`: [Experimental] Scrollable element accessibility id for fullpage; string
+  - `ignoreRegionXpaths`: Elements xpaths that user want to ignore in visual diff; list of string
+  - `ignoreRegionAccessibilityIds`: Elements accessibility_ids that user want to ignore in visual diff; list of string
+  - `ignoreRegionAppiumElements`: Appium elements that user want to ignore in visual diff; list of appium element object
+  - `customIgnoreRegions`: Custom locations that user want to ignore in visual diff; list of ignore_region object
   - IgnoreRegion:-
     - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
     - Constructor:
@@ -99,9 +99,6 @@ percyScreenshot(driver, name[, {
       `bottom` (int): Bottom coordinate of the ignore region.
       `left` (int): Left coordinate of the ignore region.
       `right` (int): Right coordinate of the ignore region.
-    - Raises:Error: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
-    - valid: Ignore region should be within the boundaries of the screen.
-
 ## Running with Hybrid Apps
 
 For a hybrid app, we need to switch to native context before taking screenshot.
