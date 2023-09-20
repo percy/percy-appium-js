@@ -72,32 +72,29 @@ percyScreenshot(driver, name[, {
 - `driver` (**required**) - A appium driver instance [ can be skipped in case of webdriverio runner]
 - `name` (**required**) - The screenshot name; must be unique to each screenshot
 - `options object` (**optional**) 
-  - `fullscreen`: if the app is currently in fullscreen
+  - `fullscreen`: if the app is currently in fullscreen; boolean
   - `deviceName`: custom device name to override SDK fetched name
-  - `orientation`: "portrait"/"landscape" tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
-  - `statusBarHeight`: In px if you want to override SDK
-  - `navigationBarHeight`: In px if you want to override SDK
-  - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions
-  - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
-    - `topScrollviewOffset`: (**optional**) - [Experimental] offset from top of scrollview [ needs @percy/cli 1.20.2+ ]; int
-    - `bottomScrollviewOffset` (**optional**) - [Experimental] offset from bottom of scrollview [ needs @percy/cli 1.20.2+ ]; int
-  - `screenLengths`: int [Experimental] max screen lengths for fullPage
-  - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage; string
-  - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage; string
-  - `ignoreRegionXpaths` (**optional**) - elements xpaths that user want to ignore in visual diff; list of string
-  - `ignoreRegionAccessibilityIds` (**optional**) - elements accessibility_ids that user want to ignore in visual diff; list of string
-  - `ignoreRegionAppiumElements` (**optional**) - appium elements that user want to ignore in visual diff; list of appium element object
-  - `customIgnoreRegions` (**optional**) - custom locations that user want to ignore in visual diff; list of ignore_region object
+  - `orientation`: ["portrait"/"landscape"] - tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
+  - `statusBarHeight`: In px if you want to override SDK; int
+  - `navigationBarHeight`: In px if you want to override SDK; int
+  - `fullPage`: [Experimental] only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
+    - `screenLengths`: [Experimental] max screen lengths for fullPage; int
+    - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
+      - `topScrollviewOffset`: [Experimental] offset from top of scrollview; int
+      - `bottomScrollviewOffset`: [Experimental] offset from bottom of scrollview; int
+  - `scrollableXpath` [Experimental] scrollable element xpath for fullpage; string
+  - `scrollableId`: [Experimental] scrollable element accessibility id for fullpage; string
+  - `ignoreRegionXpaths`: elements xpaths that user want to ignore in visual diff; list of string
+  - `ignoreRegionAccessibilityIds`: elements accessibility_ids that user want to ignore in visual diff; list of string
+  - `ignoreRegionAppiumElements`: appium elements that user want to ignore in visual diff; list of appium element object
+  - `customIgnoreRegions`: custom locations that user want to ignore in visual diff; list of ignore_region object
   - IgnoreRegion:-
     - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
-
     - Constructor:
       ```
       constructor(top, bottom, left, right)
       ```
-
     - Parameters:
-
       `top` (int): Top coordinate of the ignore region.
       `bottom` (int): Bottom coordinate of the ignore region.
       `left` (int): Left coordinate of the ignore region.
@@ -149,7 +146,6 @@ await percyScreenshotFlutter(driver, name[, {
     - `customIgnoreRegions` - elements can be ignored using custom boundaries
       - IgnoreRegion:-
         - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
-
         - Constructor:
           ```
           init(self, top, bottom, left, right)
