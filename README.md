@@ -95,10 +95,10 @@ percyScreenshot(driver, name[, {
       constructor(top, bottom, left, right)
       ```
     - Parameters:
-      `top` (int): Top coordinate of the ignore region.
-      `bottom` (int): Bottom coordinate of the ignore region.
-      `left` (int): Left coordinate of the ignore region.
-      `right` (int): Right coordinate of the ignore region.
+      - `top` (int): Top coordinate of the ignore region.
+      - `bottom` (int): Bottom coordinate of the ignore region.
+      - `left` (int): Left coordinate of the ignore region.
+      - `right` (int): Right coordinate of the ignore region.
 ## Running with Hybrid Apps
 
 For a hybrid app, we need to switch to native context before taking screenshot.
@@ -137,10 +137,10 @@ await percyScreenshotFlutter(driver, name[, {
 - `options` (**optional**) - There are various options supported by percy_screenshot to server further functionality.
     - `freezeAnimation` - Boolean value by default it falls back to `false`, you can pass `true` and percy will freeze image based animations.
     - `percyCSS` - Custom CSS to be added to DOM before the screenshot being taken. Note: This gets removed once the screenshot is taken.
-    - `ignoreRegionXpaths` - elements in the DOM can be ignored using xpath
-    - `ignoreRegionSelectors` - elements in the DOM can be ignored using selectors.
-    - `ignoreRegionAppiumElements` - elements can be ignored using appium_elements.
-    - `customIgnoreRegions` - elements can be ignored using custom boundaries
+    - `ignoreRegionXpaths` - Elements in the DOM can be ignored using xpath
+    - `ignoreRegionSelectors` - Elements in the DOM can be ignored using selectors.
+    - `ignoreRegionAppiumElements` - Elements can be ignored using appium_elements.
+    - `customIgnoreRegions` - Elements can be ignored using custom boundaries
       - IgnoreRegion:-
         - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
         - Constructor:
@@ -148,13 +148,10 @@ await percyScreenshotFlutter(driver, name[, {
           init(self, top, bottom, left, right)
           ```
         - Parameters:
-          `top` (int): Top coordinate of the ignore region.
-          `bottom` (int): Bottom coordinate of the ignore region.
-          `left` (int): Left coordinate of the ignore region.
-          `right` (int): Right coordinate of the ignore region.
-        - Raises:ValueError: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
-        - valid: Ignore region should be within the boundaries of the screen.
-
+          - `top` (int): Top coordinate of the ignore region.
+          - `bottom` (int): Bottom coordinate of the ignore region.
+          - `left` (int): Left coordinate of the ignore region.
+          - `right` (int): Right coordinate of the ignore region.
 ### Creating Percy on automate build
 Note: Automate Percy Token starts with `auto` keyword. The command can be triggered using `exec` keyword.
 ```sh-session
