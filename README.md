@@ -77,13 +77,13 @@ percyScreenshot(driver, name[, {
   - `orientation`: ["portrait"/"landscape"] - Tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
   - `statusBarHeight`: In px if you want to override SDK; int
   - `navigationBarHeight`: In px if you want to override SDK; int
-  - `fullPage`: [Experimental] Only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
-    - `screenLengths`: [Experimental] Max screen lengths for fullPage; int
+  - `fullPage`: [Alpha] Only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
+    - `screenLengths`: [Alpha] Max screen lengths for fullPage; int
     - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
-      - `topScrollviewOffset`: [Experimental] Offset from top of scrollview; int
-      - `bottomScrollviewOffset`: [Experimental] Offset from bottom of scrollview; int
-  - `scrollableXpath` [Experimental] Scrollable element xpath for fullpage; string
-  - `scrollableId`: [Experimental] Scrollable element accessibility id for fullpage; string
+      - `topScrollviewOffset`: [Alpha] Offset from top of scrollview; int
+      - `bottomScrollviewOffset`: [Alpha] Offset from bottom of scrollview; int
+  - `scrollableXpath` [Alpha] Scrollable element xpath for fullpage; string
+  - `scrollableId`: [Alpha] Scrollable element accessibility id for fullpage; string
   - `ignoreRegionXpaths`: Elements xpaths that user want to ignore in visual diff; list of string
   - `ignoreRegionAccessibilityIds`: Elements accessibility_ids that user want to ignore in visual diff; list of string
   - `ignoreRegionAppiumElements`: Appium elements that user want to ignore in visual diff; list of appium element object
