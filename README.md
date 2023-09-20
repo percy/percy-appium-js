@@ -72,39 +72,33 @@ percyScreenshot(driver, name[, {
 - `driver` (**required**) - A appium driver instance [ can be skipped in case of webdriverio runner]
 - `name` (**required**) - The screenshot name; must be unique to each screenshot
 - `options object` (**optional**) 
-  - `fullscreen`: if the app is currently in fullscreen
-  - `deviceName`: custom device name to override SDK fetched name
-  - `orientation`: "portrait"/"landscape" tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
-  - `statusBarHeight`: In px if you want to override SDK
-  - `navigationBarHeight`: In px if you want to override SDK
-  - `fullPage`: true/false. [Experimental] only supported on App Automate driver sessions
-  - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
-    - `topScrollviewOffset`: (**optional**) - [Experimental] offset from top of scrollview [ needs @percy/cli 1.20.2+ ]; int
-    - `bottomScrollviewOffset` (**optional**) - [Experimental] offset from bottom of scrollview [ needs @percy/cli 1.20.2+ ]; int
-  - `screenLengths`: int [Experimental] max screen lengths for fullPage
-  - `scrollableXpath` (**optional**) - [Experimental] scrollable element xpath for fullpage; string
-  - `scrollableId` (**optional**) - [Experimental] scrollable element accessibility id for fullpage; string
-  - `ignoreRegionXpaths` (**optional**) - elements xpaths that user want to ignore in visual diff; list of string
-  - `ignoreRegionAccessibilityIds` (**optional**) - elements accessibility_ids that user want to ignore in visual diff; list of string
-  - `ignoreRegionAppiumElements` (**optional**) - appium elements that user want to ignore in visual diff; list of appium element object
-  - `customIgnoreRegions` (**optional**) - custom locations that user want to ignore in visual diff; list of ignore_region object
+  - `fullscreen`: If the app is currently in fullscreen; boolean
+  - `deviceName`: Custom device name to override SDK fetched name
+  - `orientation`: ["portrait"/"landscape"] - Tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
+  - `statusBarHeight`: In px if you want to override SDK; int
+  - `navigationBarHeight`: In px if you want to override SDK; int
+  - `fullPage`: [Alpha] Only supported on App Automate driver sessions [ needs @percy/cli 1.20.2+ ]; boolean
+    - `screenLengths`: [Alpha] Max screen lengths for fullPage; int
+    - In case scrollview is overlapping with other app elements. Offsets can be provided to reduce the area which needs to be considered for scrolling:
+      - `topScrollviewOffset`: [Alpha] Offset from top of scrollview; int
+      - `bottomScrollviewOffset`: [Alpha] Offset from bottom of scrollview; int
+  - `scrollableXpath` [Alpha] Scrollable element xpath for fullpage; string
+  - `scrollableId`: [Alpha] Scrollable element accessibility id for fullpage; string
+  - `ignoreRegionXpaths`: Elements xpaths that user want to ignore in visual diff; list of string
+  - `ignoreRegionAccessibilityIds`: Elements accessibility_ids that user want to ignore in visual diff; list of string
+  - `ignoreRegionAppiumElements`: Appium elements that user want to ignore in visual diff; list of appium element object
+  - `customIgnoreRegions`: Custom locations that user want to ignore in visual diff; list of ignore_region object
   - IgnoreRegion:-
     - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
-
     - Constructor:
       ```
       constructor(top, bottom, left, right)
       ```
-
     - Parameters:
-
-      `top` (int): Top coordinate of the ignore region.
-      `bottom` (int): Bottom coordinate of the ignore region.
-      `left` (int): Left coordinate of the ignore region.
-      `right` (int): Right coordinate of the ignore region.
-    - Raises:Error: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
-    - valid: Ignore region should be within the boundaries of the screen.
-
+      - `top` (int): Top coordinate of the ignore region.
+      - `bottom` (int): Bottom coordinate of the ignore region.
+      - `left` (int): Left coordinate of the ignore region.
+      - `right` (int): Right coordinate of the ignore region.
 ## Running with Hybrid Apps
 
 For a hybrid app, we need to switch to native context before taking screenshot.
@@ -143,25 +137,21 @@ await percyScreenshotFlutter(driver, name[, {
 - `options` (**optional**) - There are various options supported by percy_screenshot to server further functionality.
     - `freezeAnimation` - Boolean value by default it falls back to `false`, you can pass `true` and percy will freeze image based animations.
     - `percyCSS` - Custom CSS to be added to DOM before the screenshot being taken. Note: This gets removed once the screenshot is taken.
-    - `ignoreRegionXpaths` - elements in the DOM can be ignored using xpath
-    - `ignoreRegionSelectors` - elements in the DOM can be ignored using selectors.
-    - `ignoreRegionAppiumElements` - elements can be ignored using appium_elements.
-    - `customIgnoreRegions` - elements can be ignored using custom boundaries
+    - `ignoreRegionXpaths` - Elements in the DOM can be ignored using xpath
+    - `ignoreRegionSelectors` - Elements in the DOM can be ignored using selectors.
+    - `ignoreRegionAppiumElements` - Elements can be ignored using appium_elements.
+    - `customIgnoreRegions` - Elements can be ignored using custom boundaries
       - IgnoreRegion:-
         - Description: This class represents a rectangular area on a screen that needs to be ignored for visual diff.
-
         - Constructor:
           ```
           init(self, top, bottom, left, right)
           ```
         - Parameters:
-          `top` (int): Top coordinate of the ignore region.
-          `bottom` (int): Bottom coordinate of the ignore region.
-          `left` (int): Left coordinate of the ignore region.
-          `right` (int): Right coordinate of the ignore region.
-        - Raises:ValueError: If top, bottom, left, or right is less than 0 or top is greater than or equal to bottom or left is greater than or equal to right.
-        - valid: Ignore region should be within the boundaries of the screen.
-
+          - `top` (int): Top coordinate of the ignore region.
+          - `bottom` (int): Bottom coordinate of the ignore region.
+          - `left` (int): Left coordinate of the ignore region.
+          - `right` (int): Right coordinate of the ignore region.
 ### Creating Percy on automate build
 Note: Automate Percy Token starts with `auto` keyword. The command can be triggered using `exec` keyword.
 ```sh-session
