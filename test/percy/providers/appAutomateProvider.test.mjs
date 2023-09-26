@@ -151,9 +151,13 @@ describe('AppAutomateProvider', () => {
             height: 2000,
           };
           args['options']['deviceHeight'] = screenSize['height'];
+          args['options']['topScrollviewOffset'] = 0;
+          args['options']['bottomScrollviewOffset'] = 0;
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
                                 
-          await appAutomate.getTiles(true, false, null, null, null);
+          let tiles = await appAutomate.getTiles(true, false, null, null, null);
+          expect(tiles[0].statusBarHeight).toEqual(100);
+          expect(tiles[0].navBarHeight).toEqual(200);
           expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
@@ -214,6 +218,8 @@ describe('AppAutomateProvider', () => {
           };
           args['projectId'] = 'percy-dev';
           args['options']['deviceHeight'] = screenSize['height'];
+          args['options']['topScrollviewOffset'] = 0;
+          args['options']['bottomScrollviewOffset'] = 0;
           args['screenshotType'] = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
                                 

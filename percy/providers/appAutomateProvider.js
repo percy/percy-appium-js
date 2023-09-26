@@ -31,6 +31,8 @@ class AppAutomateProvider extends GenericProvider {
     considerRegionAppiumElements,
     customConsiderRegions,
     scrollableXpath,
+    topScrollviewOffset,
+    bottomScrollviewOffset,
     scrollableId
   } = {}) {
     let response = null;
@@ -56,6 +58,8 @@ class AppAutomateProvider extends GenericProvider {
         considerRegionAppiumElements,
         customConsiderRegions,
         scrollableXpath,
+        topScrollviewOffset,
+        bottomScrollviewOffset,
         scrollableId
       });
     } catch (e) {
@@ -102,7 +106,7 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   // Override this for AA specific optimizations
-  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId) {
+  async getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, topScrollviewOffset, bottomScrollviewOffset, scrollableId) {
     // Override AA optimizations
     if (this.isDisableRemoteUpload()) {
       if (fullPage === true) {
@@ -131,6 +135,8 @@ class AppAutomateProvider extends GenericProvider {
           numOfTiles: screenLengths || 4,
           deviceHeight: (await this.metadata.screenSize()).height,
           scollableXpath: scrollableXpath || null,
+          topScrollviewOffset: topScrollviewOffset || 0,
+          bottomScrollviewOffset: bottomScrollviewOffset || 0,
           scrollableId: scrollableId || null,
           FORCE_FULL_PAGE: process.env.FORCE_FULL_PAGE === 'true'
         }
@@ -148,9 +154,9 @@ class AppAutomateProvider extends GenericProvider {
 
     JSON.parse(response.result).forEach(tileData => {
       tiles.push(new Tile({
-        statBarHeight,
-        navBarHeight,
-        fullscreen,
+        statusBarHeight: statBarHeight,
+        navBarHeight: navBarHeight,
+        fullscreen: fullscreen,
         headerHeight: tileData.header_height,
         footerHeight: tileData.footer_height,
         sha: tileData.sha.split('-')[0] // drop build id
