@@ -14,5 +14,7 @@ module.exports = async function postFailedEvents(error) {
 };
 
 module.exports.request = async function request(data) {
-  await utils.request.post('/percy/events', data);
+  try {
+    await utils.postFailedEvent(data);
+  } catch {}
 }; // To mock in test case
