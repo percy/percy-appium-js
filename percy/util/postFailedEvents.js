@@ -7,7 +7,8 @@ const CLIENT_INFO = `${sdkPkg.name.split('/')[1]}-js/${sdkPkg.version}`;
 module.exports = async function postFailedEvents(error) {
   let options = {
     clientInfo: CLIENT_INFO,
-    errorMessage: error
+    message: error,
+    errorKind: 'sdk'
   };
 
   return await module.exports.request(options);
@@ -15,6 +16,6 @@ module.exports = async function postFailedEvents(error) {
 
 module.exports.request = async function request(data) {
   try {
-    await utils.postFailedEvent(data);
+    await utils.postBuildEvents(data);
   } catch {}
 }; // To mock in test case
