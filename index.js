@@ -1,7 +1,6 @@
 const { AppiumDriver } = require('./percy/driver/driverWrapper');
 const { ProviderResolver } = require('./percy/providers/providerResolver');
 const { TimeIt } = require('./percy/util/timing');
-
 const postFailedEvents = require('./percy/util/postFailedEvents');
 const percyOnAutomate = require('./percy/percyOnAutomate');
 
