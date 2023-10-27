@@ -1,6 +1,7 @@
 const { AppiumDriver } = require('./percy/driver/driverWrapper');
 const { ProviderResolver } = require('./percy/providers/providerResolver');
 const { TimeIt } = require('./percy/util/timing');
+const postFailedEvents = require('./percy/util/postFailedEvents');
 const percyOnAutomate = require('./percy/percyOnAutomate');
 
 const log = require('./percy/util/log');
@@ -61,6 +62,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       [driver, name] = [browser, driver];
     } catch (e) { // ReferenceError: browser is not defined.
       driver = undefined;
+      await postFailedEvents(e);
     }
   };
   if (!driver) throw new Error('The WebdriverIO `browser` object or wd `driver` object is required.');
@@ -105,6 +107,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     } catch (e) {
       log.error(`[${name}] failed to take screenshot`);
       log.debug(`[${name}] ${e}, \n ${e.stack}`);
+      await postFailedEvents(e);
       if (!(await driver.getPercyOptions()).ignoreErrors) throw e;
     }
   });

@@ -5,6 +5,7 @@ import wdioDriver from './mocks/appium/wdio_driver.js';
 import { Cache } from '../percy/util/cache.js';
 import utils from '@percy/sdk-utils';
 import percyOnAutomate from '../percy/percyOnAutomate.js';
+import postFailedEvents from '../percy/util/postFailedEvents.js';
 
 describe('percyScreenshot', () => {
   let driver;
@@ -25,6 +26,7 @@ describe('percyScreenshot', () => {
     });
 
     it('throws an error when a driver is not provided', async () => {
+      spyOn(postFailedEvents, 'request').and.callFake(() => {});
       await expectAsync(percyScreenshot())
         .toBeRejectedWithError('The WebdriverIO `browser` object or wd `driver` object is required.');
     });
@@ -52,8 +54,8 @@ describe('percyScreenshot', () => {
     describe('errors', () => {
       describe('with percy:options.ignoreErrors false', () => {
         it('logs errors if any', async () => {
+          spyOn(postFailedEvents, 'request').and.callFake(() => {});
           driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
-
           await expectAsync(percyScreenshot(driver, 'Screenshot 1'))
             .toBeRejectedWithError('Screenshot failed');
         });
@@ -62,6 +64,7 @@ describe('percyScreenshot', () => {
       describe('with percy:options.ignoreErrors true', () => {
         it('logs errors if any', async () => {
           driver = wdDriver({ ignoreErrors: true });
+          spyOn(postFailedEvents, 'request').and.callFake(() => {});
           driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
 
           await percyScreenshot(driver, 'Screenshot 1');
@@ -73,6 +76,7 @@ describe('percyScreenshot', () => {
   describe('wdio standalone context', () => {
     describe('with browser not defined', () => {
       it('throws an error when a driver is not provided', async () => {
+        spyOn(postFailedEvents, 'request').and.callFake(() => {});
         await expectAsync(percyScreenshot('Screenshot 1'))
           .toBeRejectedWithError('The WebdriverIO `browser` object or wd `driver` object is required.');
       });
