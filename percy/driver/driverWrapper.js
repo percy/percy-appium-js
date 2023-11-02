@@ -12,10 +12,10 @@ class AppiumDriver {
     /* istanbul ignore else */
     // Note: else is covered here but constructor name '' couldnt cover (which is the case)
     // in real world when you get wd driver passed so need to ignore coverage on it
-    if (driver.constructor.name === 'Browser' && !Undefined(driver.getSession)) {
+    if (driver.constructor.name.includes('Browser') && !Undefined(driver.getSession)) {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
-      driver.constructor.name === 'Object') && // Object check is only added for tests
+      driver.constructor.name.includes('Object')) && // Object check is only added for tests
       !Undefined(driver.sessionCapabilities)) {
       this.type = 'wd';
     }

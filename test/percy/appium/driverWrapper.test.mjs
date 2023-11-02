@@ -5,6 +5,20 @@ import wdioDriver from '../../mocks/appium/wdio_driver.js';
 
 describe('AppiumDriver', () => {
   describe('getPercyOptions', () => {
+    class BoundBrowser { // Mocking ts WDIO driver
+      constructor() {
+        this.sessionId = '123';
+        this.capabilities = { browserName: 'chrome' };
+        this.options = { protocol: 'https', path: '/wd/hub', hostname: 'hub-cloud.browserstack.com' };
+      }
+      getSession() { return { platformDetails: { platformName: 'android' } } }
+    }
+
+    it('Should work with typescript wdio', async () => {
+      const driver = new AppiumDriver(new BoundBrowser());
+      expect(driver.sessionId).toEqual('123')
+    });
+
     it('returns default options if no options are provided', async () => {
       const driver = new AppiumDriver(wdDriver());
 
