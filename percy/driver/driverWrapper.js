@@ -15,7 +15,7 @@ class AppiumDriver {
     if (driver.constructor.name.includes('Browser') && !Undefined(driver.getSession)) {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
-      driver.constructor.name.includes('Object')) && // Object check is only added for tests
+      driver.constructor.name === 'Object') && // Object check is only added for tests
       !Undefined(driver.sessionCapabilities)) {
       this.type = 'wd';
     }
