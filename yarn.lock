@@ -22,6 +22,14 @@
   dependencies:
     "@babel/highlight" "^7.18.6"
 
+"@babel/code-frame@^7.22.13":
+  version "7.22.13"
+  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.22.13.tgz#e3c1c099402598483b7a8c46a721d1038803755e"
+  integrity sha512-XktuhWlJ5g+3TJXc5upd9Ks1HutSArik6jf2eAjYFyIOf4ej3RN+184cZbzDvbPnuTJIUhPKKJE3cIsYTiAT3w==
+  dependencies:
+    "@babel/highlight" "^7.22.13"
+    chalk "^2.4.2"
+
 "@babel/compat-data@^7.20.0":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.20.5.tgz"
@@ -57,6 +65,16 @@
     "@jridgewell/gen-mapping" "^0.3.2"
     jsesc "^2.5.1"
 
+"@babel/generator@^7.23.0":
+  version "7.23.0"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.23.0.tgz#df5c386e2218be505b34837acbcb874d7a983420"
+  integrity sha512-lN85QRR+5IbYrMWM6Y4pE/noaQtg4pNiqeNGX60eqOfo6gtEj6uw/JagelB8vVztSd7R6M5n1+PQkDbHbBRU4g==
+  dependencies:
+    "@babel/types" "^7.23.0"
+    "@jridgewell/gen-mapping" "^0.3.2"
+    "@jridgewell/trace-mapping" "^0.3.17"
+    jsesc "^2.5.1"
+
 "@babel/helper-compilation-targets@^7.20.0":
   version "7.20.0"
   resolved "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.20.0.tgz"
@@ -72,20 +90,25 @@
   resolved "https://registry.npmjs.org/@babel/helper-environment-visitor/-/helper-environment-visitor-7.18.9.tgz"
   integrity sha512-3r/aACDJ3fhQ/EVgFy0hpj8oHyHpQc+LPtJoY9SzTThAsStm4Ptegq92vqKoE3vD706ZVFWITnMnxucw+S9Ipg==
 
-"@babel/helper-function-name@^7.19.0":
-  version "7.19.0"
-  resolved "https://registry.npmjs.org/@babel/helper-function-name/-/helper-function-name-7.19.0.tgz"
-  integrity sha512-WAwHBINyrpqywkUH0nTnNgI5ina5TFn85HKS0pbPDfxFfhyR/aNQEn4hGi1P1JyT//I0t4OgXUlofzWILRvS5w==
-  dependencies:
-    "@babel/template" "^7.18.10"
-    "@babel/types" "^7.19.0"
+"@babel/helper-environment-visitor@^7.22.20":
+  version "7.22.20"
+  resolved "https://registry.yarnpkg.com/@babel/helper-environment-visitor/-/helper-environment-visitor-7.22.20.tgz#96159db61d34a29dba454c959f5ae4a649ba9167"
+  integrity sha512-zfedSIzFhat/gFhWfHtgWvlec0nqB9YEIVrpuwjruLlXfUSnA8cJB0miHKwqDnQ7d32aKo2xt88/xZptwxbfhA==
 
-"@babel/helper-hoist-variables@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/helper-hoist-variables/-/helper-hoist-variables-7.18.6.tgz"
-  integrity sha512-UlJQPkFqFULIcyW5sbzgbkxn2FKRgwWiRexcuaR8RNJRy8+LLveqPjwZV/bwrLZCN0eUHD/x8D0heK1ozuoo6Q==
+"@babel/helper-function-name@^7.23.0":
+  version "7.23.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-function-name/-/helper-function-name-7.23.0.tgz#1f9a3cdbd5b2698a670c30d2735f9af95ed52759"
+  integrity sha512-OErEqsrxjZTJciZ4Oo+eoZqeW9UIiOcuYKRJA4ZAgV9myA+pOXhhmpfNCKjEH/auVfEYVFJ6y1Tc4r0eIApqiw==
   dependencies:
-    "@babel/types" "^7.18.6"
+    "@babel/template" "^7.22.15"
+    "@babel/types" "^7.23.0"
+
+"@babel/helper-hoist-variables@^7.22.5":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-hoist-variables/-/helper-hoist-variables-7.22.5.tgz#c01a007dac05c085914e8fb652b339db50d823bb"
+  integrity sha512-wGjk9QZVzvknA6yKIUURb8zY3grXCcOZt+/7Wcy8O2uctxhplmUPkOdlgoNhmdVee2c92JXbf1xpMtVNbfoxRw==
+  dependencies:
+    "@babel/types" "^7.22.5"
 
 "@babel/helper-module-imports@^7.18.6":
   version "7.18.6"
@@ -122,15 +145,32 @@
   dependencies:
     "@babel/types" "^7.18.6"
 
+"@babel/helper-split-export-declaration@^7.22.6":
+  version "7.22.6"
+  resolved "https://registry.yarnpkg.com/@babel/helper-split-export-declaration/-/helper-split-export-declaration-7.22.6.tgz#322c61b7310c0997fe4c323955667f18fcefb91c"
+  integrity sha512-AsUnxuLhRYsisFiaJwvp1QF+I3KjD5FOxut14q/GzovUe6orHLesW2C7d754kRm53h5gqrz6sFl6sxc4BVtE/g==
+  dependencies:
+    "@babel/types" "^7.22.5"
+
 "@babel/helper-string-parser@^7.19.4":
   version "7.19.4"
   resolved "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.19.4.tgz"
   integrity sha512-nHtDoQcuqFmwYNYPz3Rah5ph2p8PFeFCsZk9A/48dPc/rGocJ5J3hAAZ7pb76VWX3fZKu+uEr/FhH5jLx7umrw==
 
+"@babel/helper-string-parser@^7.22.5":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.22.5.tgz#533f36457a25814cf1df6488523ad547d784a99f"
+  integrity sha512-mM4COjgZox8U+JcXQwPijIZLElkgEpO5rsERVDJTc2qfCDfERyob6k5WegS14SX18IIjv+XD+GrqNumY5JRCDw==
+
 "@babel/helper-validator-identifier@^7.18.6", "@babel/helper-validator-identifier@^7.19.1":
   version "7.19.1"
   resolved "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.19.1.tgz"
   integrity sha512-awrNfaMtnHUr653GgGEs++LlAvW6w+DcPrOliSMXWCKo597CwL5Acf/wWdNkf/tfEQE3mjkeD1YOVZOUV/od1w==
+
+"@babel/helper-validator-identifier@^7.22.20":
+  version "7.22.20"
+  resolved "https://registry.yarnpkg.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.22.20.tgz#c4ae002c61d2879e724581d96665583dbc1dc0e0"
+  integrity sha512-Y4OZ+ytlatR8AI+8KZfKuL5urKp7qey08ha31L8b3BwewJAoJamTzyvxPR/5D+KkdJCGPq/+8TukHBlY10FX9A==
 
 "@babel/helper-validator-option@^7.18.6":
   version "7.18.6"
@@ -155,10 +195,24 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
+"@babel/highlight@^7.22.13":
+  version "7.22.20"
+  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.22.20.tgz#4ca92b71d80554b01427815e06f2df965b9c1f54"
+  integrity sha512-dkdMCN3py0+ksCgYmGG8jKeGA/8Tk+gJwSYYlFGxG5lmhfKNoAy004YpLxpS1W2J8m/EK2Ew+yOs9pVRwO89mg==
+  dependencies:
+    "@babel/helper-validator-identifier" "^7.22.20"
+    chalk "^2.4.2"
+    js-tokens "^4.0.0"
+
 "@babel/parser@^7.18.10", "@babel/parser@^7.20.5":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.20.5.tgz"
   integrity sha512-r27t/cy/m9uKLXQNWWebeCUHgnAZq0CpG1OwKRxzJMP1vpSU4bSIK2hq+/cp0bQxetkXx38n09rNu8jVkcK/zA==
+
+"@babel/parser@^7.22.15", "@babel/parser@^7.23.0":
+  version "7.23.0"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.23.0.tgz#da950e622420bf96ca0d0f2909cdddac3acd8719"
+  integrity sha512-vvPKKdMemU85V9WE/l5wZEmImpCtLqbnTvqDS2U1fJ96KrxoW7KrXhNsNCblQlg8Ck4b85yxdTyelsMUgFUXiw==
 
 "@babel/template@^7.18.10":
   version "7.18.10"
@@ -169,29 +223,47 @@
     "@babel/parser" "^7.18.10"
     "@babel/types" "^7.18.10"
 
-"@babel/traverse@^7.20.1", "@babel/traverse@^7.20.5":
-  version "7.20.5"
-  resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.20.5.tgz"
-  integrity sha512-WM5ZNN3JITQIq9tFZaw1ojLU3WgWdtkxnhM1AegMS+PvHjkM5IXjmYEGY7yukz5XS4sJyEf2VzWjI8uAavhxBQ==
+"@babel/template@^7.22.15":
+  version "7.22.15"
+  resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.22.15.tgz#09576efc3830f0430f4548ef971dde1350ef2f38"
+  integrity sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==
   dependencies:
-    "@babel/code-frame" "^7.18.6"
-    "@babel/generator" "^7.20.5"
-    "@babel/helper-environment-visitor" "^7.18.9"
-    "@babel/helper-function-name" "^7.19.0"
-    "@babel/helper-hoist-variables" "^7.18.6"
-    "@babel/helper-split-export-declaration" "^7.18.6"
-    "@babel/parser" "^7.20.5"
-    "@babel/types" "^7.20.5"
+    "@babel/code-frame" "^7.22.13"
+    "@babel/parser" "^7.22.15"
+    "@babel/types" "^7.22.15"
+
+"@babel/traverse@^7.20.1", "@babel/traverse@^7.20.5":
+  version "7.23.2"
+  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.23.2.tgz#329c7a06735e144a506bdb2cad0268b7f46f4ad8"
+  integrity sha512-azpe59SQ48qG6nu2CzcMLbxUudtN+dOM9kDbUqGq3HXUJRlo7i8fvPoxQUzYgLZ4cMVmuZgm8vvBpNeRhd6XSw==
+  dependencies:
+    "@babel/code-frame" "^7.22.13"
+    "@babel/generator" "^7.23.0"
+    "@babel/helper-environment-visitor" "^7.22.20"
+    "@babel/helper-function-name" "^7.23.0"
+    "@babel/helper-hoist-variables" "^7.22.5"
+    "@babel/helper-split-export-declaration" "^7.22.6"
+    "@babel/parser" "^7.23.0"
+    "@babel/types" "^7.23.0"
     debug "^4.1.0"
     globals "^11.1.0"
 
-"@babel/types@^7.18.10", "@babel/types@^7.18.6", "@babel/types@^7.19.0", "@babel/types@^7.20.2", "@babel/types@^7.20.5":
+"@babel/types@^7.18.10", "@babel/types@^7.18.6", "@babel/types@^7.20.2", "@babel/types@^7.20.5":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@babel/types/-/types-7.20.5.tgz"
   integrity sha512-c9fst/h2/dcF7H+MJKZ2T0KjEQ8hY/BNnDk/H3XY8C4Aw/eWQXWn/lWntHF9ooUBnGmEvbfGrTgLWc+um0YDUg==
   dependencies:
     "@babel/helper-string-parser" "^7.19.4"
     "@babel/helper-validator-identifier" "^7.19.1"
+    to-fast-properties "^2.0.0"
+
+"@babel/types@^7.22.15", "@babel/types@^7.22.5", "@babel/types@^7.23.0":
+  version "7.23.0"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.23.0.tgz#8c1f020c9df0e737e4e247c0619f58c68458aaeb"
+  integrity sha512-0oIyUfKoI3mSqMvsxBdclDwxXKXAUA8v/apZbc+iSyARYou1o8ZGDxbUYyLFoW2arqS2jDGqJuZvv1d/io1axg==
+  dependencies:
+    "@babel/helper-string-parser" "^7.22.5"
+    "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
 "@eslint-community/eslint-utils@^4.2.0":
@@ -283,6 +355,11 @@
   resolved "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.0.tgz"
   integrity sha512-F2msla3tad+Mfht5cJq7LSXcdudKTWCVYUgw6pLFOOHSTtZlj6SWNYAp+AhuqLmWdBO2X5hPrLcu8cVP8fy28w==
 
+"@jridgewell/resolve-uri@^3.1.0":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.1.1.tgz#c08679063f279615a3326583ba3a90d1d82cc721"
+  integrity sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==
+
 "@jridgewell/set-array@^1.0.0", "@jridgewell/set-array@^1.0.1":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@jridgewell/set-array/-/set-array-1.1.2.tgz"
@@ -292,6 +369,19 @@
   version "1.4.14"
   resolved "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.14.tgz"
   integrity sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==
+
+"@jridgewell/sourcemap-codec@^1.4.14":
+  version "1.4.15"
+  resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz#d7c6e6755c78567a951e04ab52ef0fd26de59f32"
+  integrity sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==
+
+"@jridgewell/trace-mapping@^0.3.17":
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/@jridgewell/trace-mapping/-/trace-mapping-0.3.20.tgz#72e45707cf240fa6b081d0366f8265b0cd10197f"
+  integrity sha512-R8LcPeWZol2zR8mmH3JeKQ6QRCFb7XgUhV9ZlGhHLGyg4wpPiPZNQOOWhFZhxKw8u//yTbNGI42Bx/3paXEQ+Q==
+  dependencies:
+    "@jridgewell/resolve-uri" "^3.1.0"
+    "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@jridgewell/trace-mapping@^0.3.9":
   version "0.3.17"
@@ -322,106 +412,106 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@percy/cli-app@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-app/-/cli-app-1.27.0-beta.0.tgz#83080d7d011ae10d204e2f0bcc53fb560f959c3d"
-  integrity sha512-i80q+Yu+h8vUwbAELzGferrG9mDZJdAG0YHI3lL8zpK7sTOI6lFlbMMeBIDnHio3xy3r6xAyTuXUt2kFgXwTEA==
+"@percy/cli-app@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-app/-/cli-app-1.27.4.tgz#2b8364443bfd2ac59c7b4e98ccab6000828443ae"
+  integrity sha512-av/s6K2QmQgq4SCQQ+3lmteNHeQtIpMeBjMfSgxs9zeBoPVOMx5hXrdsi6l7ChvOLXyYfzl/TbEuwrSDXiA8mw==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
-    "@percy/cli-exec" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
+    "@percy/cli-exec" "1.27.4"
 
-"@percy/cli-build@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-build/-/cli-build-1.27.0-beta.0.tgz#4a511d22f676f1ec238f3af712d5ac22c0d3bf9f"
-  integrity sha512-GuwoP492tP8X85cXu530dDitQnry/F48bWLhSWTtxR4rO6xXcc3RC41Ppoz5kzy/IMqHHA/l1GhTpluhbA18NQ==
+"@percy/cli-build@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-build/-/cli-build-1.27.4.tgz#b5983129f41a461614594f62386dd2c5bd89e215"
+  integrity sha512-tzCAcV0sAw608Gr/Q6NtPvVkA8dnIehMzvEXNIN3WP9DkprOgu7MYuexN0fZXf4vSroDWYXT87pHYP8YrrnDag==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
 
-"@percy/cli-command@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-command/-/cli-command-1.27.0-beta.0.tgz#7293f59f0d99740cd0ec0e3e6a0df067dae87d02"
-  integrity sha512-p6vbRFnjvgJcsC/mgoPYRWrMH9BjZbRQVHb49R+dwUSdVPfM4xBpM0Q5Qjzst85rd0k08nsfDDCetRLAoNDcIg==
+"@percy/cli-command@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-command/-/cli-command-1.27.4.tgz#c3537260909957b165b81766e6d1771dc2496942"
+  integrity sha512-YDKeeOr1MvksDOnc2ZKQ/XuERGrWwzuT/vWZ9it8L+0SyPj28UbklDu0e9zBgPsSDfxJlIvsWXRuHNGHsweKXg==
   dependencies:
-    "@percy/config" "1.27.0-beta.0"
-    "@percy/core" "1.27.0-beta.0"
-    "@percy/logger" "1.27.0-beta.0"
+    "@percy/config" "1.27.4"
+    "@percy/core" "1.27.4"
+    "@percy/logger" "1.27.4"
 
-"@percy/cli-config@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-config/-/cli-config-1.27.0-beta.0.tgz#bad6fc692d0863fac34ae637d2fd34ab57faff2f"
-  integrity sha512-yVpSxCusOxOwduHppXal5xGj2Hd22Jc2798QNu4zUuTsZx1zhCVKaqa3wJxgBHhyaX+yECwENxywiDziMWlyWw==
+"@percy/cli-config@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-config/-/cli-config-1.27.4.tgz#c48f21040bed2a28f15888c01974ecb2226ca446"
+  integrity sha512-wFtQwPw4LEqpcZ6ac6WtejyGrvrrzzLdyvXNvsCPQLE47qXnXVXJ+E99k9KGcjavtUuPxrbWtX996Fz9Fb5hoQ==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
 
-"@percy/cli-exec@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-exec/-/cli-exec-1.27.0-beta.0.tgz#ddf71937964c71393bb19b05d5684a82bde66baf"
-  integrity sha512-gFd0lk752fni+/RWcK7T+FkDymlNUKSn+z+/HpastIC/XSHjtsswuwODuHA1D3T/TpUZVUIVP8A2zJZE/sb+bg==
+"@percy/cli-exec@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-exec/-/cli-exec-1.27.4.tgz#8839d4e8b0f4b34b8d5885d41d15fd60beede44c"
+  integrity sha512-aSDLvzXXdwJso+p5iI4iTOa7AYzgFdRoqY9ij/R5aAL9juNkvG5QatB1bkUNbJabKFe16t7iigt4eJnlS0R13A==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
     cross-spawn "^7.0.3"
     which "^2.0.2"
 
-"@percy/cli-snapshot@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-snapshot/-/cli-snapshot-1.27.0-beta.0.tgz#09638f42341daade5bf9e01a867b0aff49b885d1"
-  integrity sha512-oXBrYH7uM19B5BC3f8zkwWDOMvoZwJHapdwIzOTEiB1pXI1oM6d9vg1ieO8l3DZvw3jyAsi5dmmU4zcAVzrUYQ==
+"@percy/cli-snapshot@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-snapshot/-/cli-snapshot-1.27.4.tgz#1082e4594ef9eede4ec06aa4b7cfdff3dfc862ce"
+  integrity sha512-dDT2UpeP6X5NcMdj3AKLhHGmnobwzlXsHa52C+ne3kg3HSZgaXH9OsNY866Xe7onvcsZxvnRKDYHmWW6kC3cKQ==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
     yaml "^2.0.0"
 
-"@percy/cli-upload@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli-upload/-/cli-upload-1.27.0-beta.0.tgz#6e0f8b3cd292ca4cb0673f85721d0762b372dba2"
-  integrity sha512-nxdwQ8+UB3xXRz0YBruI57hWkMSvkzR5DyKQ/jmLVj+3CcUMh0lFN/Oj6mIJjrkr9+B8cWZjWl6AYKH5C+XbNA==
+"@percy/cli-upload@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli-upload/-/cli-upload-1.27.4.tgz#ec3e5280fc82a3789b6fb5cde69d210fee322fbf"
+  integrity sha512-+4mcEOUydFubyMWVzQjPV79sL1Jar95SR7Yr7Vp4FBoE0iq0CbaHoJtyOWDfwvHYYp4rRjVMxpY0ha3jnmF0mA==
   dependencies:
-    "@percy/cli-command" "1.27.0-beta.0"
+    "@percy/cli-command" "1.27.4"
     fast-glob "^3.2.11"
     image-size "^1.0.0"
 
-"@percy/cli@^1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/cli/-/cli-1.27.0-beta.0.tgz#775f2510f505dd66f45bc0727d5b7e030fa293b7"
-  integrity sha512-X5mGNXCOPMnbhaVDOqtd33xK6BkQUgzMS0hwcMH8xwQgd248emsODqHIkhWgBodt+ERJt0hnf4rgkidndMWQvQ==
+"@percy/cli@^1.27.2":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/cli/-/cli-1.27.4.tgz#a5b6c2082f346a86d64245fda0212f610c18d7dd"
+  integrity sha512-eIM44ejCMFc/S2W7X0htV+lvvmf63x5CaBpsSoQ9LRc/W02zHVAwQYdFFUowZEK6G1EwJEPIUnDxuuEx9PLG5A==
   dependencies:
-    "@percy/cli-app" "1.27.0-beta.0"
-    "@percy/cli-build" "1.27.0-beta.0"
-    "@percy/cli-command" "1.27.0-beta.0"
-    "@percy/cli-config" "1.27.0-beta.0"
-    "@percy/cli-exec" "1.27.0-beta.0"
-    "@percy/cli-snapshot" "1.27.0-beta.0"
-    "@percy/cli-upload" "1.27.0-beta.0"
-    "@percy/client" "1.27.0-beta.0"
-    "@percy/logger" "1.27.0-beta.0"
+    "@percy/cli-app" "1.27.4"
+    "@percy/cli-build" "1.27.4"
+    "@percy/cli-command" "1.27.4"
+    "@percy/cli-config" "1.27.4"
+    "@percy/cli-exec" "1.27.4"
+    "@percy/cli-snapshot" "1.27.4"
+    "@percy/cli-upload" "1.27.4"
+    "@percy/client" "1.27.4"
+    "@percy/logger" "1.27.4"
 
-"@percy/client@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/client/-/client-1.27.0-beta.0.tgz#c41953b5641975297cf15332f6a3cdde80c9cd51"
-  integrity sha512-yH+FoCEkpSx0MO5cqL489q9HIQcWCj4ZCPhY1cBh5J7MJuwDv0jRc7HB5xlqVUSj17l7Wqn6bT/ieLrY/dv0MA==
+"@percy/client@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/client/-/client-1.27.4.tgz#a6901e93e56245170e23b24bdf906fdfdb066956"
+  integrity sha512-1F8ulTJhfk4/Lgj1Cn0blaRd8vTRJDxahAGseTbfrnZ2PHsftPZ65/5nCHPtpdD/2CE8N5COBQscGTMQQO+hBA==
   dependencies:
-    "@percy/env" "1.27.0-beta.0"
-    "@percy/logger" "1.27.0-beta.0"
+    "@percy/env" "1.27.4"
+    "@percy/logger" "1.27.4"
 
-"@percy/config@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/config/-/config-1.27.0-beta.0.tgz#a3ff367acf1001ba31792f65ae9700c2c6ede6c6"
-  integrity sha512-AvR5mnhm5lUVw3fOhFeVDshz53Vlgl8UzSb+cgRguRow72PSibgKUoS9b0JA1n3b7CSeaoWGycGOQ4jUOsFl+A==
+"@percy/config@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/config/-/config-1.27.4.tgz#83bde546be17c801305e63b0cf84ed04fe748fba"
+  integrity sha512-mlgiOdzdSfUSx9FskVIjmbT/iHbTif0Ow5evZQJTT1W0xgHOBWDCZyhINdsqulSBw+K1PNhHsu1J0h2ijxF4uA==
   dependencies:
-    "@percy/logger" "1.27.0-beta.0"
+    "@percy/logger" "1.27.4"
     ajv "^8.6.2"
     cosmiconfig "^8.0.0"
     yaml "^2.0.0"
 
-"@percy/core@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/core/-/core-1.27.0-beta.0.tgz#3d1b6100ad78d9ce583ef7c0425df2d84ca921b3"
-  integrity sha512-U0x3VHbxfo8Ho9j/JlHYstV/MUsTB9uAQYMgsI0WAnq67TbyGY6u/g8mqi9DeXnafk3YOM2YQ7RaLaUo8/re0Q==
+"@percy/core@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/core/-/core-1.27.4.tgz#673ea19be0b9e435e3ec2419505e9d9adbab5d6e"
+  integrity sha512-WdsA4zlPgXl9xj+a5WW2wA20iU6VTDmRq5sgsYNSuPzZfQB2I5Cecgvb55p86dhlUTbPJrC76daQKzDTGe0hfA==
   dependencies:
-    "@percy/client" "1.27.0-beta.0"
-    "@percy/config" "1.27.0-beta.0"
-    "@percy/dom" "1.27.0-beta.0"
-    "@percy/logger" "1.27.0-beta.0"
-    "@percy/webdriver-utils" "1.27.0-beta.0"
+    "@percy/client" "1.27.4"
+    "@percy/config" "1.27.4"
+    "@percy/dom" "1.27.4"
+    "@percy/logger" "1.27.4"
+    "@percy/webdriver-utils" "1.27.4"
     content-disposition "^0.5.4"
     cross-spawn "^7.0.3"
     extract-zip "^2.0.1"
@@ -432,35 +522,40 @@
     rimraf "^3.0.2"
     ws "^8.0.0"
 
-"@percy/dom@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/dom/-/dom-1.27.0-beta.0.tgz#db768db620da48dd667ac0e8d927948bef3f1042"
-  integrity sha512-qmZfuAoVstQ8pXvdbS86uaK9NKbtnOYv5xOyvSMgT3kdoSrvdbtqK9FtmTh3g6kUDD7XrQAYdiuyTr7veu/7rQ==
+"@percy/dom@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/dom/-/dom-1.27.4.tgz#199597ca6107c16ca452a640e9d1bfe2f65f6820"
+  integrity sha512-pwPDx3e9y7uRobVlEya8xu3BB3GeXbC74kQ6pPM/wFYDwi/Dg8DJywCsj5Nko/7QuhXP02rYgatkbREOIRxDnA==
 
-"@percy/env@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/env/-/env-1.27.0-beta.0.tgz#89307084f525c21d9451f8b73082060b8d549f35"
-  integrity sha512-aB4sJKNmEf6/JClW206kTzSKUzkibq026CXGBtll8UH9TyxhNuX1La4img9kndaILnUKylFG9fb3JIl4jby8ng==
+"@percy/env@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/env/-/env-1.27.4.tgz#8c308c470dae5fb970d858703e1f49aff266e791"
+  integrity sha512-Xl2VUpljOrlCvAp/+KfmN9NUcTGpRdXPa1U9zSIyBnV/oAksp3/CK5EPpKZX/f8xUUkTp78UPaG99sEMA8VvXQ==
   dependencies:
-    "@percy/logger" "1.27.0-beta.0"
+    "@percy/logger" "1.27.4"
 
-"@percy/logger@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/logger/-/logger-1.27.0-beta.0.tgz#03ab52c8199071d677ed855596738048b686ae39"
-  integrity sha512-aVlXQ1agKiR0NJipEMz27JXWrtxEuT+QwtoWVFxz1SHLxOxNWlWXL9whOuj8X6jIDKFR9vZ2PttQrhyWKZFw5g==
+"@percy/logger@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/logger/-/logger-1.27.4.tgz#8d493299e219d971a92052b5998177697191dd05"
+  integrity sha512-AwXqYaDkHaq1TPkP+ByB8rjvH9ddvkAH9tFd2kmq8AeFFXZ0amAPSbm6u090OUtdHWjRmKQK9JjSouBxEh0aRw==
 
-"@percy/sdk-utils@1.27.0-beta.0", "@percy/sdk-utils@^1.27.0-beta.0":
+"@percy/sdk-utils@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.27.4.tgz#7396d743aa6916ae7fad639b0fa86f206a9b2aca"
+  integrity sha512-vhPcdtmJlvTYJ5VOqiVzo02ujdtBFNw1/Bj+2ybiZgn7PkCDPFcITfXoWWPea319EIibGC4ZHjWHctRBgtW/tQ==
+
+"@percy/sdk-utils@^1.27.0-beta.0":
   version "1.27.0-beta.0"
   resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.27.0-beta.0.tgz#b6be92d6aeaf4876a042fd9833742d229573ea95"
   integrity sha512-WsKtSNkSSbqjj+9KZ+7dG7RFApS7VkdgQxYeyTN/DwwqI627JgZZk7OKnJ99OHpL90gj33KJc01Uhft73HtMYA==
 
-"@percy/webdriver-utils@1.27.0-beta.0":
-  version "1.27.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@percy/webdriver-utils/-/webdriver-utils-1.27.0-beta.0.tgz#0943deb560786be34e5f333d9949b4677548e600"
-  integrity sha512-Ij5vuTm7PH8YSE+h+Sw7dqZ0lQsc5mEqnQ7bjLntLtdH1wcQOSUlF2w9aL+ZgCo/Jrsl+QI+sTfU0K8HAdbeug==
+"@percy/webdriver-utils@1.27.4":
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/@percy/webdriver-utils/-/webdriver-utils-1.27.4.tgz#35ce3054bcd0a0f21262ab885ee33a51d0df6f0e"
+  integrity sha512-pZOOYns8Fikh2qlbxO16DxFEnCrnFIoLpE7iz4M9jXxOfk16VZF1PWknMChSr5NqG2I9k2OMjizUE2j8zvtl2Q==
   dependencies:
-    "@percy/config" "1.27.0-beta.0"
-    "@percy/sdk-utils" "1.27.0-beta.0"
+    "@percy/config" "1.27.4"
+    "@percy/sdk-utils" "1.27.4"
 
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
@@ -980,7 +1075,7 @@ caseless@~0.12.0:
   resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
   integrity sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==
 
-chalk@^2.0.0:
+chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
