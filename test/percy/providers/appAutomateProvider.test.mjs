@@ -33,7 +33,7 @@ describe('AppAutomateProvider', () => {
 
       expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
       expect(superScreenshotSpy).toHaveBeenCalledWith('abc', jasmine.any(Object));
-      expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', false, 'undefined');
+      expect(percyScreenshotEndSpy).toHaveBeenCalledWith('abc', 'link to screenshot', null, 'undefined');
     });
 
     it('passes exception message to percyScreenshotEnd in case of exception', async () => {
@@ -47,7 +47,7 @@ describe('AppAutomateProvider', () => {
       expect(percyScreenshotBeginSpy).toHaveBeenCalledWith('abc');
 
       expect(percyScreenshotEndSpy).toHaveBeenCalledWith(
-        'abc', undefined, false, `Error: ${errorMessage}`);
+        'abc', undefined, null, `Error: ${errorMessage}`);
     });
   });
 

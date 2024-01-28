@@ -38,7 +38,7 @@ class AppAutomateProvider extends GenericProvider {
   } = {}) {
     let response = null;
     let error;
-    sync = sync || false;
+    sync = sync || null;
     try {
       let result = await this.percyScreenshotBegin(name);
       this.setDebugUrl(result);

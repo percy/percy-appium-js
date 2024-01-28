@@ -55,7 +55,7 @@ class GenericProvider {
     sync
   }) {
     fullscreen = fullscreen || false;
-    sync = sync || false;
+    sync = sync || null;
 
     this.metadata = await MetadataResolver.resolve(this.driver, {
       deviceName,
