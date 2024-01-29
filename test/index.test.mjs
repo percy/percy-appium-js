@@ -255,33 +255,28 @@ describe('percyScreenshot', () => {
         expect(response).toEqual(undefined);
       });
 
-      it('should call POA percyScreenshot with ignoreRegion and considerRegion and sync', async () => {
+      it('should call POA percyScreenshot with ignoreRegion and considerRegion', async () => {
         const element = { value: '123', elementId: '123' };
         const element2 = { value: '456', elementId: '456' };
         const driver = driverFunc({ enabled: true });
         spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
         utils.percy.type = 'automate';
-        const mockresponse = {
-          success: 'true',
-          data: 'sync_data'
-        };
-        const mockedPostCall = spyOn(percyOnAutomate, 'request').and.callFake(() => mockresponse);
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
         await percyScreenshot(driver, 'Screenshot 2', {
-          ignore_region_appium_elements: [element], consider_region_appium_elements: [element], sync: true
+          ignore_region_appium_elements: [element], consider_region_appium_elements: [element]
         });
-        expect(mockedPostCall).toHaveBeenCalledWith(jasmine.objectContaining({
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
           commandExecutorUrl: 'https://localhost/wd/hub',
           snapshotName: 'Screenshot 2',
           options: {
             ignore_region_elements: ['123'],
-            consider_region_elements: ['123'],
-            sync: true
+            consider_region_elements: ['123']
           }
         }));
 
-        const data = await percyScreenshot(driver, 'Screenshot 3', {
+        await percyScreenshot(driver, 'Screenshot 3', {
           ignoreRegionAppiumElements: [element2], considerRegionAppiumElements: [element2]
         });
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -293,9 +288,21 @@ describe('percyScreenshot', () => {
             consider_region_elements: ['456']
           }
         }));
-
-        expect(data).toEqual(mockresponse.data);
       });
+
+      it('should return CLI response', async() => {
+        const mockResponse = {
+          success: true,
+          body: { data: { name: 'test_snapshot', some_data: 'some_data', some_obj: { some_obj: 'some_obj' }}}
+        }
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+
+        spyOn(percyOnAutomate, 'request').and.callFake(() => mockResponse);
+        const response = await percyScreenshot(driver, 'Screenshot 1', { sync: true })
+        expect(response).toEqual(mockResponse.body.data)
+      })
 
       it('should handle error POA', async () => {
         const driver = driverFunc({ enabled: true, ignoreErrors: false });

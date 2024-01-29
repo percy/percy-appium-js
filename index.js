@@ -81,7 +81,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     try {
       if (utils.percy?.type === 'automate') {
         const percyOnAutomateResponse = await percyOnAutomate(driver, name, options);
-        return percyOnAutomateResponse.data;
+        return percyOnAutomateResponse?.body?.data;
       }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
@@ -107,7 +107,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         sync
       });
       log.debug(`[${name}] -> end`);
-      return response.data;
+      return response?.body?.data;
     } catch (e) {
       log.error(`[${name}] failed to take screenshot`);
       log.debug(`[${name}] ${e}, \n ${e.stack}`);
