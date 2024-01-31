@@ -71,7 +71,8 @@ percyScreenshot(driver, name[, {
 
 - `driver` (**required**) - A appium driver instance [ can be skipped in case of webdriverio runner]
 - `name` (**required**) - The screenshot name; must be unique to each screenshot
-- `options object` (**optional**) 
+- `options object` (**optional**)
+  - `sync` - Boolean value by default it falls back to false, Gives the processed result around screenshot [From CLI v1.28.0-beta.0+]
   - `fullscreen`: If the app is currently in fullscreen; boolean
   - `deviceName`: Custom device name to override SDK fetched name
   - `orientation`: ["portrait"/"landscape"] - Tell SDK which orientation app is in [ Note: This is only for tagging purpose, does not change the orientation of the device ]
