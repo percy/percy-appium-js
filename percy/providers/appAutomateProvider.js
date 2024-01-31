@@ -33,10 +33,12 @@ class AppAutomateProvider extends GenericProvider {
     scrollableXpath,
     topScrollviewOffset,
     bottomScrollviewOffset,
-    scrollableId
+    scrollableId,
+    sync
   } = {}) {
     let response = null;
     let error;
+    sync = sync || null;
     try {
       let result = await this.percyScreenshotBegin(name);
       this.setDebugUrl(result);
@@ -60,13 +62,14 @@ class AppAutomateProvider extends GenericProvider {
         scrollableXpath,
         topScrollviewOffset,
         bottomScrollviewOffset,
-        scrollableId
+        scrollableId,
+        sync
       });
     } catch (e) {
       error = e;
       throw e;
     } finally {
-      await this.percyScreenshotEnd(name, response?.body?.link, `${error}`);
+      await this.percyScreenshotEnd(name, response?.body?.link, sync, `${error}`);
     }
     return response;
   }
@@ -84,12 +87,13 @@ class AppAutomateProvider extends GenericProvider {
         return result;
       } catch (e) {
         log.debug(`[${name}] Could not mark App Automate session as percy`);
+        log.debug(`[${name}] ${e}`);
         return null;
       }
     });
   }
 
-  async percyScreenshotEnd(name, percyScreenshotUrl, statusMessage = null) {
+  async percyScreenshotEnd(name, percyScreenshotUrl, sync, statusMessage = null) {
     return await TimeIt.run('percyScreenshotEnd', async () => {
       try {
         await this.browserstackExecutor('percyScreenshot', {
@@ -97,6 +101,7 @@ class AppAutomateProvider extends GenericProvider {
           percyScreenshotUrl,
           status: percyScreenshotUrl ? 'success' : 'failure',
           statusMessage,
+          sync,
           state: 'end'
         });
       } catch (e) {
@@ -155,8 +160,8 @@ class AppAutomateProvider extends GenericProvider {
     JSON.parse(response.result).forEach(tileData => {
       tiles.push(new Tile({
         statusBarHeight: statBarHeight,
-        navBarHeight: navBarHeight,
-        fullscreen: fullscreen,
+        navBarHeight,
+        fullscreen,
         headerHeight: tileData.header_height,
         footerHeight: tileData.footer_height,
         sha: tileData.sha.split('-')[0] // drop build id

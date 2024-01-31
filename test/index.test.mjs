@@ -244,12 +244,15 @@ describe('percyScreenshot', () => {
         const driver = driverFunc({ enabled: true });
         spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
         utils.percy.type = 'automate';
-        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+        const mockresponse = {};
+        spyOn(percyOnAutomate, 'request').and.callFake(() => mockresponse);
 
-        await percyScreenshot(driver, 'Screenshot 1');
+        const response = await percyScreenshot(driver, 'Screenshot 1');
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID', commandExecutorUrl: 'https://localhost/wd/hub', snapshotName: 'Screenshot 1'
         }));
+
+        expect(response).toEqual(undefined);
       });
 
       it('should call POA percyScreenshot with ignoreRegion and considerRegion', async () => {
@@ -286,6 +289,20 @@ describe('percyScreenshot', () => {
           }
         }));
       });
+
+      it('should return CLI response', async() => {
+        const mockResponse = {
+          success: true,
+          body: { data: { name: 'test_snapshot', some_data: 'some_data', some_obj: { some_obj: 'some_obj' }}}
+        }
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        utils.percy.type = 'automate';
+
+        spyOn(percyOnAutomate, 'request').and.callFake(() => mockResponse);
+        const response = await percyScreenshot(driver, 'Screenshot 1', { sync: true })
+        expect(response).toEqual(mockResponse.body.data)
+      })
 
       it('should handle error POA', async () => {
         const driver = driverFunc({ enabled: true, ignoreErrors: false });

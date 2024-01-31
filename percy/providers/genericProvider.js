@@ -51,9 +51,11 @@ class GenericProvider {
     considerRegionAppiumElements,
     customConsiderRegions,
     scrollableXpath,
-    scrollableId
+    scrollableId,
+    sync
   }) {
     fullscreen = fullscreen || false;
+    sync = sync || null;
 
     this.metadata = await MetadataResolver.resolve(this.driver, {
       deviceName,
@@ -76,6 +78,7 @@ class GenericProvider {
     log.debug(`${name} : Tag ${JSON.stringify(tag)}`);
     log.debug(`${name} : Tiles ${JSON.stringify(tiles)}`);
     log.debug(`${name} : Debug url ${this.debugUrl}`);
+    log.debug(`${name} : sync ${sync}`);
     return await utils.postComparison({
       name,
       tag,
@@ -88,7 +91,8 @@ class GenericProvider {
         considerElementsData: considerRegions
       },
       environmentInfo: ENV_INFO,
-      clientInfo: CLIENT_INFO
+      clientInfo: CLIENT_INFO,
+      sync
     });
   }
 

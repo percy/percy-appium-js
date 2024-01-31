@@ -27,7 +27,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     scrollableXpath,
     topScrollviewOffset,
     bottomScrollviewOffset,
-    scrollableId
+    scrollableId,
+    sync
   } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
@@ -54,6 +55,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       topScrollviewOffset = name.topScrollviewOffset;
       bottomScrollviewOffset = name.bottomScrollviewOffset;
       scrollableId = name.scrollableId;
+      sync = name.sync;
       options = name;
     }
     try {
@@ -78,7 +80,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
   return TimeIt.run('percyScreenshot', async () => {
     try {
       if (utils.percy?.type === 'automate') {
-        return await percyOnAutomate(driver, name, options);
+        const percyOnAutomateResponse = await percyOnAutomate(driver, name, options);
+        return percyOnAutomateResponse?.body?.data;
       }
       const provider = ProviderResolver.resolve(driver);
       const response = await provider.screenshot(name, {
@@ -100,10 +103,11 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         scrollableXpath,
         topScrollviewOffset,
         bottomScrollviewOffset,
-        scrollableId
+        scrollableId,
+        sync
       });
       log.debug(`[${name}] -> end`);
-      return response;
+      return response?.body?.data;
     } catch (e) {
       log.error(`[${name}] failed to take screenshot`);
       log.debug(`[${name}] ${e}, \n ${e.stack}`);

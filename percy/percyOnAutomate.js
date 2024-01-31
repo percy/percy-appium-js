@@ -58,7 +58,7 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     }
 
     // Post the driver details to the automate screenshot endpoint with snapshot options and other info
-    await module.exports.request({
+    return await module.exports.request({
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO,
       sessionId,
@@ -78,5 +78,5 @@ module.exports = async function percyOnAutomate(driver, name, options) {
 
 /* istanbul ignore next */ // since can't test this function
 module.exports.request = async function request(data) {
-  await utils.captureAutomateScreenshot(data);
+  return await utils.captureAutomateScreenshot(data);
 }; // To mock in test case
