@@ -1,7 +1,7 @@
 {
   "name": "@percy/appium-app",
   "description": "Appium client library for visual testing with Percy",
-  "version": "2.0.4-beta.0",
+  "version": "2.0.4",
   "license": "MIT",
   "author": "Perceptual Inc.",
   "repository": {
@@ -25,7 +25,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "beta"
+    "tag": "latest"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
@@ -34,11 +34,11 @@
     "test:types": "tsd"
   },
   "dependencies": {
-    "@percy/sdk-utils": "^1.28.0-beta.0",
+    "@percy/sdk-utils": "^1.28.0",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@percy/cli": "^1.28.0-beta.0",
+    "@percy/cli": "^1.28.0",
     "cross-env": "^7.0.2",
     "eslint": "^8.27.0",
     "eslint-plugin-n": "^15.5.1",
