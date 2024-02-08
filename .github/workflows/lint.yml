@@ -23,4 +23,4 @@ jobs:
           yarn
       - run: |
           sar -u ALL 1 100 &
-          yarn
+          yarn lint
