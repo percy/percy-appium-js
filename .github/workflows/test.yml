@@ -53,5 +53,5 @@ jobs:
           yarn remove @percy/cli && yarn link `echo $PERCY_PACKAGES`
           npx percy --version
       - run: |
-          for attempt in {1..20}; do free -m && sar -u ALL; done; &
+          for attempt in {1..20}; do free -m; done; &
           yarn test:coverage
