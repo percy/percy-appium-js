@@ -17,7 +17,10 @@ jobs:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: v1/${{ runner.os }}/node-14/${{ hashFiles('**/yarn.lock') }}
           restore-keys: v1/${{ runner.os }}/node-14/
-      - run: sar -u ALL 1 100 &
       - run: free -m
-      - run: yarn
-      - run: yarn lint
+      - run: |
+          sar -u ALL 1 100 &
+          yarn
+      - run: |
+          sar -u ALL 1 100 &
+          yarn
