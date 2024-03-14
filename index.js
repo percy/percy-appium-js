@@ -87,7 +87,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       }
       const provider = ProviderResolver.resolve(driver);
       // Only added for browserstack sdk.
-      let thTestCaseExecutionId = options.thTestCaseExecutionId
+      let thTestCaseExecutionId = options.thTestCaseExecutionId;
 
       const response = await provider.screenshot(name, {
         fullscreen,
