@@ -52,7 +52,9 @@ class GenericProvider {
     customConsiderRegions,
     scrollableXpath,
     scrollableId,
-    sync
+    sync,
+    testCase,
+    thTestCaseExecutionId
   }) {
     fullscreen = fullscreen || false;
     sync = sync || null;
@@ -92,7 +94,9 @@ class GenericProvider {
       },
       environmentInfo: ENV_INFO,
       clientInfo: CLIENT_INFO,
-      sync
+      sync,
+      testCase,
+      thTestCaseExecutionId
     });
   }
 

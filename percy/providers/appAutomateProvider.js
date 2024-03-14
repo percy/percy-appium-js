@@ -34,7 +34,9 @@ class AppAutomateProvider extends GenericProvider {
     topScrollviewOffset,
     bottomScrollviewOffset,
     scrollableId,
-    sync
+    sync,
+    testCase,
+    thTestCaseExecutionId
   } = {}) {
     let response = null;
     let error;
@@ -63,7 +65,9 @@ class AppAutomateProvider extends GenericProvider {
         topScrollviewOffset,
         bottomScrollviewOffset,
         scrollableId,
-        sync
+        sync,
+        testCase,
+        thTestCaseExecutionId
       });
     } catch (e) {
       error = e;
