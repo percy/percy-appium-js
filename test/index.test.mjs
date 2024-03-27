@@ -264,7 +264,7 @@ describe('percyScreenshot', () => {
         spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
         await percyScreenshot(driver, 'Screenshot 2', {
-          ignore_region_appium_elements: [element], consider_region_appium_elements: [element]
+          ignore_region_appium_elements: [element], consider_region_appium_elements: [element], testCase: 'test-case-1', thTestCaseExecutionId: 'ID123'
         });
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
@@ -272,12 +272,14 @@ describe('percyScreenshot', () => {
           snapshotName: 'Screenshot 2',
           options: {
             ignore_region_elements: ['123'],
-            consider_region_elements: ['123']
+            consider_region_elements: ['123'],
+            testCase: 'test-case-1',
+            thTestCaseExecutionId: 'ID123'
           }
         }));
 
         await percyScreenshot(driver, 'Screenshot 3', {
-          ignoreRegionAppiumElements: [element2], considerRegionAppiumElements: [element2]
+          ignoreRegionAppiumElements: [element2], considerRegionAppiumElements: [element2], testCase: 'test-case-2', thTestCaseExecutionId: 'ID123'
         });
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
@@ -285,7 +287,9 @@ describe('percyScreenshot', () => {
           snapshotName: 'Screenshot 3',
           options: {
             ignore_region_elements: ['456'],
-            consider_region_elements: ['456']
+            consider_region_elements: ['456'],
+            testCase: 'test-case-2',
+            thTestCaseExecutionId: 'ID123'
           }
         }));
       });
