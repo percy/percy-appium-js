@@ -28,7 +28,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     topScrollviewOffset,
     bottomScrollviewOffset,
     scrollableId,
-    sync
+    sync,
+    testCase
   } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
@@ -56,6 +57,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       bottomScrollviewOffset = name.bottomScrollviewOffset;
       scrollableId = name.scrollableId;
       sync = name.sync;
+      testCase = name.testCase;
       options = name;
     }
     try {
@@ -84,6 +86,9 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         return percyOnAutomateResponse?.body?.data;
       }
       const provider = ProviderResolver.resolve(driver);
+      // Only added for browserstack sdk.
+      let thTestCaseExecutionId = options.thTestCaseExecutionId;
+
       const response = await provider.screenshot(name, {
         fullscreen,
         deviceName,
@@ -104,7 +109,9 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         topScrollviewOffset,
         bottomScrollviewOffset,
         scrollableId,
-        sync
+        sync,
+        testCase,
+        thTestCaseExecutionId
       });
       log.debug(`[${name}] -> end`);
       return response?.body?.data;
