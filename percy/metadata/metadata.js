@@ -16,12 +16,20 @@ class Metadata {
     this._orientation = orientation || 'caps';
     this._statusBarHeight = statusBarHeight;
     this._navigationBarHeight = navigationBarHeight;
+    this._viewportRect = null;
   }
 
   // items that need caps are moved to getters as caps are not stored on wd driver object
   // So we need to make a lazy call to avoid making session get call in app automate context
   async caps() {
-    return await this.driver.getCapabilities();
+    /* istanbul ignore next */
+    if (typeof browser !== 'undefined') {
+      /* eslint-disable */
+      return await browser.capabilities;
+      /* eslint-enable */
+    } else {
+      return await this.driver.getCapabilities();
+    }
   }
 
   async osName() {

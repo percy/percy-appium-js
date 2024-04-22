@@ -124,4 +124,17 @@ describe('Metadata', () => {
       expect(await metadata.scaleFactor()).toEqual(expectedScaleFactor);
     });
   });
+
+  describe('viewportRect', () => {
+    const expectedViewportRect = { width: 100, height: 200 };
+
+    it('returns viewportRect', async () => {
+      expect(await metadata.viewportRect()).toEqual(expectedViewportRect);
+    });
+
+    it('returns from viewportRect field', async () => {
+      await metadata.viewportRect();
+      expect(await metadata.viewportRect()).toEqual(expectedViewportRect);
+    });
+  });
 });
