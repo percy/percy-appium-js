@@ -1,4 +1,3 @@
-
 const { Undefined } = require('./validations');
 
 class Cache {

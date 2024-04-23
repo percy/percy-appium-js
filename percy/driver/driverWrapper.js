@@ -14,7 +14,7 @@ class AppiumDriver {
     // in real world when you get wd driver passed so need to ignore coverage on it
 
     // In typescript for wdio we get driver.constuctor.name as 'BoundBrowser'
-    if (driver.constructor.name.includes('Browser') && !Undefined(driver.getSession)) {
+    if (driver.constructor.name.includes('Browser') && !Undefined(driver.capabilities)) {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
       driver.constructor.name === 'Object') && // Object check is only added for tests
@@ -30,7 +30,7 @@ class AppiumDriver {
         return await TimeIt.run('getCapabilities', async () => {
           if (this.wd) return await this.driver.sessionCapabilities();
           /* istanbul ignore next */ // not sure why its marking it when its covered
-          if (this.wdio) return await this.driver.getSession();
+          if (this.wdio) return await this.driver.capabilities;
         });
       });
   }
@@ -105,6 +105,12 @@ class AppiumDriver {
   async execute(command) {
     return await TimeIt.run('execute', async () => {
       return await this.driver.execute(command);
+    });
+  }
+
+  async getWindowSize() {
+    return await TimeIt.run('getWindowSize', async () => {
+      return await this.driver.getWindowSize();
     });
   }
 

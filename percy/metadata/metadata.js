@@ -16,6 +16,7 @@ class Metadata {
     this._orientation = orientation || 'caps';
     this._statusBarHeight = statusBarHeight;
     this._navigationBarHeight = navigationBarHeight;
+    this._viewportRect = null;
   }
 
   // items that need caps are moved to getters as caps are not stored on wd driver object
