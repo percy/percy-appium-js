@@ -11,7 +11,7 @@ class Browser {
     appAutomate = appAutomate || false;
     const ios = platform === 'iOS' || false;
     const android = !ios;
-    deviceName = deviceName || android ? 'GenericAndroid' : 'iPhone 8 Plus'; // some device from static config
+    deviceName = deviceName || android ? 'GenericAndroid' : 'iPhone 14'; // some device from static config
     enabled = enabled === undefined ? true : enabled;
     ignoreErrors = ignoreErrors === undefined ? false : ignoreErrors;
 
@@ -45,7 +45,7 @@ class Browser {
     };
 
     this.capabilities = sessionCaps;
-
+    this.getWindowSize = jasmine.createSpy().and.resolveTo({ width: 390, height: 844, x: 0, y: 0 });
     this.getSession = jasmine.createSpy().and.returnValue(sessionCaps);
     this.takeScreenshot = jasmine.createSpy().and.resolveTo('some screenshot data');
     this.getSystemBars = jasmine.createSpy().and.resolveTo({
@@ -77,6 +77,8 @@ class Browser {
             ])
           });
         }
+      } else if (str.includes('viewportRect')) {
+        return { width: 100, height: 200 };
       }
     });
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');

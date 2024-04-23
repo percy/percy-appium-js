@@ -10,13 +10,11 @@ class IosMetadata extends Metadata {
       const data = await this.staticData();
       return data.statusBarHeight * data.pixelRatio;
     }
-    /* istanbul ignore next */
-    if (typeof browser !== 'undefined') {
-      const viewportRect = await this.viewportRect();
-      return viewportRect.top;
+
+    if (this.driver.wdio) {
+      return (await this.viewportRect()).top;
     } else {
       const caps = await this.caps();
-      // In Ios the height of statusBarHeight in caps needs to be multiplied by pixel ratio
       return (caps.statBarHeight || 1) * (caps.pixelRatio || 1);
     }
   }
@@ -35,18 +33,18 @@ class IosMetadata extends Metadata {
       const data = await this.staticData();
       return { width: data.screenWidth, height: data.screenHeight };
     }
-    /* istanbul ignore next */
-    if (typeof browser !== 'undefined') {
+
+    var height, width;
+    if (this.driver.wdio) {
       const viewportRect = await this.viewportRect();
-      const height = viewportRect.top + viewportRect.height;
-      const width = viewportRect.width;
-      return { width, height };
+      height = viewportRect.top + viewportRect.height;
+      width = viewportRect.width;
     } else {
       const caps = await this.caps();
-      const height = caps.statBarHeight * caps.pixelRatio + caps.viewportRect?.height;
-      const width = caps.viewportRect?.width;
-      return { width, height };
+      height = caps.statBarHeight * caps.pixelRatio + caps.viewportRect?.height;
+      width = caps.viewportRect?.width;
     }
+    return { width, height };
   }
 
   async viewportRect() {
@@ -71,13 +69,10 @@ class IosMetadata extends Metadata {
   }
 
   async scaleFactor() {
-    /* istanbul ignore next */
-    if (typeof browser !== 'undefined') {
+    if (this.driver.wdio) {
       const viewportRect = await this.viewportRect();
       const actualWidth = viewportRect.width;
-      /* eslint-disable */
-      const windowSize = await browser.getWindowSize();
-      /* eslint-enable */
+      const windowSize = await this.driver.getWindowSize();
       const width = windowSize.width;
       return actualWidth / width;
     } else {
