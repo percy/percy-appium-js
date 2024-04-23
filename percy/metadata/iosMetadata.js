@@ -11,6 +11,7 @@ class IosMetadata extends Metadata {
       return data.statusBarHeight * data.pixelRatio;
     }
 
+    // For iOS method to fetch statusBarHeight for wdio & wd is different
     if (this.driver.wdio) {
       return (await this.viewportRect()).top;
     } else {
@@ -34,7 +35,8 @@ class IosMetadata extends Metadata {
       return { width: data.screenWidth, height: data.screenHeight };
     }
 
-    var height, width;
+    let height, width;
+    // For iOS method to fetch screenSize for wdio & wd is different
     if (this.driver.wdio) {
       const viewportRect = await this.viewportRect();
       height = viewportRect.top + viewportRect.height;
@@ -69,6 +71,7 @@ class IosMetadata extends Metadata {
   }
 
   async scaleFactor() {
+    // For iOS method to fetch scaleFactor for wdio & wd is different
     if (this.driver.wdio) {
       const viewportRect = await this.viewportRect();
       const actualWidth = viewportRect.width;
