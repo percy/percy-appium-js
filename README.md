@@ -174,4 +174,4 @@ $ percy exec -- [python test command]
 [percy] Done!
 ```
 
-Refer to docs here: [Percy on Automate](https://docs.percy.io/docs/integrate-functional-testing-with-visual-testing)
+Refer to docs here: [Percy on Automate](https://www.browserstack.com/docs/percy/integrate/functional-and-visual)
