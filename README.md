@@ -161,6 +161,9 @@ await percyScreenshotFlutter(driver, name[, {
         - `bottom` (int): Bottom coordinate of the consider region.
         - `left` (int): Left coordinate of the consider region.
         - `right` (int): Right coordinate of the consider region.
+    - `androidScrollAreaPercentage` - Percentage Area to scroll for android devices. (should be between 0 and 100)
+    - `scrollSpeed` - Scroll speed in pixel/second. (Should be between 0 and 5000)
+
 ### Creating Percy on automate build
 Note: Automate Percy Token starts with `auto` keyword. The command can be triggered using `exec` keyword.
 ```sh-session

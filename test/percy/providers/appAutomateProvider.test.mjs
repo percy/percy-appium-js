@@ -121,16 +121,16 @@ describe('AppAutomateProvider', () => {
         scrollableId: null,
         FORCE_FULL_PAGE: false
       }
-    }
-    describe ('when taking singlepage', () => {
-      describe ('when env isDisableRemoteUpload is true', () => {
+    };
+
+    describe('when taking singlepage', () => {
+      describe('when env isDisableRemoteUpload is true', () => {
         it('takes a local appium screenshot', async () => {
           const appAutomate = new AppAutomateProvider(driver);
           spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
-                                .and.returnValue('true');
+            .and.returnValue('true');
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-          superGetTilesSpy.and.resolveTo([])
-                                
+          superGetTilesSpy.and.resolveTo([]);
           await appAutomate.getTiles(true, false, null, null, null);
           expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
         });
@@ -140,38 +140,52 @@ describe('AppAutomateProvider', () => {
         it('takes screenshot with remote executor', async () => {
           const appAutomate = new AppAutomateProvider(driver);
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-          let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
-          superGetTilesSpy.and.resolveTo([])
+          let browserstackExecutorSpy = spyOn(
+            AppAutomateProvider.prototype,
+            'browserstackExecutor'
+          );
+          superGetTilesSpy.and.resolveTo([]);
           let response = {
             success: true,
-            result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+            result: JSON.stringify([
+              { header_height: 100, footer_height: 200, sha: 'abc' }
+            ])
           };
-          browserstack_executorSpy.and.resolveTo(response);
+          browserstackExecutorSpy.and.resolveTo(response);
           var screenSize = {
-            height: 2000,
+            height: 2000
           };
-          args['options']['deviceHeight'] = screenSize['height'];
-          args['options']['topScrollviewOffset'] = 0;
-          args['options']['bottomScrollviewOffset'] = 0;
-          appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-                                
+          args.options.deviceHeight = screenSize.height;
+          args.options.topScrollviewOffset = 0;
+          args.options.bottomScrollviewOffset = 0;
+          args.options.androidScrollAreaPercentage = null;
+          args.options.scrollSpeed = null;
+          appAutomate.metadata = {
+            statusBarHeight: () => 100,
+            navigationBarHeight: () => 200,
+            scaleFactor: () => 1,
+            screenSize: () => screenSize
+          };
           let tiles = await appAutomate.getTiles(true, false, null, null, null);
           expect(tiles[0].statusBarHeight).toEqual(100);
           expect(tiles[0].navBarHeight).toEqual(200);
-          expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+          expect(browserstackExecutorSpy).toHaveBeenCalledWith(
+            'percyScreenshot',
+            args
+          );
         });
       });
     });
 
-    describe ('when taking fullpage', () => {
-      describe ('when env isDisableRemoteUpload is true', () => {
+    describe('when taking fullpage', () => {
+      describe('when env isDisableRemoteUpload is true', () => {
         it('takes a local appium screenshot', async () => {
           const appAutomate = new AppAutomateProvider(driver);
           spyOn(AppAutomateProvider.prototype, 'isDisableRemoteUpload')
-                                .and.returnValue('true');
+            .and.returnValue('true');
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-          superGetTilesSpy.and.resolveTo([])
-                                
+          superGetTilesSpy.and.resolveTo([]);
+
           await appAutomate.getTiles(true, true, null, null, null);
           expect(superGetTilesSpy).toHaveBeenCalledWith(true, true, null);
         });
@@ -181,22 +195,22 @@ describe('AppAutomateProvider', () => {
         it('takes screenshot with remote executor', async () => {
           const appAutomate = new AppAutomateProvider(driver);
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-          let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
-          superGetTilesSpy.and.resolveTo([])
+          let browserstackExecutorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([]);
           let response = {
             success: true,
-            result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+            result: JSON.stringify([{ header_height: 100, footer_height: 200, sha: 'abc' }])
           };
-          browserstack_executorSpy.and.resolveTo(response);
+          browserstackExecutorSpy.and.resolveTo(response);
           var screenSize = {
-            height: 2000,
+            height: 2000
           };
-          args['options']['deviceHeight'] = screenSize['height'];
-          args['screenshotType'] = 'fullpage';
+          args.options.deviceHeight = screenSize.height;
+          args.screenshotType = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-                                
+
           await appAutomate.getTiles(true, true, null, null, null);
-          expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+          expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
 
@@ -204,27 +218,28 @@ describe('AppAutomateProvider', () => {
         it('takes screenshot with remote executor with "percy-dev" as projectId', async () => {
           const appAutomate = new AppAutomateProvider(driver);
           spyOn(AppAutomateProvider.prototype, 'isPercyDev')
-                                .and.returnValue('true');
+            .and.returnValue('true');
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
-          let browserstack_executorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
-          superGetTilesSpy.and.resolveTo([])
+          let browserstackExecutorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([]);
           let response = {
             success: true,
-            result: JSON.stringify([{header_height: 100, footer_height: 200, sha: "abc"}])
+            result: JSON.stringify([{ header_height: 100, footer_height: 200, sha: 'abc' }])
           };
-          browserstack_executorSpy.and.resolveTo(response);
+          browserstackExecutorSpy.and.resolveTo(response);
           var screenSize = {
-            height: 2000,
+            height: 2000
           };
-          args['projectId'] = 'percy-dev';
-          args['options']['deviceHeight'] = screenSize['height'];
-          args['options']['topScrollviewOffset'] = 0;
-          args['options']['bottomScrollviewOffset'] = 0;
-          args['screenshotType'] = 'fullpage';
+          args.projectId = 'percy-dev';
+          args.options.deviceHeight = screenSize.height;
+          args.options.topScrollviewOffset = 0;
+          args.options.bottomScrollviewOffset = 0;
+          args.options.androidScrollAreaPercentage = null;
+          args.options.scrollSpeed = null;
+          args.screenshotType = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-                                
           await appAutomate.getTiles(true, true, null, null, null);
-          expect(browserstack_executorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+          expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
     });

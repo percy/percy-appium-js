@@ -29,7 +29,9 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     bottomScrollviewOffset,
     scrollableId,
     sync,
-    testCase
+    testCase,
+    androidScrollAreaPercentage,
+    scrollSpeed
   } = options;
   // allow working with or without standalone mode for wdio
   if (!driver || typeof driver === 'string') {
@@ -58,6 +60,8 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       scrollableId = name.scrollableId;
       sync = name.sync;
       testCase = name.testCase;
+      androidScrollAreaPercentage = name.androidScrollAreaPercentage;
+      scrollSpeed = name.scrollSpeed;
       options = name;
     }
     try {
@@ -111,7 +115,9 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         scrollableId,
         sync,
         testCase,
-        thTestCaseExecutionId
+        thTestCaseExecutionId,
+        androidScrollAreaPercentage,
+        scrollSpeed
       });
       log.debug(`[${name}] -> end`);
       return response?.body?.data;
