@@ -60,13 +60,13 @@ $ percy app:exec -- [appium test command]
 ## Configuration
 
 ```js
-percyScreenshot(driver, name[, {
+percyScreenshot(driver, name, {
   fullscreen,
   deviceName,
   orientation,
   statusBarHeight,
   navigationBarHeight
-}])
+})
 ```
 
 - `driver` (**required**) - A appium driver instance [ can be skipped in case of webdriverio runner]
