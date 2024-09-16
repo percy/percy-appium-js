@@ -242,6 +242,35 @@ describe('AppAutomateProvider', () => {
           expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
+
+      describe('when other options are passed', () => {
+        it('takes screenshot with remote executor with "percy-dev" as projectId', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isPercyDev')
+            .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          let browserstackExecutorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([]);
+          let response = {
+            success: true,
+            result: JSON.stringify([{ header_height: 100, footer_height: 200, sha: 'abc' }])
+          };
+          browserstackExecutorSpy.and.resolveTo(response);
+          var screenSize = {
+            height: 2000
+          };
+          args.projectId = 'percy-dev';
+          args.options.deviceHeight = screenSize.height;
+          args.options.topScrollviewOffset = 100;
+          args.options.bottomScrollviewOffset = 250;
+          args.options.androidScrollAreaPercentage = 50;
+          args.options.scrollSpeed = 500;
+          args.screenshotType = 'fullpage';
+          appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
+          await appAutomate.getTiles(true, true, null, null, 100, 250, null, 50, 500);
+          expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+        });
+      });
     });
   });
 });
