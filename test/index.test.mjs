@@ -129,8 +129,15 @@ describe('percyScreenshot', () => {
                 it('posts full page screenshot to the local percy server', async () => {
                   driver = driverFunc({ platform, appAutomate });
 
-                  await percyScreenshot(driver, 'Screenshot 1', { fullPage: true });
-                  await percyScreenshot(driver, 'Screenshot 2', { fullPage: true });
+                  await percyScreenshot(driver, 'Screenshot 1', {
+                    fullPage: true,
+                    androidScrollAreaPercentage: 100
+                  });
+                  await percyScreenshot(driver, 'Screenshot 2', {
+                    fullPage: true,
+                    androidScrollAreaPercentage: 100,
+                    bottomScrollviewOffset: 100
+                  });
 
                   expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
                     'Snapshot found: Screenshot 1',
@@ -242,7 +249,7 @@ describe('percyScreenshot', () => {
 
       it('should call POA percyScreenshot', async () => {
         const driver = driverFunc({ enabled: true });
-        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
         utils.percy.type = 'automate';
         const mockresponse = {};
         spyOn(percyOnAutomate, 'request').and.callFake(() => mockresponse);
@@ -259,7 +266,7 @@ describe('percyScreenshot', () => {
         const element = { value: '123', elementId: '123' };
         const element2 = { value: '456', elementId: '456' };
         const driver = driverFunc({ enabled: true });
-        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
         utils.percy.type = 'automate';
         spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
@@ -294,23 +301,23 @@ describe('percyScreenshot', () => {
         }));
       });
 
-      it('should return CLI response', async() => {
+      it('should return CLI response', async () => {
         const mockResponse = {
           success: true,
-          body: { data: { name: 'test_snapshot', some_data: 'some_data', some_obj: { some_obj: 'some_obj' }}}
-        }
+          body: { data: { name: 'test_snapshot', some_data: 'some_data', some_obj: { some_obj: 'some_obj' } } }
+        };
         const driver = driverFunc({ enabled: true });
-        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
         utils.percy.type = 'automate';
 
         spyOn(percyOnAutomate, 'request').and.callFake(() => mockResponse);
-        const response = await percyScreenshot(driver, 'Screenshot 1', { sync: true })
-        expect(response).toEqual(mockResponse.body.data)
-      })
+        const response = await percyScreenshot(driver, 'Screenshot 1', { sync: true });
+        expect(response).toEqual(mockResponse.body.data);
+      });
 
       it('should handle error POA', async () => {
         const driver = driverFunc({ enabled: true, ignoreErrors: false });
-        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
         utils.percy.type = 'automate';
         spyOn(percyOnAutomate, 'request').and.returnValue(Promise.reject(new Error('Not found 404')));
         let error = null;
@@ -324,7 +331,7 @@ describe('percyScreenshot', () => {
 
       it('should handle error POA ignoreError false', async () => {
         const driver = driverFunc({ enabled: true, ignoreErrors: true });
-        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true))
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
         utils.percy.type = 'automate';
         spyOn(percyOnAutomate, 'request').and.returnValue(Promise.reject(new Error('Not found 404')));
         let error = null;

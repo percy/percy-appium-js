@@ -51,10 +51,14 @@ class GenericProvider {
     considerRegionAppiumElements,
     customConsiderRegions,
     scrollableXpath,
+    topScrollviewOffset,
+    bottomScrollviewOffset,
     scrollableId,
     sync,
     testCase,
-    thTestCaseExecutionId
+    thTestCaseExecutionId,
+    androidScrollAreaPercentage,
+    scrollSpeed
   }) {
     fullscreen = fullscreen || false;
     sync = sync || null;
@@ -68,7 +72,17 @@ class GenericProvider {
     });
 
     const tag = await this.getTag();
-    const tiles = await this.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, scrollableId);
+    const tiles = await this.getTiles(
+      fullscreen,
+      fullPage,
+      screenLengths,
+      scrollableXpath,
+      topScrollviewOffset,
+      bottomScrollviewOffset,
+      scrollableId,
+      androidScrollAreaPercentage,
+      scrollSpeed
+    );
     const ignoreRegions = await this.findRegions(
       ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions
     );
