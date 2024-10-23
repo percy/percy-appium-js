@@ -34,19 +34,19 @@
     "test:types": "tsd"
   },
   "dependencies": {
-    "@percy/sdk-utils": "^1.28.2",
-    "tmp": "^0.2.1"
+    "@percy/sdk-utils": "^1.30.1",
+    "tmp": "^0.2.3"
   },
   "devDependencies": {
-    "@percy/cli": "^1.28.2",
-    "cross-env": "^7.0.2",
-    "eslint": "^8.27.0",
-    "eslint-plugin-n": "^15.5.1",
+    "@percy/cli": "^1.30.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.0.1",
     "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "jasmine": "^4.4.0",
+    "jasmine": "^5.4.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nyc": "^15.1.0",
     "tsd": "^0.24.1",
