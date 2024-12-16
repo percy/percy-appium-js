@@ -541,10 +541,15 @@
   resolved "https://registry.yarnpkg.com/@percy/logger/-/logger-1.30.1.tgz#d94159ffa48e77cf78e6e6d141054cdf3a21e2dd"
   integrity sha512-FaVW4YGmgPaW0OviMFUn7m7ski2uZQAeUJ/hg+IXFIN+zSreX2ORcsp+Fep2p+h5UjcZX5wFuf/8O3nth5YAfQ==
 
-"@percy/sdk-utils@1.30.1", "@percy/sdk-utils@^1.28.2":
+"@percy/sdk-utils@1.30.1":
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.30.1.tgz#005d37efb9736ba59d4a893156b46deb0bb29347"
   integrity sha512-xdeaHEdQvytFEbNBYCFdu1ToD6T/BT6YtZYwfNKAYXwQqVbm4wr/3LVH+GUcxYZsBCxmeSyCrF4buspUhxTNJQ==
+
+"@percy/sdk-utils@^1.28.2":
+  version "1.30.5"
+  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.30.5.tgz#984d6165cc9356ddc8f72b837f3395a050859ff9"
+  integrity sha512-0XCTywh03lynsvPxAgPpZOR3Zg5hqzWCWlJP2T2o/jKS7cT+O4vqS6jZfWoA9ik0ivji5bthaAHEmqVKdw1dDQ==
 
 "@percy/webdriver-utils@1.30.1":
   version "1.30.1"
