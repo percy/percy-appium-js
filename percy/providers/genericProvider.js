@@ -246,7 +246,7 @@ class GenericProvider {
     for (let index = 0; index < elements.length; index++) {
       try {
         const selector = `element: ${index}`;
-  
+
         const ignoredRegion = await this.getRegionObject(selector, elements[index]);
         elementsArray.push(ignoredRegion);
       } catch (e) {
