@@ -180,6 +180,35 @@ describe('GenericProvider', () => {
       // expect(getRegionObjectSpy).not.toHaveBeenCalled();
       expect(elementsArray).toEqual([]);
     });
+
+    it('should add regions for valid elements', async () => {
+      const elementsArray = [];
+      const mockElements = [
+        {
+          getRect: jasmine.createSpy().and.resolveTo({ x: 10, y: 20, width: 100, height: 50 })
+        },
+        {
+          getRect: jasmine.createSpy().and.resolveTo({ x: 30, y: 40, width: 200, height: 60 })
+        }
+      ];
+
+      await provider.getRegionsByElements.call({ driver, getRegionObject: getRegionObjectSpy }, elementsArray, mockElements);
+
+      expect(getRegionObjectSpy).toHaveBeenCalledTimes(2);
+      expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0');
+      expect(getRegionObjectSpy.calls.argsFor(1)[0]).toBe('element: 1');
+      expect(elementsArray).toEqual([{}, {}]);
+    });
+
+    it('should handle empty elements array', async () => {
+      const elementsArray = [];
+      const mockElements = [];
+
+      await provider.getRegionsByElements.call({ driver, getRegionObject: getRegionObjectSpy }, elementsArray, mockElements);
+
+      expect(getRegionObjectSpy).not.toHaveBeenCalled();
+      expect(elementsArray).toEqual([]);
+    });
   });
 
   describe('getRegionsByLocation function', () => {
