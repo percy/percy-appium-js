@@ -247,20 +247,20 @@ class GenericProvider {
       try {
         let identifier;
         const element = elements[index];
-        
+
         const capabilities = await this.driver.getCapabilities();
         const platformName = (capabilities.platformName || '').toLowerCase();
-        
+
         if (platformName === 'android') {
           // Android identifiers
-          identifier = await element.getAttribute('resource-id') || 
+          identifier = await element.getAttribute('resource-id') ||
                     await element.getAttribute('class');
-        } else if(platformName === 'ios') {
+        } else if (platformName === 'ios') {
           // iOS identifiers
-          identifier = await element.getAttribute('name') || 
+          identifier = await element.getAttribute('name') ||
                     await element.getAttribute('type');
         }
-  
+
         const selector = `element: ${index} ${identifier ? `${identifier}` : ''}`.trim();
         const ignoredRegion = await this.getRegionObject(selector, element);
         elementsArray.push(ignoredRegion);
