@@ -249,13 +249,13 @@ class GenericProvider {
         const element = elements[index];
 
         const capabilities = await this.driver.getCapabilities();
-        const PLATFORM_NAME = capabilities.platformName.toLowerCase();
+        const platformName = capabilities.platformName.toLowerCase();
 
-        if (PLATFORM_NAME === 'android') {
+        if (platformName === 'android') {
           // Android identifiers
           identifier = await element.getAttribute('resource-id') ||
                     await element.getAttribute('class');
-        } else if (PLATFORM_NAME === 'ios') {
+        } else if (platformName === 'ios') {
           // iOS identifiers
           identifier = await element.getAttribute('name') ||
                     await element.getAttribute('type');
