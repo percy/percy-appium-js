@@ -249,7 +249,7 @@ class GenericProvider {
         const element = elements[index];
 
         const capabilities = await this.driver.getCapabilities();
-        const PLATFORM_NAME = (capabilities.platformName || '').toLowerCase();
+        const PLATFORM_NAME = capabilities.platformName.toLowerCase();
 
         if (PLATFORM_NAME === 'android') {
           // Android identifiers

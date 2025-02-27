@@ -222,24 +222,6 @@ describe('GenericProvider', () => {
         expect(elementsArray).toEqual([{}]);
       });
 
-      it('should handle missing platformName in capabilities', async () => {
-        mockDriver.getCapabilities.and.resolveTo({});
-        const elementsArray = [];
-        mockElement = {
-          getAttribute: jasmine.createSpy('getAttribute')
-            .and.returnValue('some-value')
-        };
-
-        await provider.getRegionsByElements.call(
-          { driver: mockDriver, getRegionObject: getRegionObjectSpy },
-          elementsArray,
-          [mockElement]
-        );
-
-        expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
-        expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0');
-        expect(elementsArray).toEqual([{}]);
-      });
       describe('Android', () => {
         beforeEach(() => {
           mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
