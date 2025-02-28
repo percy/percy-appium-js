@@ -152,22 +152,43 @@ describe('GenericProvider', () => {
   describe('getRegionsByElements', () => {
     let getRegionObjectSpy;
     let mockElement;
+    let mockDriver;
 
     beforeEach(() => {
       getRegionObjectSpy = spyOn(provider, 'getRegionObject').and.resolveTo({});
-      mockElement = {
-        getAttribute: jasmine.createSpy().and.returnValue('some-class')
+      mockDriver = {
+        getCapabilities: jasmine.createSpy('getCapabilities')
       };
     });
 
     it('should get regions for each element', async () => {
+      // Set up mock driver with platform capability
+      mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+      
       const elementsArray = [];
+      mockElement = {
+        getAttribute: jasmine.createSpy('getAttribute')
+          .and.callFake(attr => {
+            if (attr === 'resource-id') return 'test_id';
+            if (attr === 'class') return 'android.widget.Button';
+            return null;
+          })
+      };
       const elements = [mockElement, mockElement, mockElement];
 
-      await provider.getRegionsByElements.call({ driver, getRegionObject: getRegionObjectSpy }, elementsArray, elements);
+      await provider.getRegionsByElements.call(
+        { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+        elementsArray,
+        elements
+      );
 
       expect(getRegionObjectSpy).toHaveBeenCalledTimes(3);
       expect(elementsArray).toEqual([{}, {}, {}]);
+      
+      // Verify each call had correct selector
+      for (let i = 0; i < 3; i++) {
+        expect(getRegionObjectSpy.calls.argsFor(i)[0]).toBe(`element: ${i} test_id`);
+      }
     });
 
     it('should ignore when error', async () => {
@@ -179,6 +200,163 @@ describe('GenericProvider', () => {
 
       // expect(getRegionObjectSpy).not.toHaveBeenCalled();
       expect(elementsArray).toEqual([]);
+    });
+
+    describe('Platform specific tests', () => {
+      it('should handle unknown platform', async () => {
+        mockDriver.getCapabilities.and.resolveTo({ platformName: 'unknown' });
+        const elementsArray = [];
+        mockElement = {
+          getAttribute: jasmine.createSpy('getAttribute')
+            .and.returnValue('some-value')
+        };
+
+        await provider.getRegionsByElements.call(
+          { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+          elementsArray,
+          [mockElement]
+        );
+
+        expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+        expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0');
+        expect(elementsArray).toEqual([{}]);
+      });
+
+      describe('Android', () => {
+        beforeEach(() => {
+          mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+        });
+  
+        it('should use resource-id as primary identifier', async () => {
+          const elementsArray = [];
+          mockElement = {
+            getAttribute: jasmine.createSpy('getAttribute')
+              .and.callFake(attr => {
+                if (attr === 'resource-id') return 'test_resource_id';
+                if (attr === 'class') return 'android.widget.Button';
+                return null;
+              })
+          };
+  
+          await provider.getRegionsByElements.call(
+            { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+            elementsArray,
+            [mockElement]
+          );
+  
+          expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+          expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 test_resource_id');
+          expect(elementsArray).toEqual([{}]);
+        });
+
+        it('should fallback to class when resource-id is not available', async () => {
+          const elementsArray = [];
+          mockElement = {
+            getAttribute: jasmine.createSpy('getAttribute')
+              .and.callFake(attr => {
+                if (attr === 'resource-id') return null;
+                if (attr === 'class') return 'android.widget.Button';
+                return null;
+              })
+          };
+  
+          await provider.getRegionsByElements.call(
+            { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+            elementsArray,
+            [mockElement]
+          );
+  
+          expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+          expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 android.widget.Button');
+          expect(elementsArray).toEqual([{}]);
+        });
+      });
+
+      describe('iOS', () => {
+        beforeEach(() => {
+          mockDriver.getCapabilities.and.resolveTo({ platformName: 'ios' });
+        });
+  
+        it('should use name as primary identifier', async () => {
+          const elementsArray = [];
+          mockElement = {
+            getAttribute: jasmine.createSpy('getAttribute')
+              .and.callFake(attr => {
+                if (attr === 'name') return 'TestButton';
+                if (attr === 'type') return 'XCUIElementTypeButton';
+                return null;
+              })
+          };
+  
+          await provider.getRegionsByElements.call(
+            { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+            elementsArray,
+            [mockElement]
+          );
+  
+          expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+          expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 TestButton');
+          expect(elementsArray).toEqual([{}]);
+        });
+
+        it('should fallback to type when name is not available', async () => {
+          const elementsArray = [];
+          mockElement = {
+            getAttribute: jasmine.createSpy('getAttribute')
+              .and.callFake(attr => {
+                if (attr === 'name') return null;
+                if (attr === 'type') return 'XCUIElementTypeButton';
+                return null;
+              })
+          };
+  
+          await provider.getRegionsByElements.call(
+            { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+            elementsArray,
+            [mockElement]
+          );
+  
+          expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+          expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 XCUIElementTypeButton');
+          expect(elementsArray).toEqual([{}]);
+        });
+      });
+    });
+
+    describe('Error handling', () => {
+      it('should handle elements with no identifiers', async () => {
+        mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+        const elementsArray = [];
+        mockElement = {
+          getAttribute: jasmine.createSpy('getAttribute').and.returnValue(null)
+        };
+  
+        await provider.getRegionsByElements.call(
+          { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+          elementsArray,
+          [mockElement]
+        );
+  
+        expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+        expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0');
+        expect(elementsArray).toEqual([{}]);
+      });
+  
+      it('should handle capability errors', async () => {
+        mockDriver.getCapabilities.and.rejectWith(new Error('Capabilities not found'));
+        const elementsArray = [];
+        mockElement = {
+          getAttribute: jasmine.createSpy('getAttribute')
+        };
+  
+        await provider.getRegionsByElements.call(
+          { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+          elementsArray,
+          [mockElement]
+        );
+  
+        expect(elementsArray).toEqual([]);
+      });
     });
   });
 

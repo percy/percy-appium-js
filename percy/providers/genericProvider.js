@@ -245,10 +245,24 @@ class GenericProvider {
   async getRegionsByElements(elementsArray, elements) {
     for (let index = 0; index < elements.length; index++) {
       try {
-        const type = await elements[index].getAttribute('class');
-        const selector = `element: ${index} ${type}`;
+        let identifier;
+        const element = elements[index];
 
-        const ignoredRegion = await this.getRegionObject(selector, elements[index]);
+        const capabilities = await this.driver.getCapabilities();
+        const platformName = capabilities.platformName.toLowerCase();
+
+        if (platformName === 'android') {
+          // Android identifiers
+          identifier = await element.getAttribute('resource-id') ||
+                    await element.getAttribute('class');
+        } else if (platformName === 'ios') {
+          // iOS identifiers
+          identifier = await element.getAttribute('name') ||
+                    await element.getAttribute('type');
+        }
+
+        const selector = `element: ${index} ${identifier ? `${identifier}` : ''}`.trim();
+        const ignoredRegion = await this.getRegionObject(selector, element);
         elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Correct Mobile Element not passed at index ${index}.`);
