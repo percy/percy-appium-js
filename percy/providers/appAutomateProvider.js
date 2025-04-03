@@ -41,6 +41,7 @@ class AppAutomateProvider extends GenericProvider {
       sync,
       testCase,
       labels,
+      regions,
       thTestCaseExecutionId,
       androidScrollAreaPercentage,
       scrollSpeed
@@ -76,6 +77,7 @@ class AppAutomateProvider extends GenericProvider {
         sync,
         testCase,
         labels,
+        regions,
         thTestCaseExecutionId,
         androidScrollAreaPercentage,
         scrollSpeed
