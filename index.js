@@ -31,6 +31,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
     sync,
     testCase,
     labels,
+    regions,
     androidScrollAreaPercentage,
     scrollSpeed
   } = options;
@@ -62,6 +63,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
       sync = name.sync;
       testCase = name.testCase;
       labels = name.labels;
+      regions = name.regions;
       androidScrollAreaPercentage = name.androidScrollAreaPercentage;
       scrollSpeed = name.scrollSpeed;
       options = name;
@@ -118,6 +120,7 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
         sync,
         testCase,
         labels,
+        regions,
         thTestCaseExecutionId,
         androidScrollAreaPercentage,
         scrollSpeed

@@ -57,6 +57,7 @@ class GenericProvider {
     sync,
     testCase,
     labels,
+    regions,
     thTestCaseExecutionId,
     androidScrollAreaPercentage,
     scrollSpeed
@@ -112,6 +113,7 @@ class GenericProvider {
       sync,
       testCase,
       labels,
+      regions,
       thTestCaseExecutionId
     });
   }

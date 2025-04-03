@@ -271,7 +271,7 @@ describe('percyScreenshot', () => {
         spyOn(percyOnAutomate, 'request').and.callFake(() => {});
 
         await percyScreenshot(driver, 'Screenshot 2', {
-          ignore_region_appium_elements: [element], consider_region_appium_elements: [element], testCase: 'test-case-1', labels: 'app;android;testing', thTestCaseExecutionId: 'ID123'
+          ignore_region_appium_elements: [element], consider_region_appium_elements: [element], testCase: 'test-case-1', labels: 'app;android;testing', regions: [{algorithm:'intelliignore'}], thTestCaseExecutionId: 'ID123'
         });
         expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
           sessionId: 'sessionID',
@@ -282,6 +282,7 @@ describe('percyScreenshot', () => {
             consider_region_elements: ['123'],
             testCase: 'test-case-1',
             labels: 'app;android;testing',
+            regions: [{algorithm:'intelliignore'}],
             thTestCaseExecutionId: 'ID123'
           }
         }));
