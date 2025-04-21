@@ -9,6 +9,7 @@ class Cache {
   static capabilities = 'capabilities';
   static sessionCapabilities = 'session_capabilites';
   static commandExecutorUrl = 'command_executor_url';
+  static sysDump = 'sysDump';
 
   // maintainance
   static lastTime = Date.now();
