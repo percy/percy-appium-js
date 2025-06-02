@@ -41,7 +41,7 @@
     "@percy/cli": "^1.30.9",
     "cross-env": "^7.0.2",
     "eslint": "^8.27.0",
-    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
