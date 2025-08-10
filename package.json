@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@percy/sdk-utils": "^1.30.9",
-    "tmp": "^0.2.3"
+    "tmp": "^0.2.4"
   },
   "devDependencies": {
     "@percy/cli": "^1.30.9",
