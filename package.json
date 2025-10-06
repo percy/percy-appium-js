@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@percy/cli": "^1.30.9",
-    "cross-env": "^7.0.2",
+    "cross-env": "^10.1.0",
     "eslint": "^8.27.0",
     "eslint-plugin-n": "^15.5.1",
     "eslint-config-standard": "^17.0.0",
