@@ -59,7 +59,8 @@ class GenericProvider {
     labels,
     thTestCaseExecutionId,
     androidScrollAreaPercentage,
-    scrollSpeed
+    scrollSpeed,
+    iosOptimizedFullpage
   }) {
     fullscreen = fullscreen || false;
     sync = sync || null;
@@ -82,7 +83,8 @@ class GenericProvider {
       bottomScrollviewOffset,
       scrollableId,
       androidScrollAreaPercentage,
-      scrollSpeed
+      scrollSpeed,
+      iosOptimizedFullpage
     );
     const ignoreRegions = await this.findRegions(
       ignoreRegionXpaths, ignoreRegionAccessibilityIds, ignoreRegionAppiumElements, customIgnoreRegions
@@ -116,7 +118,7 @@ class GenericProvider {
     });
   }
 
-  async getTiles(fullscreen, _fullPage, _screenLengths) {
+  async getTiles(fullscreen, _fullPage, _screenLengths, _scrollableXpath, _topScrollviewOffset, _bottomScrollviewOffset, _scrollableId, _androidScrollAreaPercentage, _scrollSpeed, _iosOptimizedFullpage) {
     if (_fullPage === true) {
       log.warn('Full page screeshot is only supported on App Automate.' +
         ' Falling back to single page screenshot.');

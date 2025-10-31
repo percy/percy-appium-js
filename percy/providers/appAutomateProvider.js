@@ -43,7 +43,8 @@ class AppAutomateProvider extends GenericProvider {
       labels,
       thTestCaseExecutionId,
       androidScrollAreaPercentage,
-      scrollSpeed
+      scrollSpeed,
+      iosOptimizedFullpage
     } = {}
   ) {
     let response = null;
@@ -78,7 +79,8 @@ class AppAutomateProvider extends GenericProvider {
         labels,
         thTestCaseExecutionId,
         androidScrollAreaPercentage,
-        scrollSpeed
+        scrollSpeed,
+        iosOptimizedFullpage
       });
     } catch (e) {
       error = e;
@@ -145,7 +147,8 @@ class AppAutomateProvider extends GenericProvider {
     bottomScrollviewOffset,
     scrollableId,
     androidScrollAreaPercentage,
-    scrollSpeed
+    scrollSpeed,
+    iosOptimizedFullpage
   ) {
     // Override AA optimizations
     if (this.isDisableRemoteUpload()) {
@@ -154,7 +157,7 @@ class AppAutomateProvider extends GenericProvider {
           'Full page screenshots are only supported when "PERCY_DISABLE_REMOTE_UPLOADS" is not set'
         );
       }
-      return await super.getTiles(fullscreen, fullPage, screenLengths);
+      return await super.getTiles(fullscreen, fullPage, screenLengths, scrollableXpath, topScrollviewOffset, bottomScrollviewOffset, scrollableId, androidScrollAreaPercentage, scrollSpeed, iosOptimizedFullpage);
     }
 
     let screenshotType = 'fullpage';
@@ -184,7 +187,8 @@ class AppAutomateProvider extends GenericProvider {
             scrollableId: scrollableId || null,
             FORCE_FULL_PAGE: process.env.FORCE_FULL_PAGE === 'true',
             androidScrollAreaPercentage: androidScrollAreaPercentage || null,
-            scrollSpeed: scrollSpeed || null
+            scrollSpeed: scrollSpeed || null,
+            iosOptimizedFullpage: iosOptimizedFullpage || false
           }
         });
       }
