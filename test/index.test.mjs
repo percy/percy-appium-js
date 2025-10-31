@@ -138,10 +138,15 @@ describe('percyScreenshot', () => {
                     androidScrollAreaPercentage: 100,
                     bottomScrollviewOffset: 100
                   });
+                  await percyScreenshot(driver, 'Screenshot 3', {
+                    fullPage: true,
+                    iosOptimizedFullpage: true
+                  });
 
                   expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
                     'Snapshot found: Screenshot 1',
-                    'Snapshot found: Screenshot 2'
+                    'Snapshot found: Screenshot 2',
+                    'Snapshot found: Screenshot 3'
                   ]));
                 });
 
@@ -245,6 +250,15 @@ describe('percyScreenshot', () => {
           expect(driver.$).toHaveBeenCalledWith('someXpath');
           expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
         }
+      });
+
+      it('tests iosOptimizedFullpage option works', async () => {
+        driver = driverFunc({ enabled: true });
+        await percyScreenshot(driver, 'Screenshot 1', { iosOptimizedFullpage: true });
+
+        expect(await helpers.get('logs')).toEqual(jasmine.arrayContaining([
+          'Snapshot found: Screenshot 1'
+        ]));
       });
 
       it('should call POA percyScreenshot', async () => {
