@@ -1,7 +1,7 @@
 {
   "name": "@percy/appium-app",
   "description": "Appium client library for visual testing with Percy",
-  "version": "2.1.0",
+  "version": "2.1.1-beta1",
   "license": "MIT",
   "author": "Perceptual Inc.",
   "repository": {
@@ -25,7 +25,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "latest"
+    "tag": "beta"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
