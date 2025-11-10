@@ -119,7 +119,8 @@ describe('AppAutomateProvider', () => {
         deviceHeight: undefined,
         scollableXpath: null,
         scrollableId: null,
-        FORCE_FULL_PAGE: false
+        FORCE_FULL_PAGE: false,
+        iosOptimizedFullpage: false
       }
     };
 
@@ -131,8 +132,8 @@ describe('AppAutomateProvider', () => {
             .and.returnValue('true');
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
           superGetTilesSpy.and.resolveTo([]);
-          await appAutomate.getTiles(true, false, null, null, null);
-          expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null);
+          await appAutomate.getTiles(true, false, null, null, null, null, null, null, null, false);
+          expect(superGetTilesSpy).toHaveBeenCalledWith(true, false, null, null, null, null, null, null, null, false);
         });
       });
 
@@ -160,13 +161,14 @@ describe('AppAutomateProvider', () => {
           args.options.bottomScrollviewOffset = 0;
           args.options.androidScrollAreaPercentage = null;
           args.options.scrollSpeed = null;
+          args.options.iosOptimizedFullpage = false;
           appAutomate.metadata = {
             statusBarHeight: () => 100,
             navigationBarHeight: () => 200,
             scaleFactor: () => 1,
             screenSize: () => screenSize
           };
-          let tiles = await appAutomate.getTiles(true, false, null, null, null);
+          let tiles = await appAutomate.getTiles(true, false, null, null, null, null, null, null, null, false);
           expect(tiles[0].statusBarHeight).toEqual(100);
           expect(tiles[0].navBarHeight).toEqual(200);
           expect(browserstackExecutorSpy).toHaveBeenCalledWith(
@@ -186,8 +188,8 @@ describe('AppAutomateProvider', () => {
           let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
           superGetTilesSpy.and.resolveTo([]);
 
-          await appAutomate.getTiles(true, true, null, null, null);
-          expect(superGetTilesSpy).toHaveBeenCalledWith(true, true, null);
+          await appAutomate.getTiles(true, true, null, null, null, null, null, null, null, false);
+          expect(superGetTilesSpy).toHaveBeenCalledWith(true, true, null, null, null, null, null, null, null, false);
         });
       });
 
@@ -209,7 +211,7 @@ describe('AppAutomateProvider', () => {
           args.screenshotType = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
 
-          await appAutomate.getTiles(true, true, null, null, null);
+          await appAutomate.getTiles(true, true, null, null, null, null, null, null, null, false);
           expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
@@ -236,9 +238,10 @@ describe('AppAutomateProvider', () => {
           args.options.bottomScrollviewOffset = 0;
           args.options.androidScrollAreaPercentage = null;
           args.options.scrollSpeed = null;
+          args.options.iosOptimizedFullpage = false;
           args.screenshotType = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-          await appAutomate.getTiles(true, true, null, null, null);
+          await appAutomate.getTiles(true, true, null, null, null, null, null, null, null, false);
           expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
@@ -265,9 +268,40 @@ describe('AppAutomateProvider', () => {
           args.options.bottomScrollviewOffset = 250;
           args.options.androidScrollAreaPercentage = 50;
           args.options.scrollSpeed = 500;
+          args.options.iosOptimizedFullpage = false;
           args.screenshotType = 'fullpage';
           appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
-          await appAutomate.getTiles(true, true, null, null, 100, 250, null, 50, 500);
+          await appAutomate.getTiles(true, true, null, null, 100, 250, null, 50, 500, false);
+          expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
+        });
+      });
+
+      describe('when iosOptimizedFullpage is true', () => {
+        it('takes screenshot with iosOptimizedFullpage option set to true', async () => {
+          const appAutomate = new AppAutomateProvider(driver);
+          spyOn(AppAutomateProvider.prototype, 'isPercyDev')
+            .and.returnValue('true');
+          let superGetTilesSpy = spyOn(GenericProvider.prototype, 'getTiles');
+          let browserstackExecutorSpy = spyOn(AppAutomateProvider.prototype, 'browserstackExecutor');
+          superGetTilesSpy.and.resolveTo([]);
+          let response = {
+            success: true,
+            result: JSON.stringify([{ header_height: 100, footer_height: 200, sha: 'abc' }])
+          };
+          browserstackExecutorSpy.and.resolveTo(response);
+          var screenSize = {
+            height: 2000
+          };
+          args.projectId = 'percy-dev';
+          args.options.deviceHeight = screenSize.height;
+          args.options.topScrollviewOffset = 0;
+          args.options.bottomScrollviewOffset = 0;
+          args.options.androidScrollAreaPercentage = null;
+          args.options.scrollSpeed = null;
+          args.options.iosOptimizedFullpage = true;
+          args.screenshotType = 'fullpage';
+          appAutomate.metadata = { statusBarHeight: () => 100, navigationBarHeight: () => 200, scaleFactor: () => 1, screenSize: () => screenSize };
+          await appAutomate.getTiles(true, true, null, null, null, null, null, null, null, true);
           expect(browserstackExecutorSpy).toHaveBeenCalledWith('percyScreenshot', args);
         });
       });
