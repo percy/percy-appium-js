@@ -1,26 +1,79 @@
 const { Cache } = require('../util/cache');
 const { Undefined } = require('../util/validations');
 const { TimeIt } = require('../util/timing');
+const log = require('../util/log');
 
 // This is a single common driver class that gives same interface to multiple appium drivers
-// like wd or wdio etc.
+// like wd or wdio etc. It also handles Appium version differences transparently.
 class AppiumDriver {
   constructor(driver) {
     this.driver = driver;
     this.type = null;
+    this._appiumVersion = null;
+    this._appiumMajor = null;
 
     /* istanbul ignore else */
-    // Note: else is covered here but constructor name '' couldnt cover (which is the case)
-    // in real world when you get wd driver passed so need to ignore coverage on it
-
-    // In typescript for wdio we get driver.constuctor.name as 'BoundBrowser'
     if (driver.constructor.name.includes('Browser') && !Undefined(driver.capabilities)) {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
-      driver.constructor.name === 'Object') && // Object check is only added for tests
+      driver.constructor.name === 'Object') &&
       !Undefined(driver.sessionCapabilities)) {
       this.type = 'wd';
     }
+  }
+
+  async resolveAppiumVersion() {
+    return await Cache.withCache(Cache.appiumVersion, this.sessionId, async () => {
+      return await TimeIt.run('resolveAppiumVersion', async () => {
+        let version = null;
+
+        // Primary: read appiumVersion from session capabilities
+        try {
+          const caps = await this.getCapabilities();
+          version = caps['appium:appiumVersion'] || caps.appiumVersion;
+        } catch (e) {
+          log.debug(`Could not read appiumVersion from capabilities: ${e}`);
+        }
+
+        // Secondary: try /status endpoint via driver.status() (wdio)
+        if (!version && this.wdio && typeof this.driver.status === 'function') {
+          try {
+            const statusResponse = await this.driver.status();
+            version = statusResponse?.build?.version;
+          } catch (e) {
+            log.debug(`Could not get Appium version from /status: ${e}`);
+          }
+        }
+
+        if (version) {
+          this._appiumVersion = version;
+          const major = parseInt(version.split('.')[0], 10);
+          this._appiumMajor = isNaN(major) ? null : major;
+          log.debug(`Detected Appium server version: ${version} (major: ${this._appiumMajor})`);
+        } else {
+          log.debug('Could not detect Appium server version, using default behavior');
+        }
+
+        return version;
+      });
+    });
+  }
+
+  get appiumMajor() {
+    return this._appiumMajor;
+  }
+
+  // Normalize capability key access across Appium versions.
+  // In Appium 2.x+, non-standard caps require 'appium:' prefix.
+  getCapabilityValue(caps, key) {
+    if (Undefined(caps) || caps === null) return undefined;
+    // Standard W3C keys never need prefix
+    const w3cStandard = ['browserName', 'browserVersion', 'platformName', 'acceptInsecureCerts', 'pageLoadStrategy', 'proxy', 'timeouts', 'unhandledPromptBehavior'];
+    if (w3cStandard.includes(key)) return caps[key];
+    // Try bare key first (Appium 1.x or already-resolved), then appium: prefixed
+    const val = caps[key];
+    if (!Undefined(val)) return val;
+    return caps[`appium:${key}`];
   }
 
   // cached
@@ -29,10 +82,19 @@ class AppiumDriver {
       async () => {
         return await TimeIt.run('getCapabilities', async () => {
           if (this.wd) return await this.driver.sessionCapabilities();
-          /* istanbul ignore next */ // not sure why its marking it when its covered
+          /* istanbul ignore next */
           if (this.wdio) return await this.driver.capabilities;
         });
       });
+  }
+
+  // Returns full raw capabilities from the driver, bypassing the wrapper's filtered view.
+  // Use this instead of accessing driver.driver.capabilities directly.
+  async getAllCapabilities() {
+    return await Cache.withCache(Cache.allCapabilities, this.sessionId, async () => {
+      if (this.wd) return await this.getCapabilities();
+      if (this.wdio) return this.driver.capabilities;
+    });
   }
 
   async getSystemBars() {

@@ -6,14 +6,32 @@ const sdkPkg = require('../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 const { Cache } = require('./util/cache');
 
-let clientWdPkg = null;
-try {
-  clientWdPkg = require('wd/package.json');
-} catch { }
+// Resolve the wdio/wd client version from the consumer project (CWD), not from this SDK's
+// own node_modules. This ensures we report the actual version the test project is running.
+const { createRequire } = require('module');
+const path = require('path');
+const fsSync = require('fs');
+const cwdRequire = createRequire(path.join(process.cwd(), 'package.json'));
 
-try {
-  clientWdPkg = require('webdriverio/package.json');
-} catch { }
+function resolveClientPkg(name, req) {
+  try { return req(`${name}/package.json`); } catch { }
+  try {
+    let dir = path.dirname(req.resolve(name));
+    while (dir !== path.parse(dir).root) {
+      const pkgPath = path.join(dir, 'package.json');
+      if (fsSync.existsSync(pkgPath)) {
+        const pkg = JSON.parse(fsSync.readFileSync(pkgPath, 'utf8'));
+        if (pkg.name === name) return pkg;
+      }
+      dir = path.dirname(dir);
+    }
+  } catch { }
+  return null;
+}
+
+let clientWdPkg = resolveClientPkg('wd', cwdRequire) ||
+  resolveClientPkg('webdriverio', cwdRequire) ||
+  resolveClientPkg('webdriverio', require);
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
@@ -31,7 +49,7 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     // Hence to access the capabilities of original driver adding this fix
     // Also, note that driverWrapper.getCapabilities() returns only few capabilities and not all
     const capabilities = await Cache.withCache(Cache.capabilities, sessionId, async () => {
-      return driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
+      return await driver.getAllCapabilities();
     });
     const commandExecutorUrl = await Cache.withCache(Cache.commandExecutorUrl, sessionId, async () => {
       return driver.commandExecutorUrl;

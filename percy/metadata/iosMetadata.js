@@ -56,12 +56,13 @@ class IosMetadata extends Metadata {
     return this._viewportRect;
   }
 
-  // Need override because ios does not have desired in caps
   async deviceName() {
     if (this._deviceName) return this._deviceName;
 
-    let caps = await this.caps();
-    return caps.deviceName || caps.device;
+    const caps = await this.caps();
+    return this.driver.getCapabilityValue(caps, 'deviceName') ||
+      this.driver.getCapabilityValue(caps, 'device') ||
+      caps.deviceName || caps.device;
   }
 
   // helpers

@@ -33,7 +33,10 @@ class Metadata {
     if (this._osVersion) return this._osVersion;
 
     const caps = await this.caps();
-    return (caps.osVersion || caps.platformVersion)?.split('.')[0];
+    const version = caps.osVersion ||
+      this.driver.getCapabilityValue(caps, 'platformVersion') ||
+      caps.platformVersion;
+    return version?.split('.')[0];
   }
 
   async orientation() {
@@ -45,10 +48,11 @@ class Metadata {
       return this._orientation;
     }
 
-    const deviceOrientation = (await this.caps()).deviceOrientation?.toLowerCase();
+    const caps = await this.caps();
+    const deviceOrientation = this.driver.getCapabilityValue(caps, 'deviceOrientation')?.toLowerCase();
     if (deviceOrientation) return deviceOrientation;
 
-    return 'portrait'; // default if failed to get from caps (wd/jsonwire)
+    return 'portrait';
   }
 
   // Ideally dont cache this as it can change in the test
@@ -86,7 +90,8 @@ class Metadata {
   }
 
   async screenSize() {
-    let deviceScreenSize = (await this.caps()).deviceScreenSize;
+    const caps = await this.caps();
+    const deviceScreenSize = this.driver.getCapabilityValue(caps, 'deviceScreenSize') || caps.deviceScreenSize;
     const [width, height] = deviceScreenSize.split('x').map(i => parseInt(i, 10));
     return { width, height };
   }
@@ -94,8 +99,12 @@ class Metadata {
   async deviceName() {
     if (this._deviceName) return this._deviceName;
 
-    let caps = await this.caps();
-    return caps.desired.deviceName || caps.desired.device;
+    const caps = await this.caps();
+    // Try desired caps first (wd), then direct caps with appium: prefix normalization
+    const desired = caps.desired || {};
+    return desired.deviceName || desired.device ||
+      this.driver.getCapabilityValue(caps, 'deviceName') ||
+      this.driver.getCapabilityValue(caps, 'device');
   }
 
   async scaleFactor() {

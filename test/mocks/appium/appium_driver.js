@@ -12,6 +12,14 @@ module.exports = function() {
         return JSON.stringify({ success: true });
       }
     }),
-    takeScreenshot: jasmine.createSpy().and.resolveTo('abcd=')
+    takeScreenshot: jasmine.createSpy().and.resolveTo('abcd='),
+    getCapabilityValue(caps, key) {
+      if (caps == null) return undefined;
+      const w3cStandard = ['browserName', 'browserVersion', 'platformName', 'acceptInsecureCerts', 'pageLoadStrategy', 'proxy', 'timeouts', 'unhandledPromptBehavior'];
+      if (w3cStandard.includes(key)) return caps[key];
+      const val = caps[key];
+      if (val != null) return val;
+      return caps[`appium:${key}`];
+    }
   };
 };

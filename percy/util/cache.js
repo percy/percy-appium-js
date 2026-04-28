@@ -7,9 +7,11 @@ class Cache {
   static caps = 'caps';
   static systemBars = 'systemBars';
   static capabilities = 'capabilities';
+  static allCapabilities = 'allCapabilities';
   static sessionCapabilities = 'session_capabilites';
   static commandExecutorUrl = 'command_executor_url';
   static sysDump = 'sysDump';
+  static appiumVersion = 'appiumVersion';
 
   // maintainance
   static lastTime = Date.now();
