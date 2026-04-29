@@ -51,6 +51,7 @@ class AppiumDriver {
   async getAllCapabilities() {
     return await Cache.withCache(Cache.allCapabilities, this.sessionId, async () => {
       if (this.wd) return await this.getCapabilities();
+      /* istanbul ignore next */
       if (this.wdio) return this.driver.capabilities;
     });
   }

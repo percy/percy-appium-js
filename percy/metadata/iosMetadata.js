@@ -61,8 +61,7 @@ class IosMetadata extends Metadata {
 
     const caps = await this.caps();
     return this.driver.getCapabilityValue(caps, 'deviceName') ||
-      this.driver.getCapabilityValue(caps, 'device') ||
-      caps.deviceName || caps.device;
+      this.driver.getCapabilityValue(caps, 'device');
   }
 
   // helpers

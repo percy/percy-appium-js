@@ -54,6 +54,11 @@ describe('Metadata', () => {
       mockCaps({ osVersion: '12.5', platformVersion: '13.7' }); // keeping different for test
       expect(await metadata.osVersion()).toEqual('12');
     });
+
+    it('resolves appium:platformVersion when bare keys are absent', async () => {
+      mockCaps({ 'appium:platformVersion': '16.2' });
+      expect(await metadata.osVersion()).toEqual('16');
+    });
   });
 
   describe('orientation', () => {
@@ -78,6 +83,11 @@ describe('Metadata', () => {
     describe('with orientation not passed', () => {
       it('gets orientation from caps', async () => {
         mockCaps({ deviceOrientation: 'LANDSCAPE' });
+        expect(await metadata.orientation()).toEqual('landscape');
+      });
+
+      it('resolves appium:deviceOrientation when bare key is absent', async () => {
+        mockCaps({ 'appium:deviceOrientation': 'LANDSCAPE' });
         expect(await metadata.orientation()).toEqual('landscape');
       });
 
@@ -145,6 +155,13 @@ describe('Metadata', () => {
       expect(width).toEqual(1080);
       expect(height).toEqual(1920);
     });
+
+    it('resolves appium:deviceScreenSize when bare key is absent', async () => {
+      mockCaps({ 'appium:deviceScreenSize': '720x1280' });
+      const { width, height } = await metadata.screenSize();
+      expect(width).toEqual(720);
+      expect(height).toEqual(1280);
+    });
   });
 
   describe('deviceName', () => {
@@ -164,6 +181,21 @@ describe('Metadata', () => {
 
       it('defaults to device from caps if deviceName is null', async () => {
         mockCaps({ desired: { device: expectedDeviceName } });
+        expect(await metadata.deviceName()).toEqual(expectedDeviceName);
+      });
+
+      it('falls back to bare deviceName when desired is absent', async () => {
+        mockCaps({ deviceName: expectedDeviceName });
+        expect(await metadata.deviceName()).toEqual(expectedDeviceName);
+      });
+
+      it('falls back to appium:deviceName when desired and bare key are absent', async () => {
+        mockCaps({ 'appium:deviceName': expectedDeviceName });
+        expect(await metadata.deviceName()).toEqual(expectedDeviceName);
+      });
+
+      it('falls back to appium:device as last resort', async () => {
+        mockCaps({ 'appium:device': expectedDeviceName });
         expect(await metadata.deviceName()).toEqual(expectedDeviceName);
       });
     });

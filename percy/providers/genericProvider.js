@@ -11,30 +11,12 @@ const log = require('../util/log');
 const sdkPkg = require('../../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 
-// Resolve the wdio/wd client version from the consumer project (CWD), not from this SDK's
-// own node_modules. This ensures we report the actual version the test project is running.
+const { resolveClientPkg } = require('../util/resolveClientPkg');
 const { createRequire } = require('module');
 const path = require('path');
-const fsSync = require('fs');
 const cwdRequire = createRequire(path.join(process.cwd(), 'package.json'));
 
-function resolveClientPkg(name, req) {
-  try { return req(`${name}/package.json`); } catch { }
-  // webdriverio v9+ blocks package.json via exports — resolve entry and walk up
-  try {
-    let dir = path.dirname(req.resolve(name));
-    while (dir !== path.parse(dir).root) {
-      const pkgPath = path.join(dir, 'package.json');
-      if (fsSync.existsSync(pkgPath)) {
-        const pkg = JSON.parse(fsSync.readFileSync(pkgPath, 'utf8'));
-        if (pkg.name === name) return pkg;
-      }
-      dir = path.dirname(dir);
-    }
-  } catch { }
-  return null;
-}
-
+/* istanbul ignore next */ // depends on which client SDK is installed at runtime
 let clientWdPkg = resolveClientPkg('wd', cwdRequire) ||
   resolveClientPkg('webdriverio', cwdRequire) ||
   resolveClientPkg('webdriverio', require);

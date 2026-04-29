@@ -111,6 +111,16 @@ describe('Metadata', () => {
         mockCaps({ device: expectedDeviceName });
         expect(await metadata.deviceName()).toEqual(expectedDeviceName);
       });
+
+      it('resolves appium:deviceName via getCapabilityValue', async () => {
+        mockCaps({ 'appium:deviceName': expectedDeviceName });
+        expect(await metadata.deviceName()).toEqual(expectedDeviceName);
+      });
+
+      it('resolves appium:device as last resort via getCapabilityValue', async () => {
+        mockCaps({ 'appium:device': expectedDeviceName });
+        expect(await metadata.deviceName()).toEqual(expectedDeviceName);
+      });
     });
   });
 
