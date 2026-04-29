@@ -10,10 +10,14 @@ class AppiumDriver {
     this.type = null;
 
     /* istanbul ignore else */
+    // Note: else is covered here but constructor name '' couldnt cover (which is the case)
+    // in real world when you get wd driver passed so need to ignore coverage on it
+
+    // In typescript for wdio we get driver.constuctor.name as 'BoundBrowser'
     if (driver.constructor.name.includes('Browser') && !Undefined(driver.capabilities)) {
       this.type = 'wdio';
     } else if ((driver.constructor.name === '' ||
-      driver.constructor.name === 'Object') &&
+      driver.constructor.name === 'Object') && // Object check is only added for tests
       !Undefined(driver.sessionCapabilities)) {
       this.type = 'wd';
     }
@@ -36,7 +40,7 @@ class AppiumDriver {
       async () => {
         return await TimeIt.run('getCapabilities', async () => {
           if (this.wd) return await this.driver.sessionCapabilities();
-          /* istanbul ignore next */
+          /* istanbul ignore next */ // not sure why its marking it when its covered
           if (this.wdio) return await this.driver.capabilities;
         });
       });

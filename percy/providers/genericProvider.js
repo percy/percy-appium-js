@@ -221,10 +221,10 @@ class GenericProvider {
     const location = await element.getLocation();
     const size = await element.getSize();
     const coOrdinates = {
-      top: Math.round(location.y * scaleFactor),
-      bottom: Math.round((location.y + size.height) * scaleFactor),
-      left: Math.round(location.x * scaleFactor),
-      right: Math.round((location.x + size.width) * scaleFactor)
+      top: location.y * scaleFactor,
+      bottom: (location.y + size.height) * scaleFactor,
+      left: location.x * scaleFactor,
+      right: (location.x + size.width) * scaleFactor
     };
 
     const jsonObject = {
