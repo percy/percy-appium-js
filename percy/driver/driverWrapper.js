@@ -1,16 +1,13 @@
 const { Cache } = require('../util/cache');
 const { Undefined } = require('../util/validations');
 const { TimeIt } = require('../util/timing');
-const log = require('../util/log');
 
 // This is a single common driver class that gives same interface to multiple appium drivers
-// like wd or wdio etc. It also handles Appium version differences transparently.
+// like wd or wdio etc.
 class AppiumDriver {
   constructor(driver) {
     this.driver = driver;
     this.type = null;
-    this._appiumVersion = null;
-    this._appiumMajor = null;
 
     /* istanbul ignore else */
     if (driver.constructor.name.includes('Browser') && !Undefined(driver.capabilities)) {
@@ -22,49 +19,6 @@ class AppiumDriver {
     }
   }
 
-  async resolveAppiumVersion() {
-    return await Cache.withCache(Cache.appiumVersion, this.sessionId, async () => {
-      return await TimeIt.run('resolveAppiumVersion', async () => {
-        let version = null;
-
-        // Primary: read appiumVersion from session capabilities
-        try {
-          const caps = await this.getCapabilities();
-          version = caps['appium:appiumVersion'] || caps.appiumVersion;
-        } catch (e) {
-          log.debug(`Could not read appiumVersion from capabilities: ${e}`);
-        }
-
-        // Secondary: try /status endpoint via driver.status() (wdio)
-        if (!version && this.wdio && typeof this.driver.status === 'function') {
-          try {
-            const statusResponse = await this.driver.status();
-            version = statusResponse?.build?.version;
-          } catch (e) {
-            log.debug(`Could not get Appium version from /status: ${e}`);
-          }
-        }
-
-        if (version) {
-          this._appiumVersion = version;
-          const major = parseInt(version.split('.')[0], 10);
-          this._appiumMajor = isNaN(major) ? null : major;
-          log.debug(`Detected Appium server version: ${version} (major: ${this._appiumMajor})`);
-        } else {
-          log.debug('Could not detect Appium server version, using default behavior');
-        }
-
-        return version;
-      });
-    });
-  }
-
-  get appiumMajor() {
-    return this._appiumMajor;
-  }
-
-  // Normalize capability key access across Appium versions.
-  // In Appium 2.x+, non-standard caps require 'appium:' prefix.
   getCapabilityValue(caps, key) {
     if (Undefined(caps) || caps === null) return undefined;
     // Standard W3C keys never need prefix

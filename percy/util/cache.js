@@ -11,7 +11,6 @@ class Cache {
   static sessionCapabilities = 'session_capabilites';
   static commandExecutorUrl = 'command_executor_url';
   static sysDump = 'sysDump';
-  static appiumVersion = 'appiumVersion';
 
   // maintainance
   static lastTime = Date.now();

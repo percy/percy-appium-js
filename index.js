@@ -82,7 +82,6 @@ module.exports = async function percyScreenshot(driver, name, options = {}) {
 
   log.debug(`[${name}] -> begin`);
   driver = new AppiumDriver(driver);
-  await driver.resolveAppiumVersion();
 
   if (!await module.exports.isPercyEnabled(driver)) {
     log.info(`[${name}] percy is disabled for session ${driver.sessionId} -> end`);

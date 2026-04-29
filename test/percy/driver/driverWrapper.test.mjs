@@ -30,84 +30,6 @@ describe('AppiumDriver', () => {
     };
   }
 
-  describe('resolveAppiumVersion', () => {
-    it('detects version from appium:appiumVersion capability', async () => {
-      const raw = wdioDriver({ capabilities: { 'appium:appiumVersion': '2.5.1', platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toEqual('2.5.1');
-      expect(driver.appiumMajor).toEqual(2);
-    });
-
-    it('detects version from bare appiumVersion capability', async () => {
-      const raw = wdioDriver({ capabilities: { appiumVersion: '1.22.3', platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toEqual('1.22.3');
-      expect(driver.appiumMajor).toEqual(1);
-    });
-
-    it('detects Appium 3.x from capabilities', async () => {
-      const raw = wdioDriver({ capabilities: { 'appium:appiumVersion': '3.0.0', platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toEqual('3.0.0');
-      expect(driver.appiumMajor).toEqual(3);
-    });
-
-    it('falls back to /status endpoint for wdio when caps lack version', async () => {
-      const raw = wdioDriver({ capabilities: { platformName: 'Android' } });
-      raw.status = jasmine.createSpy('status').and.resolveTo({ build: { version: '2.11.0' } });
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toEqual('2.11.0');
-      expect(driver.appiumMajor).toEqual(2);
-      expect(raw.status).toHaveBeenCalled();
-    });
-
-    it('returns undefined and sets no major when version is undetectable', async () => {
-      const raw = wdioDriver({ capabilities: { platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toBeUndefined();
-      expect(driver.appiumMajor).toBeNull();
-    });
-
-    it('does not call /status for wd drivers', async () => {
-      const raw = wdDriver({ sessionCaps: { platformName: 'Android' } });
-      raw.status = jasmine.createSpy('status');
-      const driver = new AppiumDriver(raw);
-      await driver.resolveAppiumVersion();
-      expect(raw.status).not.toHaveBeenCalled();
-    });
-
-    it('caches the result across calls', async () => {
-      const raw = wdioDriver({ capabilities: { 'appium:appiumVersion': '2.5.1', platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      await driver.resolveAppiumVersion();
-      await driver.resolveAppiumVersion();
-      // Cache.withCache is called but the inner function only runs once
-      expect(driver.appiumMajor).toEqual(2);
-    });
-
-    it('handles /status failure gracefully', async () => {
-      const raw = wdioDriver({ capabilities: { platformName: 'Android' } });
-      raw.status = jasmine.createSpy('status').and.rejectWith(new Error('network error'));
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toBeUndefined();
-      expect(driver.appiumMajor).toBeNull();
-    });
-
-    it('handles capabilities failure gracefully', async () => {
-      const raw = wdDriver();
-      raw.sessionCapabilities = jasmine.createSpy().and.rejectWith(new Error('session gone'));
-      const driver = new AppiumDriver(raw);
-      const version = await driver.resolveAppiumVersion();
-      expect(version).toBeNull();
-    });
-  });
-
   describe('getCapabilityValue', () => {
     let driver;
 
@@ -197,17 +119,4 @@ describe('AppiumDriver', () => {
     });
   });
 
-  describe('appiumMajor', () => {
-    it('returns null before resolveAppiumVersion is called', () => {
-      const driver = new AppiumDriver(wdioDriver());
-      expect(driver.appiumMajor).toBeNull();
-    });
-
-    it('returns parsed major version after detection', async () => {
-      const raw = wdioDriver({ capabilities: { 'appium:appiumVersion': '2.15.0', platformName: 'Android' } });
-      const driver = new AppiumDriver(raw);
-      await driver.resolveAppiumVersion();
-      expect(driver.appiumMajor).toEqual(2);
-    });
-  });
 });
