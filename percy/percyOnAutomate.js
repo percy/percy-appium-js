@@ -12,9 +12,9 @@ const path = require('path');
 const cwdRequire = createRequire(path.join(process.cwd(), 'package.json'));
 
 /* istanbul ignore next */ // depends on which client SDK is installed at runtime
-let clientWdPkg = resolveClientPkg('wd', cwdRequire) ||
-  resolveClientPkg('webdriverio', cwdRequire) ||
-  resolveClientPkg('webdriverio', require);
+let clientWdPkg = resolveClientPkg('webdriverio', cwdRequire) ||
+  resolveClientPkg('webdriverio', require) ||
+  resolveClientPkg('wd', cwdRequire);
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
