@@ -58,12 +58,12 @@ describe('AppAutomateProvider', () => {
       await appAutomate.percyScreenshotBegin('abc');
     });
 
-    it('sends "percy-prod" as projectId by default', async () => {
+    it('does not send projectId by default', async () => {
       driver.execute = jasmine.createSpy().and.resolveTo({ value: '{"success":true}' });
       const appAutomate = new AppAutomateProvider(driver);
       await appAutomate.percyScreenshotBegin('abc');
 
-      expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('"projectId":"percy-prod"'));
+      expect(driver.execute).not.toHaveBeenCalledWith(jasmine.stringContaining('projectId'));
     });
 
     it('sends "percy-dev" as projectId when isPercyDev is true', async () => {
@@ -91,12 +91,12 @@ describe('AppAutomateProvider', () => {
       expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('failure'));
     });
 
-    it('sends "percy-prod" as projectId by default', async () => {
+    it('does not send projectId by default', async () => {
       driver.execute = jasmine.createSpy().and.resolveTo({ value: '{}' });
       const appAutomate = new AppAutomateProvider(driver);
       await appAutomate.percyScreenshotEnd('abc', 'url');
 
-      expect(driver.execute).toHaveBeenCalledWith(jasmine.stringContaining('"projectId":"percy-prod"'));
+      expect(driver.execute).not.toHaveBeenCalledWith(jasmine.stringContaining('projectId'));
     });
 
     it('sends "percy-dev" as projectId when isPercyDev is true', async () => {
