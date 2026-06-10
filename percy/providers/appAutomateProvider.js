@@ -103,6 +103,7 @@ class AppAutomateProvider extends GenericProvider {
           name,
           percyBuildId: utils.percy?.build?.id,
           percyBuildUrl: utils.percy?.build?.url,
+          projectId: this.isPercyDev() ? 'percy-dev' : 'percy-prod',
           state: 'begin'
         });
         this._markedPercy = result.success;
@@ -129,6 +130,7 @@ class AppAutomateProvider extends GenericProvider {
           status: percyScreenshotUrl ? 'success' : 'failure',
           statusMessage,
           sync,
+          projectId: this.isPercyDev() ? 'percy-dev' : 'percy-prod',
           state: 'end'
         });
       } catch (e) {
