@@ -21,6 +21,11 @@ class Cache {
 
     store = this.cache[store];
     if (store[key]) {
+      // Promise-dedup (CWE-362): concurrent callers for the same key await a
+      // single in-flight computation instead of each invoking func().
+      if (store[key].promise) {
+        return await store[key].promise;
+      }
       if (store[key].success) {
         return store[key].val;
       } else {
@@ -28,23 +33,30 @@ class Cache {
       }
     }
 
-    const obj = { success: false, val: null, time: Date.now() };
-    try {
-      obj.val = await func();
-      obj.success = true;
-    } catch (e) {
-      obj.val = e;
-    }
+    const promise = (async () => {
+      const obj = { success: false, val: null, time: Date.now() };
+      try {
+        obj.val = await func();
+        obj.success = true;
+      } catch (e) {
+        obj.val = e;
+      }
 
-    // We seem to have correct coverage for both flows but nyc is marking it as missing
-    // branch coverage anyway
-    /* istanbul ignore next */
-    if (obj.success || cacheExceptions) {
-      store[key] = obj;
-    }
+      // Replace the in-flight marker with the settled value, or drop it so a
+      // failed computation can be retried (unless exceptions are cached).
+      if (obj.success || cacheExceptions) {
+        store[key] = obj;
+      } else {
+        delete store[key];
+      }
 
-    if (!obj.success) throw obj.val;
-    return obj.val;
+      if (!obj.success) throw obj.val;
+      return obj.val;
+    })();
+
+    // Mark the key as in-flight so overlapping callers dedup onto `promise`.
+    store[key] = { promise, time: Date.now() };
+    return await promise;
   }
 
   static maintain() {

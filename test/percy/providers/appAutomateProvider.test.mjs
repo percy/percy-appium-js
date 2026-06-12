@@ -14,6 +14,31 @@ describe('AppAutomateProvider', () => {
     superScreenshotSpy = spyOn(GenericProvider.prototype, 'screenshot');
   });
 
+  describe('supports', () => {
+    afterEach(() => { delete process.env.AA_DOMAIN; });
+
+    it('does not match a non-browserstack host by default', () => {
+      // mock remoteHostname is 'localhost'
+      expect(AppAutomateProvider.supports(driver)).toBeFalsy();
+    });
+
+    it('ignores an empty AA_DOMAIN instead of matching every host (CWE-285)', () => {
+      process.env.AA_DOMAIN = '';
+      // Before the fix, ''.includes made this match any hostname.
+      expect(AppAutomateProvider.supports(driver)).toBeFalsy();
+    });
+
+    it('ignores a whitespace-only AA_DOMAIN', () => {
+      process.env.AA_DOMAIN = '   ';
+      expect(AppAutomateProvider.supports(driver)).toBeFalsy();
+    });
+
+    it('honours a real AA_DOMAIN override', () => {
+      process.env.AA_DOMAIN = 'localhost';
+      expect(AppAutomateProvider.supports(driver)).toBeTruthy();
+    });
+  });
+
   describe('screenshot', () => {
     let percyScreenshotBeginSpy;
     let percyScreenshotEndSpy;

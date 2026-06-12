@@ -31,6 +31,33 @@ describe('GenericProvider', () => {
         expect(path.startsWith(process.env.PERCY_TMP_DIR));
       });
     });
+
+    describe('resolveTmpDir', () => {
+      afterEach(() => { delete process.env.PERCY_TMP_DIR; });
+
+      it('returns undefined when PERCY_TMP_DIR is not set', () => {
+        delete process.env.PERCY_TMP_DIR;
+        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
+      });
+
+      it('rejects a path that resolves outside the system temp dir (CWE-22)', () => {
+        process.env.PERCY_TMP_DIR = process.cwd() + '/percy-escape-test';
+        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
+      });
+
+      it('rejects a ../ traversal out of the temp dir', async () => {
+        const os = await import('os');
+        process.env.PERCY_TMP_DIR = os.tmpdir() + '/../../etc/percy-evil';
+        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
+      });
+
+      it('accepts a subdirectory of the system temp dir', async () => {
+        const os = await import('os');
+        const path = await import('path');
+        process.env.PERCY_TMP_DIR = path.join(os.tmpdir(), 'percy-ok');
+        expect(GenericProvider.resolveTmpDir()).toEqual(path.resolve(os.tmpdir(), 'percy-ok'));
+      });
+    });
   });
 
   describe('getTiles', () => {
