@@ -5,15 +5,11 @@ const utils = require('@percy/sdk-utils');
 const sdkPkg = require('../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 const { Cache } = require('./util/cache');
+const resolveClientPkg = require('./util/resolveClientPkg');
 
-let clientWdPkg = null;
-try {
-  clientWdPkg = require('wd/package.json');
-} catch { }
-
-try {
-  clientWdPkg = require('webdriverio/package.json');
-} catch { }
+// webdriverio takes precedence over wd when both are present. resolveClientPkg
+// handles webdriverio v9, which no longer exposes "webdriverio/package.json".
+let clientWdPkg = resolveClientPkg('webdriverio') || resolveClientPkg('wd');
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
