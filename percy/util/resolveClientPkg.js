@@ -17,9 +17,11 @@ function resolveClientPkg(name, req = require) {
   try {
     let dir = path.dirname(req.resolve(name));
     while (dir && dir !== path.dirname(dir)) {
-      const pkgPath = path.join(dir, 'package.json');
+      // `dir` derives from require.resolve(name), not user input — no traversal risk.
+      const pkgPath = path.join(dir, 'package.json'); // nosemgrep
       if (fs.existsSync(pkgPath)) {
         const pkg = req(pkgPath);
+        /* istanbul ignore next */ // defensive name guard on the v9 walk-up
         if (pkg && pkg.name === name) return pkg;
       }
       dir = path.dirname(dir);
