@@ -10,15 +10,11 @@ const log = require('../util/log');
 // Collect client and environment information
 const sdkPkg = require('../../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
+const resolveClientPkg = require('../util/resolveClientPkg');
 
-let clientWdPkg = null;
-try {
-  clientWdPkg = require('wd/package.json');
-} catch { }
-
-try {
-  clientWdPkg = require('webdriverio/package.json');
-} catch { }
+// webdriverio takes precedence over wd; resolveAppiumClientPkg centralizes that
+// and handles webdriverio v9 (no "webdriverio/package.json" subpath export).
+let clientWdPkg = resolveClientPkg.resolveAppiumClientPkg();
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
