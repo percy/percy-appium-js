@@ -1,7 +1,7 @@
 {
   "name": "@percy/appium-app",
   "description": "Appium client library for visual testing with Percy",
-  "version": "2.1.1-beta2",
+  "version": "2.1.1-beta3",
   "license": "MIT",
   "author": "Perceptual Inc.",
   "repository": {
