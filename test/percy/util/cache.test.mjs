@@ -95,6 +95,53 @@ describe('Cache', () => {
         expect(func.calls.count()).toEqual(1);
         expect(actualError).toEqual(expectedError);
       });
+
+      it('rethrows a settled cached exception on a later call', async () => {
+        const expectedError = new Error('Async error');
+        // Async-rejecting func so the in-flight marker is replaced by the
+        // settled (success:false) entry before the next call reads it.
+        const func = jasmine.createSpy('func').and.callFake(
+          () => Promise.reject(expectedError)
+        );
+
+        let actualError = null;
+        try {
+          await Cache.withCache(store, key, func, true);
+        } catch (e) {
+          actualError = e;
+        }
+        expect(actualError).toEqual(expectedError);
+
+        // Second call: cached entry exists, success is false -> rethrow path.
+        actualError = null;
+        try {
+          await Cache.withCache(store, key, func, true);
+        } catch (e) {
+          actualError = e;
+        }
+        expect(func.calls.count()).toEqual(1);
+        expect(actualError).toEqual(expectedError);
+      });
+    });
+
+    describe('with concurrent callers (promise dedup)', () => {
+      it('shares a single in-flight computation for the same key', async () => {
+        const expectedVal = 123;
+        const func = jasmine.createSpy('func').and.callFake(
+          () => new Promise((resolve) => setTimeout(() => resolve(expectedVal), 20))
+        );
+
+        // Fire two overlapping calls before the first resolves; the second
+        // should dedup onto the in-flight promise rather than re-invoking func.
+        const [val1, val2] = await Promise.all([
+          Cache.withCache(store, key, func),
+          Cache.withCache(store, key, func)
+        ]);
+
+        expect(func.calls.count()).toEqual(1);
+        expect(val1).toEqual(expectedVal);
+        expect(val2).toEqual(expectedVal);
+      });
     });
 
     describe('with expired cache', () => {

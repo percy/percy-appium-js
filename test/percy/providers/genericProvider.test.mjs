@@ -14,12 +14,15 @@ describe('GenericProvider', () => {
 
   describe('tempFile', () => {
     describe('with PERCY_TMP_DIR', () => {
-      beforeAll(() => {
-        if (['linux', 'darwin'].includes(process.platform)) {
-          process.env.PERCY_TMP_DIR = '/tmp/percy-app-test';
-        } else if (process.platform === 'win32') {
-          process.env.PERCY_TMP_DIR = 'C:\\percy-app-test';
-        }
+      let expectedTmpDir;
+
+      beforeAll(async () => {
+        const os = await import('os');
+        const path = await import('path');
+        // Must be inside the system temp dir, otherwise resolveTmpDir rejects
+        // it as unsafe and falls back to the default tmpdir.
+        expectedTmpDir = path.join(os.tmpdir(), 'percy-app-test');
+        process.env.PERCY_TMP_DIR = expectedTmpDir;
       });
 
       afterAll(() => {
@@ -27,8 +30,8 @@ describe('GenericProvider', () => {
       });
 
       it('creates tmp file in the specified directory', async () => {
-        const path = await provider.tempFile();
-        expect(path.startsWith(process.env.PERCY_TMP_DIR));
+        const filePath = await provider.tempFile();
+        expect(filePath.startsWith(expectedTmpDir)).toEqual(true);
       });
     });
 

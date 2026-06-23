@@ -99,5 +99,15 @@ describe('Utils', () => {
     it('returns non-string input unchanged', () => {
       expect(sanitizeCommandExecutorUrl(undefined)).toEqual(undefined);
     });
+
+    it('falls back to a regex strip when the url is not parseable', () => {
+      // No scheme, so new URL() throws and we exercise the regex userinfo strip.
+      expect(sanitizeCommandExecutorUrl('//user:key@hub.browserstack.com/wd/hub'))
+        .toEqual('//hub.browserstack.com/wd/hub');
+    });
+
+    it('returns an unparseable credential-free string unchanged via fallback', () => {
+      expect(sanitizeCommandExecutorUrl('not a url')).toEqual('not a url');
+    });
   });
 });
