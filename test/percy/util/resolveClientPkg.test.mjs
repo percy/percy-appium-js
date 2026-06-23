@@ -35,4 +35,30 @@ describe('resolveClientPkg', () => {
     req.resolve = () => { throw new Error('not found'); };
     expect(resolveClientPkg('definitely-not-installed-xyz', req)).toBeNull();
   });
+
+  it('uses the default require when no req is supplied (wd is installed)', () => {
+    const pkg = resolveClientPkg('wd');
+    expect(pkg).not.toBeNull();
+    expect(pkg.name).toEqual('wd');
+  });
+});
+
+describe('resolveAppiumClientPkg', () => {
+  it('prefers webdriverio when both are present', () => {
+    const req = (p) => {
+      if (p === 'webdriverio/package.json') return { name: 'webdriverio', version: '9.0.0' };
+      if (p === 'wd/package.json') return { name: 'wd', version: '1.14.0' };
+      throw new Error('not found');
+    };
+    expect(resolveClientPkg.resolveAppiumClientPkg(req)).toEqual({ name: 'webdriverio', version: '9.0.0' });
+  });
+
+  it('falls back to wd when webdriverio is absent', () => {
+    const req = (p) => {
+      if (p === 'wd/package.json') return { name: 'wd', version: '1.14.0' };
+      throw new Error('not found');
+    };
+    req.resolve = () => { throw new Error('not found'); };
+    expect(resolveClientPkg.resolveAppiumClientPkg(req)).toEqual({ name: 'wd', version: '1.14.0' });
+  });
 });

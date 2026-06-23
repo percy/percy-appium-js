@@ -31,4 +31,12 @@ function resolveClientPkg(name, req = require) {
   return null;
 }
 
+// Resolves the Appium client package (name + version), preferring webdriverio
+// over wd when both are present. Centralizes the precedence so callers don't
+// repeat it.
+function resolveAppiumClientPkg(req = require) {
+  return resolveClientPkg('webdriverio', req) || resolveClientPkg('wd', req);
+}
+
 module.exports = resolveClientPkg;
+module.exports.resolveAppiumClientPkg = resolveAppiumClientPkg;

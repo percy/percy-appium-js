@@ -7,11 +7,9 @@ const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 const { Cache } = require('./util/cache');
 const resolveClientPkg = require('./util/resolveClientPkg');
 
-// webdriverio takes precedence over wd when both are present. resolveClientPkg
-// handles webdriverio v9, which no longer exposes "webdriverio/package.json".
-let clientWdPkg = resolveClientPkg('webdriverio');
-/* istanbul ignore next */ // wd-only fallback, not hit when webdriverio is present
-if (!clientWdPkg) clientWdPkg = resolveClientPkg('wd');
+// webdriverio takes precedence over wd; resolveAppiumClientPkg centralizes that
+// and handles webdriverio v9 (no "webdriverio/package.json" subpath export).
+let clientWdPkg = resolveClientPkg.resolveAppiumClientPkg();
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
