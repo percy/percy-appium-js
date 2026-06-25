@@ -48,7 +48,47 @@ function extractNavigationBarHeight(input) {
   }
 }
 
+// Only these capability keys are forwarded to the Percy CLI/cloud. Everything
+// else — notably bstack:options.accessKey/userName and other vendor secrets —
+// is dropped so credentials never leave the tester's trust boundary
+// (CWE-284/CWE-312). The CLI authenticates to BrowserStack using its own
+// configured credentials, not these forwarded values.
+const FORWARDED_CAPABILITY_KEYS = [
+  'platformName', 'platform', 'deviceName', 'device',
+  'osVersion', 'os_version', 'platformVersion', 'browserName',
+  'orientation', 'percy:options', 'percyOptions'
+];
+
+function filterCapabilities(capabilities) {
+  if (!capabilities || typeof capabilities !== 'object') return capabilities;
+  const filtered = {};
+  for (const key of FORWARDED_CAPABILITY_KEYS) {
+    if (key in capabilities && capabilities[key] !== undefined) {
+      filtered[key] = capabilities[key];
+    }
+  }
+  return filtered;
+}
+
+// Strip any embedded user:pass@ credentials from a command executor URL before
+// it is forwarded (CWE-312). Returns the origin+path without the userinfo.
+function sanitizeCommandExecutorUrl(commandExecutorUrl) {
+  if (!commandExecutorUrl || typeof commandExecutorUrl !== 'string') return commandExecutorUrl;
+  try {
+    const url = new URL(commandExecutorUrl);
+    url.username = '';
+    url.password = '';
+    return url.toString();
+  } catch (e) {
+    // Not a parseable URL — fall back to a regex strip of the userinfo.
+    return commandExecutorUrl.replace(/\/\/[^/@]+@/, '//');
+  }
+}
+
 module.exports = {
   extractStatusBarHeight,
-  extractNavigationBarHeight
+  extractNavigationBarHeight,
+  filterCapabilities,
+  sanitizeCommandExecutorUrl,
+  FORWARDED_CAPABILITY_KEYS
 };

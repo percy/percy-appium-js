@@ -1,6 +1,8 @@
 import {
   extractStatusBarHeight,
-  extractNavigationBarHeight
+  extractNavigationBarHeight,
+  filterCapabilities,
+  sanitizeCommandExecutorUrl
 } from './../../../percy/util/util.js';
 
 describe('Utils', () => {
@@ -51,6 +53,61 @@ describe('Utils', () => {
     it('should catch and log exceptions', () => {
       const result = extractNavigationBarHeight(undefined); // Will cause an error
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('filterCapabilities', () => {
+    it('drops credential and unknown keys, keeps allowlisted ones', () => {
+      const caps = {
+        platformName: 'android',
+        deviceName: 'Pixel 7',
+        osVersion: '13',
+        'percy:options': { enabled: true },
+        'bstack:options': { accessKey: 'super-secret', userName: 'user' },
+        accessKey: 'super-secret',
+        'browserstack.key': 'super-secret'
+      };
+      const filtered = filterCapabilities(caps);
+      expect(filtered).toEqual({
+        platformName: 'android',
+        deviceName: 'Pixel 7',
+        osVersion: '13',
+        'percy:options': { enabled: true }
+      });
+      expect(filtered.accessKey).toBeUndefined();
+      expect(filtered['bstack:options']).toBeUndefined();
+      expect(filtered['browserstack.key']).toBeUndefined();
+    });
+
+    it('returns non-object input unchanged', () => {
+      expect(filterCapabilities(null)).toEqual(null);
+      expect(filterCapabilities(undefined)).toEqual(undefined);
+    });
+  });
+
+  describe('sanitizeCommandExecutorUrl', () => {
+    it('strips embedded user:pass credentials', () => {
+      expect(sanitizeCommandExecutorUrl('https://user:key@hub.browserstack.com/wd/hub'))
+        .toEqual('https://hub.browserstack.com/wd/hub');
+    });
+
+    it('leaves a credential-free url intact', () => {
+      expect(sanitizeCommandExecutorUrl('https://hub.browserstack.com/wd/hub'))
+        .toEqual('https://hub.browserstack.com/wd/hub');
+    });
+
+    it('returns non-string input unchanged', () => {
+      expect(sanitizeCommandExecutorUrl(undefined)).toEqual(undefined);
+    });
+
+    it('falls back to a regex strip when the url is not parseable', () => {
+      // No scheme, so new URL() throws and we exercise the regex userinfo strip.
+      expect(sanitizeCommandExecutorUrl('//user:key@hub.browserstack.com/wd/hub'))
+        .toEqual('//hub.browserstack.com/wd/hub');
+    });
+
+    it('returns an unparseable credential-free string unchanged via fallback', () => {
+      expect(sanitizeCommandExecutorUrl('not a url')).toEqual('not a url');
     });
   });
 });

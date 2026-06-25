@@ -1,6 +1,8 @@
 const utils = require('@percy/sdk-utils');
 const tmp = require('tmp');
 const fs = require('fs/promises');
+const path = require('path');
+const os = require('os');
 
 const { Tile } = require('../util/tile');
 const { MetadataResolver } = require('../metadata/metadataResolver');
@@ -155,9 +157,25 @@ class GenericProvider {
     });
   }
 
+  // Validate PERCY_TMP_DIR before using it for filesystem writes. An unchecked
+  // value (e.g. ../../var/www/html) would redirect screenshot PNG writes to an
+  // arbitrary path (CWE-22). Resolve it and require it to stay within the
+  // system temp dir; otherwise warn and fall back to the default tmpdir.
+  static resolveTmpDir() {
+    const percyTmpDir = process.env.PERCY_TMP_DIR;
+    if (!percyTmpDir) return undefined;
+    const base = path.resolve(os.tmpdir());
+    const resolved = path.resolve(percyTmpDir);
+    if (resolved === base || resolved.startsWith(base + path.sep)) {
+      return resolved;
+    }
+    log.warn(`Ignoring unsafe PERCY_TMP_DIR '${percyTmpDir}' (outside the system temp directory); using the default temp directory instead.`);
+    return undefined;
+  }
+
   // this creates a temp file and closes descriptor
   async tempFile() {
-    const percyTmpDir = process.env.PERCY_TMP_DIR;
+    const percyTmpDir = GenericProvider.resolveTmpDir();
     if (percyTmpDir) {
       // this does not throw for existing directory if recursive is true
       await fs.mkdir(percyTmpDir, { recursive: true });

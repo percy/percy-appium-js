@@ -5,6 +5,7 @@ const utils = require('@percy/sdk-utils');
 const sdkPkg = require('../package.json');
 const CLIENT_INFO = `${sdkPkg.name}/${sdkPkg.version}`;
 const { Cache } = require('./util/cache');
+const { filterCapabilities, sanitizeCommandExecutorUrl } = require('./util/util');
 const resolveClientPkg = require('./util/resolveClientPkg');
 
 // webdriverio takes precedence over wd; resolveAppiumClientPkg centralizes that
@@ -26,11 +27,14 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     // This AppiumDriver has a property of driver which contains the original driver
     // Hence to access the capabilities of original driver adding this fix
     // Also, note that driverWrapper.getCapabilities() returns only few capabilities and not all
+    // Filter credentials out BEFORE caching so the process-global cache never
+    // holds secrets that could cross-leak between sessions (CWE-284/CWE-639).
     const capabilities = await Cache.withCache(Cache.capabilities, sessionId, async () => {
-      return driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
+      const rawCaps = driver.type === 'wd' ? await driver.getCapabilities() : driver.driver.capabilities;
+      return filterCapabilities(rawCaps);
     });
     const commandExecutorUrl = await Cache.withCache(Cache.commandExecutorUrl, sessionId, async () => {
-      return driver.commandExecutorUrl;
+      return sanitizeCommandExecutorUrl(driver.commandExecutorUrl);
     });
 
     /* istanbul ignore next */
