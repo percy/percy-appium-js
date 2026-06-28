@@ -42,7 +42,7 @@ jobs:
       - name: Set up @percy/cli from git
         if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
-          BRNACH: ${{ github.event.inputs.branch }}
+          BRANCH: ${{ github.event.inputs.branch }}
           WORKSPACE: ${{ github.workspace }} 
         run: |
           cd /tmp
