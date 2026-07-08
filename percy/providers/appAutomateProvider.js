@@ -11,12 +11,9 @@ class AppAutomateProvider extends GenericProvider {
   }
 
   static supports(driver) {
-    // AA_DOMAIN can override the matched hub domain (used for staging hubs).
-    // Ignore empty/whitespace values — an empty AA_DOMAIN would make includes()
-    // match every hostname and route executor commands to an arbitrary Appium
-    // host (CWE-285). Fall back to the trusted default in that case.
-    const aaDomain = (process.env.AA_DOMAIN || '').trim() || 'browserstack';
-    return driver.remoteHostname.includes(aaDomain);
+    return driver.remoteHostname.includes(
+      process.env.AA_DOMAIN || 'browserstack'
+    );
   }
 
   async screenshot(

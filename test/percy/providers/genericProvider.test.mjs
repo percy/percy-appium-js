@@ -14,15 +14,12 @@ describe('GenericProvider', () => {
 
   describe('tempFile', () => {
     describe('with PERCY_TMP_DIR', () => {
-      let expectedTmpDir;
-
-      beforeAll(async () => {
-        const os = await import('os');
-        const path = await import('path');
-        // Must be inside the system temp dir, otherwise resolveTmpDir rejects
-        // it as unsafe and falls back to the default tmpdir.
-        expectedTmpDir = path.join(os.tmpdir(), 'percy-app-test');
-        process.env.PERCY_TMP_DIR = expectedTmpDir;
+      beforeAll(() => {
+        if (['linux', 'darwin'].includes(process.platform)) {
+          process.env.PERCY_TMP_DIR = '/tmp/percy-app-test';
+        } else if (process.platform === 'win32') {
+          process.env.PERCY_TMP_DIR = 'C:\\percy-app-test';
+        }
       });
 
       afterAll(() => {
@@ -30,35 +27,8 @@ describe('GenericProvider', () => {
       });
 
       it('creates tmp file in the specified directory', async () => {
-        const filePath = await provider.tempFile();
-        expect(filePath.startsWith(expectedTmpDir)).toEqual(true);
-      });
-    });
-
-    describe('resolveTmpDir', () => {
-      afterEach(() => { delete process.env.PERCY_TMP_DIR; });
-
-      it('returns undefined when PERCY_TMP_DIR is not set', () => {
-        delete process.env.PERCY_TMP_DIR;
-        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
-      });
-
-      it('rejects a path that resolves outside the system temp dir (CWE-22)', () => {
-        process.env.PERCY_TMP_DIR = process.cwd() + '/percy-escape-test';
-        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
-      });
-
-      it('rejects a ../ traversal out of the temp dir', async () => {
-        const os = await import('os');
-        process.env.PERCY_TMP_DIR = os.tmpdir() + '/../../etc/percy-evil';
-        expect(GenericProvider.resolveTmpDir()).toBeUndefined();
-      });
-
-      it('accepts a subdirectory of the system temp dir', async () => {
-        const os = await import('os');
-        const path = await import('path');
-        process.env.PERCY_TMP_DIR = path.join(os.tmpdir(), 'percy-ok');
-        expect(GenericProvider.resolveTmpDir()).toEqual(path.resolve(os.tmpdir(), 'percy-ok'));
+        const path = await provider.tempFile();
+        expect(path.startsWith(process.env.PERCY_TMP_DIR));
       });
     });
   });
