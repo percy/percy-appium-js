@@ -187,7 +187,7 @@ class GenericProvider {
     const regionsArray = [];
     await this.getRegionsByXpath(regionsArray, xpaths || []);
     await this.getRegionsByIds(regionsArray, accessibilityIds || []);
-    await this.getRegionsByElements(regionsArray, appiumElements || []);
+    await this.getRegionsByElements(regionsArray, await appiumElements || []);
     await this.getRegionsByLocation(regionsArray, customLocations || []);
 
     return regionsArray;

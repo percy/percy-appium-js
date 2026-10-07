@@ -33,6 +33,14 @@
     "test:coverage": "nyc yarn test",
     "test:types": "tsd"
   },
+  "peerDependencies": {
+    "webdriverio": "^8 || ^9 || ^10"
+  },
+  "peerDependenciesMeta": {
+    "webdriverio": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@percy/sdk-utils": "^1.30.9",
     "tmp": "^0.2.3"
@@ -51,7 +59,7 @@
     "nyc": "^15.1.0",
     "tsd": "^0.24.1",
     "wd": "^1.14.0",
-    "webdriverio": "^7.25.4"
+    "webdriverio": "^10.0.0"
   },
   "bugs": {
     "url": "https://github.com/percy/percy-appium-js/issues"

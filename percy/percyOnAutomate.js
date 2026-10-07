@@ -15,9 +15,12 @@ let clientWdPkg = resolveClientPkg.resolveAppiumClientPkg();
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
 async function getElementIdFromElements(type, elements) {
-  if (type === 'wd') return elements.map(e => e.value);
-  /* istanbul ignore next */
-  if (type === 'wdio') return elements.map(e => e.elementId);
+  // Accepts an array, a promise of an array, an array of promises, or a webdriverio 10
+  // ElementArray (whose own map/forEach are async, so they are not used here).
+  const list = Array.from(await elements);
+  const resolved = await Promise.all(list);
+  if (type === 'wd') return resolved.map(e => e.value);
+  return resolved.map(e => e.elementId);
 }
 
 module.exports = async function percyOnAutomate(driver, name, options) {
@@ -75,6 +78,8 @@ module.exports = async function percyOnAutomate(driver, name, options) {
     if (!(await driver.getPercyOptions()).ignoreErrors) throw error;
   }
 };
+
+module.exports.getElementIdFromElements = getElementIdFromElements;
 
 /* istanbul ignore next */ // since can't test this function
 module.exports.request = async function request(data) {
