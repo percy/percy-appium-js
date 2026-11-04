@@ -316,6 +316,24 @@ describe('percyScreenshot', () => {
         }));
       });
 
+      it('does not mutate the caller options so they can be reused', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        const options = { ignoreRegionAppiumElements: [element], considerRegionAppiumElements: [element] };
+        await percyScreenshot(driver, 'Screenshot 4', options);
+        await percyScreenshot(driver, 'Screenshot 5', options);
+
+        expect(options).toEqual({ ignoreRegionAppiumElements: [element], considerRegionAppiumElements: [element] });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          snapshotName: 'Screenshot 5',
+          options: { ignore_region_elements: ['123'], consider_region_elements: ['123'] }
+        }));
+      });
+
       it('should return CLI response', async () => {
         const mockResponse = {
           success: true,
