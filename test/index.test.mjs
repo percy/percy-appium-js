@@ -233,7 +233,7 @@ describe('percyScreenshot', () => {
           expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
           expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
         } else {
-          expect(driver.$).toHaveBeenCalledWith('someXpath');
+          expect(driver.$).toHaveBeenCalledWith('someXpath', { strict: false });
           expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
         }
       });
@@ -250,7 +250,7 @@ describe('percyScreenshot', () => {
           expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
           expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
         } else {
-          expect(driver.$).toHaveBeenCalledWith('someXpath');
+          expect(driver.$).toHaveBeenCalledWith('someXpath', { strict: false });
           expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
         }
       });
@@ -277,6 +277,34 @@ describe('percyScreenshot', () => {
         }));
 
         expect(response).toEqual(undefined);
+      });
+
+      it('should resolve un-awaited element promises for ignoreRegion', async () => {
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 4', {
+          ignoreRegionAppiumElements: [Promise.resolve({ value: 'wd-1', elementId: 'wdio-1' })]
+        });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          options: { ignore_region_elements: [driverType === 'wd driver' ? 'wd-1' : 'wdio-1'] }
+        }));
+      });
+
+      it('should resolve a promise of an element list for considerRegion', async () => {
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        await percyScreenshot(driver, 'Screenshot 5', {
+          considerRegionAppiumElements: Promise.resolve([{ value: 'wd-1', elementId: 'wdio-1' }])
+        });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          options: { consider_region_elements: [driverType === 'wd driver' ? 'wd-1' : 'wdio-1'] }
+        }));
       });
 
       it('should call POA percyScreenshot with ignoreRegion and considerRegion', async () => {

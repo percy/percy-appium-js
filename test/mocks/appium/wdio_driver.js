@@ -52,7 +52,7 @@ class Browser {
       statusBar: { height: 60 },
       navigationBar: { height: 30 }
     });
-    this.execute = jasmine.createSpy().and.callFake((str) => {
+    const fakeExecute = (str) => {
       if (str.includes('percyScreenshot')) {
         if (str.includes('begin')) {
           if (failedBeginCall) {
@@ -80,7 +80,9 @@ class Browser {
       } else if (str.includes('viewportRect')) {
         return { width: 100, height: 200 };
       }
-    });
+    };
+    this.execute = jasmine.createSpy().and.callFake(fakeExecute);
+    this.executeScript = jasmine.createSpy().and.callFake(fakeExecute);
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');
     this.$ = jasmine.createSpy().and.returnValue(Promise.resolve({
       getLocation: jasmine.createSpy().and.returnValue({ x: 10, y: 20 }),

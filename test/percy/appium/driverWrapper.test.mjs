@@ -84,19 +84,32 @@ describe('AppiumDriver', () => {
     });
 
     it('should return correct element location by XPath for wdio driver', async () => {
-      const driver = new AppiumDriver(wdioDriver());
+      const browser = wdioDriver();
+      const driver = new AppiumDriver(browser);
       const xpath = '//div[@class="example"]';
       const element = await driver.elementByXPath(xpath);
+      expect(browser.$).toHaveBeenCalledWith(xpath, { strict: false });
       expect(element.getLocation()).toEqual({ x: 10, y: 20 });
       expect(element.getSize()).toEqual({ width: 100, height: 200 });
     });
 
     it('should return correct element location by id for wdio driver', async () => {
-      const driver = new AppiumDriver(wdioDriver());
+      const browser = wdioDriver();
+      const driver = new AppiumDriver(browser);
       const id = 'id';
       const element = await driver.elementByAccessibilityId(id);
+      expect(browser.$).toHaveBeenCalledWith('~id', { strict: false });
       expect(element.getLocation()).toEqual({ x: 10, y: 20 });
       expect(element.getSize()).toEqual({ width: 100, height: 200 });
+    });
+
+    it('uses executeScript for wdio string scripts on a BiDi session', async () => {
+      const browser = wdioDriver();
+      browser.isBidi = true;
+      browser.execute = jasmine.createSpy().and.rejectWith(new Error('BiDi script.callFunction'));
+      await new AppiumDriver(browser).execute('mobile: viewportRect');
+      expect(browser.executeScript).toHaveBeenCalledWith('mobile: viewportRect', []);
+      expect(browser.execute).not.toHaveBeenCalled();
     });
 
     it('should return correct commandExecutorUrl', async () => {

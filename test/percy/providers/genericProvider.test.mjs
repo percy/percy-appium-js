@@ -149,6 +149,23 @@ describe('GenericProvider', () => {
     });
   });
 
+  describe('findRegions', () => {
+    it('awaits a promise of elements before reading its length', async () => {
+      const element = {
+        getLocation: jasmine.createSpy().and.resolveTo({ x: 10, y: 20 }),
+        getSize: jasmine.createSpy().and.resolveTo({ width: 100, height: 200 }),
+        getAttribute: jasmine.createSpy().and.resolveTo('test_id')
+      };
+      provider.metadata = { scaleFactor: () => 1, screenSize: () => ({ width: 100, height: 200 }) };
+      driver.getCapabilities = jasmine.createSpy().and.resolveTo({ platformName: 'android' });
+
+      const regions = await provider.findRegions([], [], Promise.resolve([element]), []);
+
+      expect(regions.length).toBe(1);
+      expect(regions[0].selector).toBe('element: 0 test_id');
+    });
+  });
+
   describe('getRegionsByElements', () => {
     let getRegionObjectSpy;
     let mockElement;
