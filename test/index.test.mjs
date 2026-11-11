@@ -350,6 +350,24 @@ describe('percyScreenshot', () => {
         }));
       });
 
+      it('translates non-enumerable region options on the caller options', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        const options = {};
+        Object.defineProperty(options, 'ignoreRegionAppiumElements', { value: [element], enumerable: false });
+        await percyScreenshot(driver, 'Screenshot 7', options);
+
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          snapshotName: 'Screenshot 7',
+          options: jasmine.objectContaining({ ignore_region_elements: ['123'] })
+        }));
+        expect(Object.getOwnPropertyNames(options)).toEqual(['ignoreRegionAppiumElements']);
+      });
+
       it('should return CLI response', async () => {
         const mockResponse = {
           success: true,
