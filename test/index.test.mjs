@@ -68,6 +68,9 @@ describe('percyScreenshot', () => {
           driver.takeScreenshot = jasmine.createSpy().and.throwError(new Error('Screenshot failed'));
 
           await percyScreenshot(driver, 'Screenshot 1');
+          expect(helpers.logger.stderr).toEqual(jasmine.arrayContaining([
+            '[percy] [Screenshot 1] failed to take screenshot: Error: Screenshot failed'
+          ]));
         });
       });
     });
