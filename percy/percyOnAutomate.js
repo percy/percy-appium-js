@@ -39,8 +39,9 @@ module.exports = async function percyOnAutomate(driver, name, options) {
 
     /* istanbul ignore next */
     if (options) {
-      // Work on a copy so the caller's options object can be reused across screenshots
-      options = { ...options };
+      // Work on a copy so the caller's options object can be reused across screenshots.
+      // Keep the prototype so inherited region options are still translated.
+      options = Object.assign(Object.create(Object.getPrototypeOf(options)), options);
       if ('ignoreRegionAppiumElements' in options) {
         options.ignore_region_appium_elements = options.ignoreRegionAppiumElements;
         delete options.ignoreRegionAppiumElements;
