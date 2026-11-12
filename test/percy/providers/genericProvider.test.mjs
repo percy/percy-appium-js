@@ -191,6 +191,35 @@ describe('GenericProvider', () => {
       }
     });
 
+    it('resolves an un-awaited list and un-awaited elements (webdriverio 9+)', async () => {
+      mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+      const elementsArray = [];
+      mockElement = {
+        getAttribute: jasmine.createSpy('getAttribute').and.callFake(attr => attr === 'resource-id' ? 'test_id' : null)
+      };
+      const elements = Promise.resolve([Promise.resolve(mockElement), mockElement]);
+
+      await provider.getRegionsByElements.call(
+        { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+        elementsArray,
+        elements
+      );
+
+      expect(getRegionObjectSpy).toHaveBeenCalledTimes(2);
+      expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 test_id');
+    });
+
+    it('treats a list promise that resolves to nothing as no elements', async () => {
+      const elementsArray = [];
+      await provider.getRegionsByElements.call(
+        { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+        elementsArray,
+        Promise.resolve(undefined)
+      );
+      expect(getRegionObjectSpy).not.toHaveBeenCalled();
+      expect(elementsArray).toEqual([]);
+    });
+
     it('should ignore when error', async () => {
       getRegionObjectSpy.and.rejectWith(new Error('Element not found'));
       const elementsArray = [];

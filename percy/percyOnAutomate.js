@@ -14,10 +14,19 @@ let clientWdPkg = resolveClientPkg.resolveAppiumClientPkg();
 
 let ENV_INFO = `(${clientWdPkg?.name}/${clientWdPkg?.version})`;
 
+// Accepts what users pass as `ignoreRegionAppiumElements` /
+// `considerRegionAppiumElements`: an array of elements, a promise of one (e.g. an
+// un-awaited webdriverio `$$()`), an array of promises of elements (e.g.
+// `[$('~a'), $('~b')]`, where webdriverio 9+ returns chainable promises), or a
+// single element.
 async function getElementIdFromElements(type, elements) {
-  if (type === 'wd') return elements.map(e => e.value);
+  let resolved = await elements;
+  if (resolved === null || resolved === undefined) return [];
+  if (typeof resolved[Symbol.iterator] !== 'function') resolved = [resolved];
+  resolved = await Promise.all(Array.from(resolved));
+  if (type === 'wd') return resolved.map(e => e.value);
   /* istanbul ignore next */
-  if (type === 'wdio') return elements.map(e => e.elementId);
+  if (type === 'wdio') return resolved.map(e => e.elementId);
 }
 
 module.exports = async function percyOnAutomate(driver, name, options) {
@@ -80,3 +89,5 @@ module.exports = async function percyOnAutomate(driver, name, options) {
 module.exports.request = async function request(data) {
   return await utils.captureAutomateScreenshot(data);
 }; // To mock in test case
+
+module.exports.getElementIdFromElements = getElementIdFromElements;

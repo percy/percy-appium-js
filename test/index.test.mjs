@@ -233,8 +233,8 @@ describe('percyScreenshot', () => {
           expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
           expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
         } else {
-          expect(driver.$).toHaveBeenCalledWith('someXpath');
-          expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
+          expect(driver.$).toHaveBeenCalledWith('someXpath', { strict: false });
+          expect(driver.$).not.toHaveBeenCalledWith('~someXpath', jasmine.anything());
         }
       });
 
@@ -250,8 +250,8 @@ describe('percyScreenshot', () => {
           expect(driver.elementByXPath).toHaveBeenCalledWith('someXpath');
           expect(driver.elementByAccessibilityId).not.toHaveBeenCalled();
         } else {
-          expect(driver.$).toHaveBeenCalledWith('someXpath');
-          expect(driver.$).not.toHaveBeenCalledWith('~someXpath');
+          expect(driver.$).toHaveBeenCalledWith('someXpath', { strict: false });
+          expect(driver.$).not.toHaveBeenCalledWith('~someXpath', jasmine.anything());
         }
       });
 
