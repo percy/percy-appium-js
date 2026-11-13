@@ -81,6 +81,8 @@ class Browser {
         return { width: 100, height: 200 };
       }
     });
+    // AppiumDriver calls the Classic `executeScript` for wdio; reuse the fake above
+    this.executeScript = jasmine.createSpy().and.callFake((str) => this.execute(str));
     this.getOrientation = jasmine.createSpy().and.returnValue('PORTRAIT');
     this.$ = jasmine.createSpy().and.returnValue(Promise.resolve({
       getLocation: jasmine.createSpy().and.returnValue({ x: 10, y: 20 }),

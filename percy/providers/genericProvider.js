@@ -241,10 +241,17 @@ class GenericProvider {
   }
 
   async getRegionsByElements(elementsArray, elements) {
-    for (let index = 0; index < elements.length; index++) {
+    // Users may pass an un-awaited webdriverio `$$()` or an array of un-awaited
+    // `$()` calls, so resolve both the list and each element. allSettled attaches a
+    // handler to every element promise up front, so one that rejects while an
+    // earlier element is still being processed can't become an unhandled rejection.
+    const list = (await elements) || [];
+    const settled = await Promise.allSettled(Array.from(list, e => Promise.resolve(e)));
+    for (let index = 0; index < settled.length; index++) {
       try {
         let identifier;
-        const element = elements[index];
+        if (settled[index].status === 'rejected') throw settled[index].reason;
+        const element = settled[index].value;
 
         const capabilities = await this.driver.getCapabilities();
         const platformName = capabilities.platformName.toLowerCase();
@@ -264,7 +271,8 @@ class GenericProvider {
         elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Correct Mobile Element not passed at index ${index}.`);
-        log.debug(e.toString());
+        // String() so a promise rejected with null/undefined can't throw here
+        log.debug(String(e));
       }
     }
   }

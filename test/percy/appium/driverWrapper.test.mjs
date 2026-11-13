@@ -99,6 +99,33 @@ describe('AppiumDriver', () => {
       expect(element.getSize()).toEqual({ width: 100, height: 200 });
     });
 
+    it('looks up wdio regions by first match (strict: false) for webdriverio 10', async () => {
+      const mock = wdioDriver();
+      const driver = new AppiumDriver(mock);
+      await driver.elementByXPath('//a');
+      await driver.elementByAccessibilityId('b');
+      expect(mock.$).toHaveBeenCalledWith('//a', { strict: false });
+      expect(mock.$).toHaveBeenCalledWith('~b', { strict: false });
+    });
+
+    it('runs wdio scripts through the Classic executeScript command, not execute', async () => {
+      const mock = wdioDriver();
+      mock.execute = jasmine.createSpy('execute');
+      mock.executeScript = jasmine.createSpy('executeScript').and.resolveTo({ width: 1 });
+      const driver = new AppiumDriver(mock);
+      expect(await driver.execute('mobile: viewportRect')).toEqual({ width: 1 });
+      expect(mock.executeScript).toHaveBeenCalledWith('mobile: viewportRect', []);
+      expect(mock.execute).not.toHaveBeenCalled();
+    });
+
+    it('keeps using execute for wd', async () => {
+      const mock = wdDriver();
+      mock.execute = jasmine.createSpy('execute').and.resolveTo('ok');
+      const driver = new AppiumDriver(mock);
+      expect(await driver.execute('mobile: viewportRect')).toEqual('ok');
+      expect(mock.execute).toHaveBeenCalledWith('mobile: viewportRect');
+    });
+
     it('should return correct commandExecutorUrl', async () => {
       const driver = new AppiumDriver(wdioDriver());
       expect(driver.commandExecutorUrl).toEqual('https://localhost/wd/hub');
