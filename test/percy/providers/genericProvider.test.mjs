@@ -229,6 +229,26 @@ describe('GenericProvider', () => {
       expect(elementsArray).toEqual([{}, {}]);
     });
 
+    it('skips an element whose promise rejects with no reason', async () => {
+      mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+      const elementsArray = [];
+      mockElement = {
+        getAttribute: jasmine.createSpy('getAttribute').and.callFake(attr => attr === 'resource-id' ? 'test_id' : null)
+      };
+      // eslint-disable-next-line prefer-promise-reject-errors
+      const elements = [Promise.reject(undefined), Promise.reject(null), mockElement];
+
+      await provider.getRegionsByElements.call(
+        { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+        elementsArray,
+        elements
+      );
+
+      expect(getRegionObjectSpy).toHaveBeenCalledTimes(1);
+      expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 2 test_id');
+      expect(elementsArray).toEqual([{}]);
+    });
+
     it('treats a list promise that resolves to nothing as no elements', async () => {
       const elementsArray = [];
       await provider.getRegionsByElements.call(

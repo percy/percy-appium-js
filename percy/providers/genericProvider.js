@@ -271,7 +271,8 @@ class GenericProvider {
         elementsArray.push(ignoredRegion);
       } catch (e) {
         log.info(`Correct Mobile Element not passed at index ${index}.`);
-        log.debug(e.toString());
+        // String() so a promise rejected with null/undefined can't throw here
+        log.debug(String(e));
       }
     }
   }
