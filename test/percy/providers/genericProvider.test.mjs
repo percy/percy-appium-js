@@ -209,6 +209,26 @@ describe('GenericProvider', () => {
       expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 test_id');
     });
 
+    it('skips an element whose promise rejects and keeps processing the rest', async () => {
+      mockDriver.getCapabilities.and.resolveTo({ platformName: 'android' });
+      const elementsArray = [];
+      mockElement = {
+        getAttribute: jasmine.createSpy('getAttribute').and.callFake(attr => attr === 'resource-id' ? 'test_id' : null)
+      };
+      const elements = [mockElement, Promise.reject(new Error('no such element')), mockElement];
+
+      await provider.getRegionsByElements.call(
+        { driver: mockDriver, getRegionObject: getRegionObjectSpy },
+        elementsArray,
+        elements
+      );
+
+      expect(getRegionObjectSpy).toHaveBeenCalledTimes(2);
+      expect(getRegionObjectSpy.calls.argsFor(0)[0]).toBe('element: 0 test_id');
+      expect(getRegionObjectSpy.calls.argsFor(1)[0]).toBe('element: 2 test_id');
+      expect(elementsArray).toEqual([{}, {}]);
+    });
+
     it('treats a list promise that resolves to nothing as no elements', async () => {
       const elementsArray = [];
       await provider.getRegionsByElements.call(
