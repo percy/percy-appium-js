@@ -2,6 +2,12 @@ const { Cache } = require('../util/cache');
 const { Undefined } = require('../util/validations');
 const { TimeIt } = require('../util/timing');
 
+// webdriverio 10 makes `$()` strict by default: it throws StrictSelectorError when
+// a selector matches more than one element. Region selectors (xpath / accessibility
+// id) have always meant "the first match", so opt out per call. Earlier majors
+// ignore the extra argument.
+const WDIO_FIRST_MATCH = { strict: false };
+
 // This is a single common driver class that gives same interface to multiple appium drivers
 // like wd or wdio etc.
 class AppiumDriver {
@@ -104,6 +110,13 @@ class AppiumDriver {
 
   async execute(command) {
     return await TimeIt.run('execute', async () => {
+      // webdriverio 9+ sends `execute()` over WebDriver BiDi (script.callFunction)
+      // whenever the session has BiDi enabled, which happens automatically when
+      // `browserName` is set. Appium/BrowserStack `mobile:` and
+      // `browserstack_executor:` commands only work over the Classic protocol, so
+      // call the Classic `executeScript` command directly. It exists in every
+      // webdriverio major (7 to 10), so this stays backward compatible.
+      if (this.wdio) return await this.driver.executeScript(command, []);
       return await this.driver.execute(command);
     });
   }
@@ -145,7 +158,7 @@ class AppiumDriver {
     // for finding element size and location and attributes
     if (this.wd) return await this.driver.elementByXPath(xpath);
     /* istanbul ignore next */ // not sure why its marking it when its covered
-    if (this.wdio) return await this.driver.$(xpath);
+    if (this.wdio) return await this.driver.$(xpath, WDIO_FIRST_MATCH);
   }
 
   async elementByAccessibilityId(id) {
@@ -153,7 +166,7 @@ class AppiumDriver {
     // for finding element size and location and attributes
     if (this.wd) return await this.driver.elementByAccessibilityId(id);
     /* istanbul ignore next */ // not sure why its marking it when its covered
-    if (this.wdio) return await this.driver.$(`~${id}`);
+    if (this.wdio) return await this.driver.$(`~${id}`, WDIO_FIRST_MATCH);
   }
 }
 
