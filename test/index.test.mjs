@@ -319,6 +319,58 @@ describe('percyScreenshot', () => {
         }));
       });
 
+      it('does not mutate the caller options so they can be reused', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        const options = { ignoreRegionAppiumElements: [element], considerRegionAppiumElements: [element] };
+        await percyScreenshot(driver, 'Screenshot 4', options);
+        await percyScreenshot(driver, 'Screenshot 5', options);
+
+        expect(options).toEqual({ ignoreRegionAppiumElements: [element], considerRegionAppiumElements: [element] });
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          snapshotName: 'Screenshot 5',
+          options: { ignore_region_elements: ['123'], consider_region_elements: ['123'] }
+        }));
+      });
+
+      it('translates region options inherited by the caller options', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        const options = Object.create({ ignoreRegionAppiumElements: [element], considerRegionAppiumElements: [element] });
+        await percyScreenshot(driver, 'Screenshot 6', options);
+
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          snapshotName: 'Screenshot 6',
+          options: jasmine.objectContaining({ ignore_region_elements: ['123'], consider_region_elements: ['123'] })
+        }));
+      });
+
+      it('translates non-enumerable region options on the caller options', async () => {
+        const element = { value: '123', elementId: '123' };
+        const driver = driverFunc({ enabled: true });
+        spyOn(percyScreenshot, 'isPercyEnabled').and.returnValue(Promise.resolve(true));
+        utils.percy.type = 'automate';
+        spyOn(percyOnAutomate, 'request').and.callFake(() => {});
+
+        const options = {};
+        Object.defineProperty(options, 'ignoreRegionAppiumElements', { value: [element], enumerable: false });
+        await percyScreenshot(driver, 'Screenshot 7', options);
+
+        expect(percyOnAutomate.request).toHaveBeenCalledWith(jasmine.objectContaining({
+          snapshotName: 'Screenshot 7',
+          options: jasmine.objectContaining({ ignore_region_elements: ['123'] })
+        }));
+        expect(Object.getOwnPropertyNames(options)).toEqual(['ignoreRegionAppiumElements']);
+      });
+
       it('should return CLI response', async () => {
         const mockResponse = {
           success: true,
